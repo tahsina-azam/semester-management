@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint src --ext .ts, .tsx",
     "prepare": "husky install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive test",
+    "bump-version": "npm version patch"
   },
   "dependencies": {
     "next": "12.1.0",
@@ -29,7 +30,8 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md,html,ts,tsx}": [
+    "*.{js,json,css,md}": [
+      "eslint --cache --fix",
       "prettier --single-quote --write",
       "git add"
     ]
