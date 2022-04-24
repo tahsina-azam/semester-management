@@ -33,7 +33,7 @@ const HomepageHeading = ({ mobile }) => (
   <Container text>
     <Header
       as="h1"
-      content="Imagine-a-Company"
+      content="CLASSADEMIA"
       inverted
       style={{
         fontSize: mobile ? "2em" : "4em",
@@ -108,17 +108,16 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  <Button as="a" inverted={!fixed}>
-                    Log in
-                  </Button>
-                  <Button
-                    as="a"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: "0.5em" }}
-                  >
-                    Sign Up
-                  </Button>
+                  <a href="/sign-in">
+                    <Button as="a" inverted={!fixed}>
+                      Log in
+                    </Button>
+                  </a>
+                  <a href="/sign-up">
+                    <Button as="a" inverted={!fixed}>
+                      Sign Up
+                    </Button>
+                  </a>
                 </Menu.Item>
               </Container>
             </Menu>
@@ -187,7 +186,7 @@ class MobileContainer extends Component {
                     <Button color="grey" inverted>
                       Log in
                     </Button>
-                    <Button as="a" inverted style={{ marginLeft: "0.5em" }}>
+                    <Button as="a" inverted>
                       Sign Up
                     </Button>
                   </Menu.Item>
