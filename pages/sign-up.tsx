@@ -105,7 +105,8 @@ class FormSignUp extends Component {
               <div className="field">
                 <label>Password</label>
                 <Form.Input
-                  type="text"
+                  fluid
+                  type="password"
                   name="password"
                   placeholder="enter your password"
                   value={password}
@@ -115,7 +116,8 @@ class FormSignUp extends Component {
               <div className="field">
                 <label>Confirm Password</label>
                 <Form.Input
-                  type="text"
+                  fluid
+                  type="password"
                   name="confirmPassword"
                   placeholder="Confirm your password"
                   value={confirmPassword}
