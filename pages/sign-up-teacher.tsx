@@ -1,6 +1,6 @@
 import "semantic-ui-css/semantic.min.css";
 import React, { Component, useRef } from "react";
-import { Grid, Form, Card } from "semantic-ui-react";
+import { Grid, Form } from "semantic-ui-react";
 import axios from "axios";
 
 class FormSignUp extends Component {
@@ -9,8 +9,8 @@ class FormSignUp extends Component {
     email: "",
     submittedName: "",
     submittedEmail: "",
-    roll: "",
-    submittedRoll: "",
+    department: "",
+    submittedDepartment: "",
     password: "",
     submittedPassword: "",
     confirmPassword: "",
@@ -21,25 +21,25 @@ class FormSignUp extends Component {
 
   handleSubmit = () => {
     console.log("inside handle submit");
-    const { name, email, roll, password, confirmPassword } = this.state;
+    const { name, email, department, password, confirmPassword } = this.state;
 
     this.setState({
       submittedName: name,
       submittedEmail: email,
-      submittedRoll: roll,
+      submittedDepartment: department,
       submittedPassword: password,
       submittedConfirmPassword: confirmPassword,
     });
     let data = {
       name: name,
       email: email,
-      roll: roll,
+      department: department,
       password: password,
       confirmPassword: confirmPassword,
     };
     console.log(data);
     axios
-      .post("/api/signup", data)
+      .post("/api/signup/teacher", data)
       .then((response) => {
         console.log(response);
       })
@@ -54,8 +54,8 @@ class FormSignUp extends Component {
       email,
       submittedName,
       submittedEmail,
-      roll,
-      submittedRoll,
+      department,
+      submittedDepartment,
       password,
       submittedPassword,
       confirmPassword,
@@ -93,12 +93,12 @@ class FormSignUp extends Component {
                 />
               </div>
               <div className="field">
-                <label>roll</label>
+                <label>department</label>
                 <Form.Input
                   type="text"
-                  name="roll"
-                  placeholder="enter your roll"
-                  value={roll}
+                  name="department"
+                  placeholder="enter your department"
+                  value={department}
                   onChange={this.handleChange}
                 />
               </div>

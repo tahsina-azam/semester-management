@@ -109,14 +109,10 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
                   <a href="/sign-in">
-                    <Button as="a" inverted={!fixed}>
-                      Log in
-                    </Button>
+                    <Button as="a">Log in</Button>
                   </a>
                   <a href="/sign-up">
-                    <Button as="a" inverted={!fixed}>
-                      Sign Up
-                    </Button>
+                    <Button as="a">Sign Up</Button>
                   </a>
                 </Menu.Item>
               </Container>
@@ -183,12 +179,18 @@ class MobileContainer extends Component {
                     <Icon name="sidebar" />
                   </Menu.Item>
                   <Menu.Item position="right">
-                    <Button color="grey" inverted>
-                      Log in
-                    </Button>
-                    <Button as="a" inverted>
-                      Sign Up
-                    </Button>
+                    <a href="/sign-in">
+                      {" "}
+                      <Button color="grey" inverted>
+                        Log in
+                      </Button>
+                    </a>
+                    <a href="/choices">
+                      {" "}
+                      <Button as="a" inverted>
+                        Sign Up
+                      </Button>
+                    </a>
                   </Menu.Item>
                 </Menu>
               </Container>
