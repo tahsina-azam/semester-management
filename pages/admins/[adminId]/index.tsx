@@ -58,6 +58,19 @@ const Card = ({ name, email, phone, about }) => {
         console.log(e);
       });
   }
+  function handleDelete() {
+    const data = {
+      email: email,
+    };
+    axios
+      .post("/api/admin/delete-req", data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <div>
       <div className="ui cards">
@@ -73,7 +86,9 @@ const Card = ({ name, email, phone, about }) => {
               <div className="ui basic green button" onClick={handleClick}>
                 Approve
               </div>
-              <div className="ui basic red button">Decline</div>
+              <div className="ui basic red button" onClick={handleDelete}>
+                Decline
+              </div>
             </div>
           </div>
         </div>
