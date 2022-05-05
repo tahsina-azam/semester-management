@@ -1,5 +1,6 @@
 import "semantic-ui-css/semantic.min.css";
 import React, { Component } from "react";
+import Router from "next/router";
 import {
   Button,
   Form,
@@ -36,6 +37,7 @@ class LoginForm extends Component {
       .post("/api/signin", data)
       .then((response) => {
         console.log(response);
+        Router.push(response.data.link);
       })
       .catch((e) => {
         console.log(e);

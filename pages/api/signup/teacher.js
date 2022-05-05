@@ -2,6 +2,7 @@ import executeQuery from "../../../config/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import { stat } from "fs";
 
 export default async (req, res) => {
   try {
@@ -10,6 +11,7 @@ export default async (req, res) => {
     console.log(hashedPassword + "<--hashed");
     const uniqueId = uuidv4();
     console.log("req nom", req.body);
+    const approval = "pending";
     const result = await executeQuery({
       query:
         "INSERT INTO Teachers VALUES('" +
@@ -19,7 +21,7 @@ export default async (req, res) => {
         "',NULL,NULL,'" +
         req.body.email +
         "','" +
-        req.body.department +
+        approval +
         "',NULL,'" +
         hashedPassword +
         "')",
