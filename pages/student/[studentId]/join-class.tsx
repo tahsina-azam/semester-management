@@ -23,14 +23,18 @@ class JoinClass extends Component {
     console.log("inside handle submit");
     const { code } = this.state;
     this.setState({
-      submittedcode: code,
+      submittedCode: code,
     });
+    const path = window.location.pathname;
+    const arr = path.split("/");
+    console.log();
     let data = {
       code: code,
+      roll: arr[2],
     };
     console.log(data);
     axios
-      .post("/api/signin", data)
+      .post("/api/student/join-class", data)
       .then((response) => {
         console.log(response);
         Router.push(response.data.link);
