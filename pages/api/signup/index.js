@@ -1,6 +1,5 @@
 import executeQuery from "../../../config/db";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 export default async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(10);
