@@ -3,19 +3,20 @@ import bcrypt from "bcryptjs";
 
 export default async (req, res) => {
   try {
-    //console.log("req nom", req.body.password);
+    console.log("sign in response");
+    console.log("req nom", req.body.password);
     const result = await executeQuery({
       query:
-        "SELECT password FROM Users WHERE email='" +
+        "SELECT password FROM users WHERE email='" +
         req.body.email +
-        "'UNION ALL SELECT password FROM Teachers WHERE email='" +
+        "'UNION ALL SELECT password FROM teachers WHERE email='" +
         req.body.email +
-        "'UNION ALL SELECT password FROM Admins WHERE email='" +
+        "'UNION ALL SELECT password FROM admins WHERE email='" +
         req.body.email +
         "'",
     });
     const teacher = await executeQuery({
-      query: "SELECT * FROM Teachers WHERE email='" + req.body.email + "'",
+      query: "SELECT * FROM teachers WHERE email='" + req.body.email + "'",
     });
     console.log("ttt", result);
     if (result.length > 0) {
@@ -37,11 +38,11 @@ export default async (req, res) => {
         }
       } else {
         const student = await executeQuery({
-          query: "SELECT * FROM Users WHERE email='" + req.body.email + "'",
+          query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
         });
 
         const admin = await executeQuery({
-          query: "SELECT * FROM Admins WHERE email='" + req.body.email + "'",
+          query: "SELECT * FROM admins WHERE email='" + req.body.email + "'",
         });
         if (admin.length > 0) {
           return res.send({

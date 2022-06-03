@@ -1,93 +1,85 @@
-import "semantic-ui-css/semantic.min.css";
-import React, { Component } from "react";
-import Router from "next/router";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
-} from "semantic-ui-react";
+import { TextInput, Group, PasswordInput, Card, Button } from "@mantine/core";
+import { ComposedButton, Center } from "../src/components/common";
+import { useForm } from "@mantine/form";
 import axios from "axios";
 
-class LoginForm extends Component {
-  state = {
-    email: "",
-    submittedEmail: "",
-    password: "",
-    submittedPassword: "",
+export default function Demo() {
+  const onsubmit = async (values: { email: string; password: string }) => {
+    try {
+      const { email, password } = values;
+      const response = await axios.post("/api/signin", values);
+    } catch (err) {
+      console.log(err);
+    }
   };
+  const form = useForm({
+    initialValues: {
+      email: "",
+      password: "",
+      // 'confirm password': '',
+    },
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
-  handleSubmit = () => {
-    console.log("inside handle submit");
-    const { email, password } = this.state;
-    this.setState({
-      submittedEmail: email,
-      submittedPassword: password,
-    });
-    let data = {
-      email: email,
-      password: password,
-    };
-    console.log(data);
-    axios
-      .post("/api/signin", data)
-      .then((response) => {
-        console.log(response);
-        Router.push(response.data.link);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-  render() {
-    const { email, password } = this.state;
-    return (
-      <div>
-        <Grid
-          textAlign="center"
-          style={{ height: "100vh" }}
-          verticalAlign="middle"
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      // password: (value) =>
+      //   value.length >= 8 ? null : "please enter at least 8 digit",
+      // 'confirm password': (value, values) =>
+      //   value !== values.password ? 'Passwords did not match' : null,
+    },
+  });
+
+  return (
+    <Center style={{ width: "100%", height: "100vh" }}>
+      <Card
+        shadow="lg"
+        p="lg"
+        mx="auto"
+        sx={{
+          width: "50%",
+          height: "80%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <form
+          onSubmit={form.onSubmit((values) => {
+            return onsubmit(values);
+          })}
+          style={{
+            width: "100%",
+          }}
         >
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h2" color="black" textAlign="center">
-              Log-in to your account
-            </Header>
-            <Form size="large" onSubmit={this.handleSubmit}>
-              <Segment stacked>
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  name="email"
-                  value={email}
-                  onChange={this.handleChange}
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={this.handleChange}
-                />
-                <Form.Button content="Submit" />
-              </Segment>
-            </Form>
-            <Message>
-              New to us? <a href="/choices">Sign Up</a>
-            </Message>
-          </Grid.Column>
-        </Grid>
-      </div>
-    );
-  }
-}
+          <TextInput
+            required
+            label="Email"
+            placeholder="your@email.com"
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            required
+            label="Password"
+            placeholder="8 digit password"
+            {...form.getInputProps("password")}
+          />
+          {/* <PasswordInput
+            required
+            label="Confirm password"
+            placeholder="Confirm password"
+            {...form.getInputProps('confirm password')}
+          /> */}
 
-export default LoginForm;
+          <Button
+            type="submit"
+            mt="lg"
+            sx={{
+              width: "100%",
+            }}
+          >
+            Submit
+          </Button>
+        </form>
+      </Card>
+    </Center>
+  );
+}

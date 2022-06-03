@@ -8,8 +8,8 @@ export default async (req, res) => {
     console.log("req nom", req.body);
     const result = await executeQuery({
       query:
-        "INSERT INTO Users VALUES('" +
-        req.body.roll +
+        "INSERT INTO users VALUES('" +
+        req.body.regnum +
         "','" +
         req.body.name +
         "',NULL,NULL,'" +
