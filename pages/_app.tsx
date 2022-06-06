@@ -1,5 +1,6 @@
 import { UserProvider } from "@auth0/nextjs-auth0";
 import "../styles/globals.css";
+import { AuthProvider } from "../lib/client/context/auth";
 import Head from "next/head";
 import { MantineProvider,useMantineTheme } from "@mantine/core";
 function MyApp({ Component, pageProps }) {
@@ -18,7 +19,7 @@ function MyApp({ Component, pageProps }) {
         </style>
       </Head>
       <UserProvider>
-      <MantineProvider
+        <AuthProvider><MantineProvider
         theme={{
           colorScheme: "light",
           fontFamily: "tiro bangla",
@@ -32,7 +33,8 @@ function MyApp({ Component, pageProps }) {
         withNormalizeCSS
       >
         <Component {...pageProps} />
-      </MantineProvider>
+      </MantineProvider></AuthProvider>
+      
     </UserProvider>
     </>
     

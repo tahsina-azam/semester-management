@@ -2,12 +2,14 @@ import { TextInput, Group, PasswordInput, Card, Button } from "@mantine/core";
 import { ComposedButton, Center } from "../src/components/common";
 import { useForm } from "@mantine/form";
 import axios from "axios";
+import { useAuth } from "../lib/client/context/auth";
 
 export default function Demo() {
+  const { signIn } = useAuth();
   const onsubmit = async (values: { email: string; password: string }) => {
     try {
       const { email, password } = values;
-      const response = await axios.post("/api/signin", values);
+      const response = await signIn(email, password);
     } catch (err) {
       console.log(err);
     }
