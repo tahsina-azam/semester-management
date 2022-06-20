@@ -55,7 +55,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const verifyToken = () => {
       const token = JSON.parse(localStorage.getItem("token"));
       console.log("token: ", token);
-      if (token === undefined) {
+      if (token === undefined || token === null) {
+        console.log("undfined token");
         setLoading(false);
         if (router.pathname === "/sign-up") router.push("/sign-up");
         else if (router.pathname === "/sign-in") router.push("/sign-in");
@@ -78,22 +79,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   ): Promise<{ status: string; message: string; errorMessage?: string }> => {
     console.log("in sign up");
     setEmail(email);
-    const response = await axios.post("/api/signup", {
-      name,
-      email,
-      password,
-      regnum,
-    });
-    const {
-      data: { status, message, errorMessage },
-    } = response;
-    if (status === "fail")
+    try {
+      const response = await axios.post("/api/signup", {
+        name,
+        email,
+        password,
+        regnum,
+      });
+      const {
+        data: { status, message, errorMessage },
+      } = response;
+      if (status === "fail")
+        return {
+          status,
+          message,
+          errorMessage,
+        };
+      try {
+        const responseForActivation = await axios.post(
+          "/api/uth/activate-account",
+          {
+            name,
+            email,
+          }
+        );
+        const {
+          data: { status, message, errorMessage },
+        } = responseForActivation;
+        if (status === "fail")
+          return {
+            status,
+            message,
+            errorMessage,
+          };
+        return {
+          status,
+          message,
+        };
+      } catch (err) {
+        return {
+          status: "fail",
+          message: "error occured while sending mail",
+          errorMessage: err,
+        };
+      }
+    } catch (err) {
+      console.log(err);
       return {
-        status,
-        message,
-        errorMessage,
+        status: "fail",
+        message: "error occured while registering",
+        errorMessage: err,
       };
-      const rep
+    }
   };
 
   const signIn = async (

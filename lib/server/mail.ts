@@ -1,25 +1,26 @@
 import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(
-  "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"
-);
+import ENV from "./env";
+sgMail.setApiKey(ENV.SENDGRID_API_KEY);
 export default async function SendMail(
   to: string,
   subject: string,
   text: string,
   html: string
 ) {
-  console.log(`email in sending mail ${to}`)
+  console.log(`email in sending mail ${to}`);
   const msg = {
-    to: to, 
+    to,
     from: "nowshin22@student.sust.edu",
-    subject: subject,
-    text: text,
-    html: html,
+    subject,
+    text,
+    html,
   };
   try {
     const response = await sgMail.send(msg);
     console.log("Email sent");
+    return { status: "success" };
   } catch (error) {
     console.error(error);
+    return { status: "fail", error };
   }
 }
