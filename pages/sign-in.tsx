@@ -1,7 +1,6 @@
 import { TextInput, Group, PasswordInput, Card, Button } from "@mantine/core";
 import { ComposedButton, Center } from "../src/components/common";
 import { useForm } from "@mantine/form";
-import axios from "axios";
 import { useAuth } from "../lib/client/context/auth";
 
 export default function Demo() {
@@ -18,15 +17,10 @@ export default function Demo() {
     initialValues: {
       email: "",
       password: "",
-      // 'confirm password': '',
     },
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      // password: (value) =>
-      //   value.length >= 8 ? null : "please enter at least 8 digit",
-      // 'confirm password': (value, values) =>
-      //   value !== values.password ? 'Passwords did not match' : null,
     },
   });
 
