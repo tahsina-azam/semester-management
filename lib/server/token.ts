@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
 import ENV from "./env";
 export default function createToken(email: string, name: string) {
-  console.log(process.env.JWT_SECRET);
+  console.log(ENV.JWT_SECRET);
   const token = jwt.sign(
     {
       email,
       name,
     },
-    ENV.JWT_SECRET,
-    { algorithm: "HS256", expiresIn: "3h" }
+    ENV.JWT_SECRET
   );
+  console.log("Created");
+  console.log(token);
 
   return token;
 }

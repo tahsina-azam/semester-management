@@ -1,5 +1,4 @@
 import axios from "axios";
-import cookie from "js-cookie";
 import { useRouter } from "next/router";
 import {
   createContext,
@@ -8,19 +7,21 @@ import {
   useEffect,
   useState,
 } from "react";
-import { json } from "stream/consumers";
 import { User } from "../../common/types";
+interface vars {
+  email: string;
+  name: string;
+  password: string;
+  regnum?: string;
+  department?: string;
+}
 interface Auth {
   isLoading: boolean;
   isLoggedIn: boolean;
   user: User;
   email: string;
   signUpAndVerifyEmail: (
-    name: string,
-    regnum: string,
-    email: string,
-    password: string,
-    department?: string
+    variables: vars
   ) => Promise<{ status: string; message: string; errorMessage?: string }>;
   signIn: (
     email: string,
@@ -36,12 +37,8 @@ const AuthContext = createContext<Auth>({
   email: "",
   signIn: (email: string, password: string) =>
     new Promise((res) => res({ status: "", message: "" })),
-  signUpAndVerifyEmail: (
-    name: string,
-    regnum: string,
-    email: string,
-    password: string
-  ) => new Promise((res) => res({ status: "", message: "" })),
+  signUpAndVerifyEmail: (variables: vars) =>
+    new Promise((res) => res({ status: "", message: "" })),
   signOut: () => {},
   setUser: () => {},
 });
@@ -58,9 +55,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token === undefined || token === null) {
         console.log("undfined token");
         setLoading(false);
-        if (router.pathname === "/sign-up") router.push("/sign-up");
-        else if (router.pathname === "/sign-in") router.push("/sign-in");
-        else router.push("/sign-in");
+        //later ------------------------------------------
+        // if (router.pathname === "/sign-up") router.push("/sign-up");
+        // else if (router.pathname === "/sign-in") router.push("/sign-in");
+        // else router.push("/sign-in");
         return;
       }
       const { name, role, email } = token;
@@ -72,21 +70,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUpAndVerifyEmail = async (
-    name: string,
-    regnum: string,
-    email: string,
-    password: string,
-    department?: string
+    variables: vars
   ): Promise<{ status: string; message: string; errorMessage?: string }> => {
+    const { name, email, password, department, regnum } = variables;
     console.log("in sign up");
     setEmail(email);
+    let path = "/api/signup";
+
+    const mainVars: vars = {
+      name,
+      email,
+      password,
+    };
+    console.log({ variables });
+    //teacher
+    if (department !== undefined) {
+      path = path + "/teacher";
+      mainVars.department = department;
+    }
+    //student
+    else if (regnum !== undefined) {
+      mainVars.regnum = regnum;
+    }
+    console.log({ path, mainVars });
     try {
-      const response = await axios.post("/api/signup", {
-        name,
-        email,
-        password,
-        regnum,
-      });
+      const response = await axios.post(path, mainVars);
       const {
         data: { status, message, errorMessage },
       } = response;
@@ -100,8 +108,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const responseForActivation = await axios.post(
           "/api/auth/activate-account",
           {
-            email, 
-            name
+            email,
+            name,
           }
         );
         const {
@@ -146,11 +154,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       console.log({ response });
       const {
-        data: { data, status, code: message },
+        data: { data, status, code: message, link },
       } = response;
       console.log(`status: ${status}`);
       if (status === "fail") {
-        // router.push("/sign-up");
+        //router.push(link);
         return { status, message };
       }
       const { role, name } = data;
@@ -159,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log(`token ${localStorage.getItem("token")}`);
       setLoggedIn(true);
       setUser({ role, email, name } as User);
-      router.push("/");
+      router.push(link);
       setLoading(false);
       return { status: "success", message };
     } catch (err) {

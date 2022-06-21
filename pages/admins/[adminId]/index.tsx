@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import MenuBar from "../../../../src/components/common/menubar";
 import "semantic-ui-css/semantic.min.css";
 import axios from "axios";
 
