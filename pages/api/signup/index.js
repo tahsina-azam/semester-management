@@ -21,7 +21,8 @@ export default async function handler(req, res) {
     });
     console.log("ttt", result);
     res.send({
-      status: "success"
+      status: "success",
+      message: "successfully registered student"
     })
   } catch (error) {
     console.log(error);

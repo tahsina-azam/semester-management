@@ -9,19 +9,17 @@ import {
 import { ComposedButton, Center } from "../src/components/common";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
-import { fail } from "assert";
-export default function Demo() {
+export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
     email: string;
     password: string;
-    "confirm password"?: string;
+    "confirm password": string;
     regnum: string;
   }) => {
     console.log(values);
-    const { name, email, password, regnum } = values;
-    const response = await signUpAndVerifyEmail(name, regnum, email, password);
+    const response = await signUpAndVerifyEmail(values);
     const { status, message } = response;
     if (status === "fail") {
       console.log(response.errorMessage);
