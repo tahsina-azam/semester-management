@@ -1,12 +1,12 @@
 import mysql from "serverless-mysql";
-
+import ENV from "./env";
 const db = mysql({
   config: {
-    host: "127.0.0.1",
-    port: 3306,
-    database: "semester_management",
-    user: "root",
-    password: process.env.MYSQL_PASSWORD,
+    host: ENV.DATABASE_HOST,
+    port: 6033,
+    database: ENV.DATABASE,
+    user: ENV.DATABASE_USER,
+    password: ENV.DATABASE_PASSWORD,
   },
 });
 export default async function excuteQuery({ query, values }) {
