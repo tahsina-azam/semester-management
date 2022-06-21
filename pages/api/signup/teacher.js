@@ -14,7 +14,7 @@ export default async (req, res) => {
     const approval = "pending";
     const result = await executeQuery({
       query:
-        "INSERT INTO Teachers VALUES('" +
+        "INSERT INTO teachers VALUES('" +
         uniqueId +
         "','" +
         req.body.name +
@@ -25,18 +25,18 @@ export default async (req, res) => {
         "',NULL,'" +
         hashedPassword +
         "')",
-      // "INSERT INTO admins VALUES('" +
-      // uniqueId +
-      // "','" +
-      // req.body.email +
-      // "','" +
-      // req.body.name +
-      // "','" +
-      // hashedPassword +
-      // "')",
     });
     console.log("ttt", result);
-  } catch (error) {
-    console.log(error);
+    res.send({
+      status: "successs",
+      message: "successfully registered teacher",
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({
+      status: "fail",
+      message: "try agaun",
+      errorMessage: err,
+    });
   }
 };
