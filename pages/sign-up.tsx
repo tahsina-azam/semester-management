@@ -8,9 +8,10 @@ import {
 } from "@mantine/core";
 import { ComposedButton, Center } from "../src/components/common";
 import { useForm } from "@mantine/form";
-import axios from "axios";
-
+import { useAuth } from "../lib/client/context/auth";
+import { fail } from "assert";
 export default function Demo() {
+  const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
     email: string;
@@ -20,17 +21,11 @@ export default function Demo() {
   }) => {
     console.log(values);
     const { name, email, password, regnum } = values;
-    const subject = "Hello from classademia";
-    const text = "Your OTP is ";
-    const html = "<strong>Valid for only 10 minutes</strong>";
-    console.log(email)
-    const response = await axios.post(
-      "/api/send-mail",
-      {email,
-      subject,
-      text,
-      html}
-    );
+    const response = await signUpAndVerifyEmail(name, regnum, email, password);
+    const { status, message } = response;
+    if (status === "fail") {
+      console.log(response.errorMessage);
+    } else console.log({ status, message });
   };
   const form = useForm({
     initialValues: {
