@@ -15,12 +15,12 @@ interface Auth {
   isLoggedIn: boolean;
   user: User;
   email: string;
-  signUpAndgetVerificationCode: (
+  signUpAndVerifyEmail: (
     name: string,
     regnum: string,
     email: string,
-    department: string,
-    password: string
+    password: string,
+    department?: string
   ) => Promise<{ status: string; message: string; errorMessage?: string }>;
   signIn: (
     email: string,
@@ -36,7 +36,7 @@ const AuthContext = createContext<Auth>({
   email: "",
   signIn: (email: string, password: string) =>
     new Promise((res) => res({ status: "", message: "" })),
-  signUpAndgetVerificationCode: (
+  signUpAndVerifyEmail: (
     name: string,
     regnum: string,
     email: string,
@@ -71,11 +71,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     verifyToken();
   }, []);
 
-  const signUpAndgetVerificationCode = async (
+  const signUpAndVerifyEmail = async (
     name: string,
     regnum: string,
     email: string,
-    password: string
+    password: string,
+    department?: string
   ): Promise<{ status: string; message: string; errorMessage?: string }> => {
     console.log("in sign up");
     setEmail(email);
@@ -97,10 +98,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         };
       try {
         const responseForActivation = await axios.post(
-          "/api/uth/activate-account",
+          "/api/auth/activate-account",
           {
-            name,
-            email,
+            email, 
+            name
           }
         );
         const {
@@ -177,7 +178,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isLoading,
         isLoggedIn,
-        signUpAndgetVerificationCode,
+        signUpAndVerifyEmail,
         signIn,
         user,
         signOut,
