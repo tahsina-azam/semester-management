@@ -75,7 +75,6 @@ export default async (req, res) => {
             },
           });
         }
-        console.log("password matched");
       }
     } else {
       return res.status(400).send({

@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const { token } = await req.query;
   console.log("in the correct place");
   try {
-    console.log(token);
-    const data = jwt.verify(token, ENV.JWT_SECRET) as jwtPayload;
+    console.log(req.query);
+    const data = jwt.verify(req.query.token, ENV.JWT_SECRET) as jwtPayload;
     console.log(data.email);
     res.send(
       `<html>Your account was activated. You are being redirected...<script>window.location.replace("/sign-in")</script></html>`
@@ -21,3 +21,4 @@ export default async function handler(req, res) {
     );
   }
 }
+//////////
