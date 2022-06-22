@@ -7,10 +7,13 @@ export default function createToken(email: string, name: string) {
       email,
       name,
     },
-    ENV.JWT_SECRET
+    ENV.JWT_SECRET,
+    {
+      algorithm: "HS256",
+    }
   );
   console.log("Created");
-  console.log(token);
+  console.log({token});
 
   return token;
 }
