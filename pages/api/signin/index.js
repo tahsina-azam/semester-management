@@ -2,7 +2,7 @@ import executeQuery from "../../../config/db";
 import bcrypt from "bcryptjs";
 
 export default async (req, res) => {
-  const {email, password} = req.body
+  const { email, password } = req.body;
   try {
     console.log("sign in response");
     console.log("req nom", req.body.password);
@@ -37,11 +37,11 @@ export default async (req, res) => {
             teacher: teacher,
             status: "success",
             message: "login successful",
-            link: "/teachers/" + teacher[0].id,
+            link: "/teachers",
             data: {
               role: "teacher",
-              name: teacher[0].name
-            }
+              name: teacher[0].name,
+            },
           });
         }
       } else {
@@ -57,23 +57,22 @@ export default async (req, res) => {
             admin: admin,
             status: "success",
             message: "login successful",
-            link: "/admins/" + admin[0].id,
+            link: "/admins",
             data: {
-              role: "teacher",
-              name: admin[0].name
-            }
+              role: "admin",
+              name: admin[0].name,
+            },
           });
         } else {
           return res.send({
             student: student,
             status: "success",
             message: "login successful",
-            link: "/student/" + student[0].reg_no,
+            link: "/student",
             data: {
-              role: "teacher",
-              name: student[0].name
-            }
-            
+              role: "student",
+              name: student[0].name,
+            },
           });
         }
         console.log("password matched");

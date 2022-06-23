@@ -1,6 +1,6 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import MenuBar from "../../../../src/components/common/menubar";
+import MenuBar from "../../../src/components/common/menubar";
 
 function Teacher() {
   const currentPath = window.location.pathname;
