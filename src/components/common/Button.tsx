@@ -1,6 +1,6 @@
-import { Button, useMantineTheme } from "@mantine/core";
+import { Button, useMantineTheme, Text } from "@mantine/core";
+import Link from "next/link";
 import { ReactNode } from "react";
-import { Logout } from "tabler-icons-react";
 export default function ComposedButton({ text, variant = "normal" }) {
   return (
     <Button
@@ -17,32 +17,49 @@ export default function ComposedButton({ text, variant = "normal" }) {
     </Button>
   );
 }
-export function NavbarButton({
-  text,
-  onClick,
-  children,
-  color = "dark"
-}: {
-  text: string;
-  onClick: () => void;
-  children?: ReactNode;
-  color?: string
-}) {
+export function NavbarButton({ text, href }: { text: string; href: string }) {
   return (
-    <Button
-      variant="white"
-      color={color}
-      m="5px"
-      onClick={onClick} 
-      style={{fontWeight: "lighter"}}     
-      sx={(theme) => ({
-        backgroundColor: theme.colors.gray[0],
-        "&:hover": {
-          backgroundColor: theme.colors.gray[1],
-        },
-      })}
-    >
-      {text}{children}
-    </Button>
+    <Link href={href} passHref>
+      <Text
+        m="sm"
+        sx={(theme) => ({
+          color: theme.colors.dark[7],
+          // backgroundColor: theme.colors.gray[0],
+          "&:hover": {
+            backgroundColor: theme.colors.cyan[1],
+            color: theme.colors.indigo[8],
+          },
+        })}
+      >
+        {text}
+      </Text>
+    </Link>
+  );
+}
+export function Logout() {
+  return (
+    <Link href={"/sign-in"}>
+      <Button
+        mx="5"
+        onClick={() => {
+          localStorage.removeItem("token");
+          console.log("token removed");
+          console.log(localStorage.getItem("token"));
+        }}
+        mt="auto"
+        sx={(theme) => ({
+          color: "white",
+          fontFamily: theme.fontFamilyMonospace,
+          backgroundColor: theme.colors.indigo[5],
+          // backgroundColor: theme.colors.gray[0],
+          "&:hover": {
+            backgroundColor: theme.colors.cyan[1],
+            color: theme.colors.indigo[8],
+          },
+        })}
+      >
+        Sign out
+      </Button>
+    </Link>
   );
 }
