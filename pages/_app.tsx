@@ -11,20 +11,17 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <style>
           @import
-          url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
+          url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
         </style>
-        <style>
-          @import
-          url('https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap');
-        </style>
+
       </Head>
       <AuthProvider>
         <MantineProvider
           theme={{
             colorScheme: "light",
-            fontFamily: "tiro bangla",
-        
-            headings: { fontFamily: "sriracha", fontWeight: "normal" },
+            fontFamily: "lato",
+
+            headings: { fontFamily: "lato", fontWeight: "normal" },
             // black: theme.colors.dark[7],
             // white: theme.colors.gray[2],
           }}

@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from "react";
-import logo from "../../logo/pinwheel.png";
+import logo from "../../logo/idea.png";
+import AllOnClick from "./barsOnClicks";
 import {
   AppShell,
   Navbar,
@@ -13,11 +14,11 @@ import {
   useMantineTheme,
   Image,
   Title,
+  Badge,
 } from "@mantine/core";
-import { Logout } from "tabler-icons-react";
 import { roleChangesForHeader } from "./roleChanges";
 import { User } from "../../../lib/common/types";
-import { NavbarButton } from "./Button";
+import { Logout, NavbarButton } from "./Button";
 export default function AppShellWithRole({
   children,
   user,
@@ -30,6 +31,7 @@ export default function AppShellWithRole({
   const buttonOfHeader = roleChangesForHeader(user);
   console.log(buttonOfHeader);
   const [opened, setOpened] = useState(false);
+  const { logout } = AllOnClick();
   let i = 0;
   return (
     <AppShell
@@ -49,9 +51,10 @@ export default function AppShellWithRole({
           width={{ sm: 200, lg: 200 }}
         >
           {buttonOfHeader.map((but) => (
-            <NavbarButton text={but.name} onClick={but.onClick} />
+            <NavbarButton text={but.name} href={""} />
           ))}
-          <NavbarButton text="Edit account" onClick={() => {}}/>
+          <NavbarButton text="Edit account" href={""} />
+          <Logout />
         </Navbar>
       }
       // aside={
@@ -76,21 +79,22 @@ export default function AppShellWithRole({
               />
             </MediaQuery>
             <Image width={40} height={40} imageProps={logo} />
-            <Title
+            <Text
               p="md"
+              variant="gradient"
+              gradient={{ from: "indigo", to: "cyan", deg: 40 }}
               style={{
                 fontSize: "20px",
                 fontWeight: "bold",
-                color: theme.colors.cyan[3],
               }}
             >
               Classademia
-            </Title>
+            </Text>
 
             <div style={{ marginLeft: "auto" }}>
-              <NavbarButton text="Logout" onClick={() => {}}>
-                <Logout size={30} strokeWidth={1} color={"black"} />
-              </NavbarButton>
+              <Badge color="cyan" size="lg" ml="%10" variant="dot">
+                {user.role}
+              </Badge>
             </div>
           </div>
         </Header>
