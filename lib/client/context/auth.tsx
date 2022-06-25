@@ -63,6 +63,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       const { name, role, email } = token;
       setUser({ name, role, email } as User);
+      console.log({ name, role, email });
+      console.log({ token });
+      //console.log({user})
       setLoggedIn(true);
       setLoading(false);
     };
@@ -76,7 +79,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log("in sign up");
     setEmail(email);
     let path = "/api/signup";
-
     const mainVars: vars = {
       name,
       email,
@@ -158,7 +160,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } = response;
       console.log(`status: ${status}`);
       if (status === "fail") {
-        //router.push(link);
         return { status, message };
       }
       const { role, name } = data;
@@ -194,7 +195,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
       }}
     >
-      {children}
+      {!isLoading && children}
     </AuthContext.Provider>
   );
 };

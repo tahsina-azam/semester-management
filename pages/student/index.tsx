@@ -1,27 +1,8 @@
-import React from "react";
-import "semantic-ui-css/semantic.min.css";
-import { useRouter } from "next/router";
+import { useAuth } from "../../lib/client/context/auth";
+import AppShellWithRole from "../../src/components/common/Bars";
 
-function Student() {
-  //const currentPath = window.location.pathname;
-  const router = useRouter();
-  const currentPath = router.pathname;
-  const newPath = currentPath + "/join-class";
-  return (
-    <div>
-      <div className="ui menu">
-        <a className="item">Home</a>
-        <a className="item">Profile</a>
-        <a className="item">Semester Rooms</a>
-        <div className="right menu">
-          <a className="item" href={newPath}>
-            join classroom
-          </a>
-          <a className="item">Sign Out</a>
-        </div>
-      </div>
-    </div>
-  );
+export default function Student(){
+  const {user} = useAuth() 
+
+  return <AppShellWithRole user={user}><div></div></AppShellWithRole>
 }
-
-export default Student;
