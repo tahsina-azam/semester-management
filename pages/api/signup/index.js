@@ -17,19 +17,21 @@ export default async function handler(req, res) {
         email +
         "','" +
         hashedPassword +
-        "',NULL)",
+        "','" +
+        Date.now() +
+        "','false')",
     });
     console.log("ttt", result);
     res.send({
       status: "success",
-      message: "successfully registered student"
-    })
+      message: "successfully registered student",
+    });
   } catch (error) {
     console.log(error);
     res.status(400).send({
       status: "fail",
       message: "Please try again",
-      errorMessage: err
-    })
+      errorMessage: err,
+    });
   }
-};
+}

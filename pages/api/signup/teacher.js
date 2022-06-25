@@ -24,7 +24,7 @@ export default async (req, res) => {
         approval +
         "',NULL,'" +
         hashedPassword +
-        "')",
+        "','false')",
     });
     console.log("ttt", result);
     res.send({

@@ -27,7 +27,13 @@ export default async (req, res) => {
           message: "invalid password",
         });
       } else if (teacher.length > 0) {
-        if (teacher[0].status === "pending") {
+        if (teacher[0].is_verified === "false") {
+          return res.status(400).send({
+            status: "not verified",
+            message:
+              "you're yet to be verified, make sure you got the verification mail",
+          });
+        } else if (teacher[0].status === "pending") {
           return res.status(400).send({
             status: "waiting",
             message: "your sign-up request is still pending",
@@ -63,6 +69,12 @@ export default async (req, res) => {
               name: admin[0].name,
             },
           });
+        } else if (student[0].is_verified === "false") {
+          return res.status(400).send({
+            status: "not verified",
+            message:
+              "you're yet to be verified, make sure you got the verification mail",
+          });
         } else {
           return res.send({
             student: student,
@@ -75,7 +87,6 @@ export default async (req, res) => {
             },
           });
         }
-        console.log("password matched");
       }
     } else {
       return res.status(400).send({
@@ -89,7 +100,7 @@ export default async (req, res) => {
 };
 
 //admin->tahsina72@student.sust.edu->123
-//teacher->pinky@gmail.com->12
-//student->tahsina.sheeva@gmail.com->1234
+//teacher->->12
+//student->tahsina.sheeva@gmail.com->12345678
 //miko-miko@gmail.com->12
 //chiko@gmail.com->12
