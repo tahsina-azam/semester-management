@@ -4,7 +4,7 @@ export default async (req, res) => {
     console.log("req nom", req.body);
     const result = await executeQuery({
       query:
-        "UPDATE Teachers SET status='approved' WHERE email='" +
+        "UPDATE teachers SET status='approved' WHERE email='" +
         req.body.email +
         "'",
     });
