@@ -3,7 +3,7 @@ import createToken from "../../../lib/server/token";
 import sendMailViaNodeMailer from "../../../lib/server/mail";
 
 export default async function handler(
-  req: { body: { email: any; name: any } },
+  req: { body: { email: string; name: string, role: string } },
   res: {
     send: (arg0: {
       status: string;
@@ -12,8 +12,8 @@ export default async function handler(
     }) => void;
   }
 ) {
-  const { email, name } = req.body;
-  const token = createToken(email, name);
+  const { email, name, role } = req.body;
+  const token = createToken(email, name, role);
   const subject = "Code from Classademia";
   const text = `Activation link`;
   const html = `<a href="http://localhost:3000/api/auth/${token}">Activate account now</a>`;

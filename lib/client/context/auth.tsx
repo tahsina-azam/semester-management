@@ -112,6 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           {
             email,
             name,
+            role : regnum===undefined?"teacher":"student"
           }
         );
         const {
