@@ -1,5 +1,5 @@
 import { useAuth } from "../../lib/client/context/auth";
-import AppShellWithRole from "../../src/components/common/bars";
+import AppShellWithRole from "../../src/components/common/Bars";
 
 export default function Student(){
   const {user} = useAuth() 

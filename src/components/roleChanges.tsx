@@ -1,4 +1,4 @@
-import { useAuth } from "../../../lib/client/context/auth";
+import { useAuth } from "../../lib/client/context/auth";
 const roles = [
   {
     role: "student",

@@ -22,8 +22,6 @@ function MyApp({ Component, pageProps }) {
             fontFamily: "lato",
 
             headings: { fontFamily: "lato", fontWeight: "normal" },
-            // black: theme.colors.dark[7],
-            // white: theme.colors.gray[2],
           }}
           withGlobalStyles
           withNormalizeCSS

@@ -1,6 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import logo from "../../logo/idea.png";
-import AllOnClick from "./barsOnClicks";
+import Image from "next/image";
 import {
   AppShell,
   Navbar,
@@ -12,13 +11,13 @@ import {
   Burger,
   Button,
   useMantineTheme,
-  Image,
   Title,
   Badge,
 } from "@mantine/core";
-import { roleChangesForHeader } from "./roleChanges";
+import { roleChangesForHeader } from "../roleChanges";
 import { User } from "../../../lib/common/types";
-import { Logout, NavbarButton } from "./Button";
+import { NavbarButton, ComposedButton } from "./Button";
+import Link from "next/link";
 export default function AppShellWithRole({
   children,
   user,
@@ -31,7 +30,6 @@ export default function AppShellWithRole({
   const buttonOfHeader = roleChangesForHeader(user);
   console.log(buttonOfHeader);
   const [opened, setOpened] = useState(false);
-  const { logout } = AllOnClick();
   let i = 0;
   return (
     <AppShell
@@ -51,10 +49,20 @@ export default function AppShellWithRole({
           width={{ sm: 200, lg: 200 }}
         >
           {buttonOfHeader.map((but) => (
-            <NavbarButton text={but.name} href={""} />
+            <NavbarButton text={but.name} href={""} key={++i} />
           ))}
           <NavbarButton text="Edit account" href={""} />
-          <Logout />
+          <Link href={"/sign-in"} passHref>
+            <ComposedButton
+              text="Logout"
+              styles={{ mt: "auto" }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                console.log("token removed");
+                console.log(localStorage.getItem("token"));
+              }}
+            />
+          </Link>
         </Navbar>
       }
       // aside={
@@ -78,7 +86,7 @@ export default function AppShellWithRole({
                 mr="xl"
               />
             </MediaQuery>
-            <Image width={40} height={40} imageProps={logo} />
+            <Image width={40} height={40} src={"/idea.png"} />
             <Text
               p="md"
               variant="gradient"
