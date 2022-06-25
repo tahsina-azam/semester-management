@@ -37,10 +37,10 @@ export default async function handler(req, res) {
             "'",
         });
         console.log("ttt", result, resultT);
-        return res.send({
-          status: "success",
-          message: "successfully verified, please login",
-        });
+        res.send(
+          `<html>Your account was activated. You are being redirected...<script>window.location.replace("/")</script></html>`
+        );
+        
       } catch (error) {
         console.log(error);
         return res.send({
