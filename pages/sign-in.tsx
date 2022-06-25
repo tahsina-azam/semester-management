@@ -1,6 +1,13 @@
-import { TextInput, Group, PasswordInput, Card, Button } from "@mantine/core";
-import { ComposedButton, Center } from "../src/components/common";
+import {
+  TextInput,
+  Group,
+  PasswordInput,
+  Card,
+  Button,
+  Center,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
+import Image from "next/image";
 import { useAuth } from "../lib/client/context/auth";
 
 export default function Demo() {
@@ -8,7 +15,7 @@ export default function Demo() {
   const onsubmit = async (values: { email: string; password: string }) => {
     try {
       const { email, password } = values;
-      const response = await signIn(email, password);
+      await signIn(email, password);
     } catch (err) {
       console.log(err);
     }
@@ -27,53 +34,58 @@ export default function Demo() {
   return (
     <Center style={{ width: "100%", height: "100vh" }}>
       <Card
-        shadow="lg"
-        p="lg"
-        mx="auto"
         sx={{
           width: "50%",
-          height: "80%",
+          height: "100%",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
+          <Image width={60} height={60} src={"/idea.png"} />
+
         <form
           onSubmit={form.onSubmit((values) => {
             return onsubmit(values);
           })}
           style={{
-            width: "100%",
+            width: "50%",
           }}
         >
           <TextInput
             required
+            m={"md"}
             label="Email"
             placeholder="your@email.com"
             {...form.getInputProps("email")}
           />
           <PasswordInput
             required
+            m={"sm"}
             label="Password"
             placeholder="8 digit password"
             {...form.getInputProps("password")}
           />
-          {/* <PasswordInput
-            required
-            label="Confirm password"
-            placeholder="Confirm password"
-            {...form.getInputProps('confirm password')}
-          /> */}
+          <Center>
+            <Button
+              type="submit"
+              m={"sm"}
+              sx={(theme) => ({
+                color: "white",
+                fontFamily: theme.fontFamilyMonospace,
+                backgroundColor: theme.colors.indigo[5],
+                "&:hover": {
+                  backgroundColor: theme.colors.cyan[2],
+                  color: theme.colors.blue[7],
+                },
+              })}
+            >
+              Submit
+            </Button>
+          </Center>
 
-          <Button
-            type="submit"
-            mt="lg"
-            sx={{
-              width: "100%",
-            }}
-          >
-            Submit
-          </Button>
+          {/* <ComposedButton text={"a"} href={""}/> */}
         </form>
       </Card>
     </Center>

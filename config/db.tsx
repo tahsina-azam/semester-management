@@ -3,7 +3,7 @@ import ENV from "./env";
 const db = mysql({
   config: {
     host: ENV.DATABASE_HOST,
-    port: 3306,
+    port: 6033,
     database: ENV.DATABASE,
     user: ENV.DATABASE_USER,
     password: ENV.DATABASE_PASSWORD,
