@@ -4,13 +4,19 @@ import {
   PasswordInput,
   Card,
   Button,
+  Center,
   NumberInput,
+  Footer,
 } from "@mantine/core";
-import { ComposedButton, Center } from "../src/components/common";
+import Image from "next/image";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
+import { useState } from "react";
+import ShowNotification from "../src/components/common/Notifications";
+import { useRouter } from "next/router";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
+  const [notify, setNotify] = useState(0);
   const onsubmit = async (values: {
     name: string;
     email: string;
@@ -19,11 +25,18 @@ export default function SignUp() {
     regnum: string;
   }) => {
     console.log(values);
+    setNotify(1);
     const response = await signUpAndVerifyEmail(values);
     const { status, message } = response;
     if (status === "fail") {
+      setNotify(3);
       console.log(response.errorMessage);
-    } else console.log({ status, message });
+      return;
+    } else {
+      console.log({ status, message });
+      setNotify(2);
+      return;
+    }
   };
   const form = useForm({
     initialValues: {
@@ -46,69 +59,92 @@ export default function SignUp() {
   });
 
   return (
-    <Center style={{ width: "100%", height: "100vh" }}>
-      <Card
-        shadow="lg"
-        p="lg"
-        mx="auto"
-        sx={{
-          width: "50%",
-          height: "80%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <form
-          onSubmit={form.onSubmit((values) => {
-            return onsubmit(values);
-          })}
-          style={{
-            width: "100%",
+    <div style={{ height: "100vh" }}>
+      <Center style={{ width: "100%", height: "auto" }}>
+        <Card
+          sx={{
+            width: "50%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <TextInput
-            required
-            label="Name"
-            placeholder="your full name"
-            {...form.getInputProps("name")}
-          />
-          <TextInput
-            required
-            label="Email"
-            placeholder="your@email.com"
-            {...form.getInputProps("email")}
-          />
-          <TextInput
-            required
-            label="Registration number"
-            placeholder="Your registration number, e.x :2018331001"
-            {...form.getInputProps("regnum")}
-          ></TextInput>
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="8 digit password"
-            {...form.getInputProps("password")}
-          />
-          <PasswordInput
-            required
-            label="Confirm password"
-            placeholder="Confirm password"
-            {...form.getInputProps("confirm password")}
-          />
-
-          <Button
-            type="submit"
-            mt="lg"
-            sx={{
-              width: "100%",
+          <Image width={60} height={60} src={"/idea.png"} />
+          <form
+            onSubmit={form.onSubmit((values) => {
+              return onsubmit(values);
+            })}
+            style={{
+              width: "50%",
             }}
           >
-            Submit
-          </Button>
-        </form>
-      </Card>
-    </Center>
+            <TextInput
+              required
+              label="Name"
+              placeholder="your full name"
+              {...form.getInputProps("name")}
+            />
+            <TextInput
+              required
+              label="Email"
+              placeholder="your@email.com"
+              {...form.getInputProps("email")}
+            />
+            <TextInput
+              required
+              label="Registration number"
+              placeholder="Your registration number, e.x :2018331001"
+              {...form.getInputProps("regnum")}
+            ></TextInput>
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="8 digit password"
+              {...form.getInputProps("password")}
+            />
+            <PasswordInput
+              required
+              label="Confirm password"
+              placeholder="Confirm password"
+              {...form.getInputProps("confirm password")}
+            />
+
+            <Center>
+              <Button
+                type="submit"
+                mt="md"
+                sx={(theme) => ({
+                  color: "white",
+                  fontFamily: theme.fontFamilyMonospace,
+                  backgroundColor: theme.colors.indigo[5],
+                  "&:hover": {
+                    backgroundColor: theme.colors.cyan[2],
+                    color: theme.colors.blue[7],
+                  },
+                })}
+              >
+                Submit
+              </Button>
+            </Center>
+          </form>
+        </Card>
+        <div style={{ alignSelf: "flex-end", justifySelf: "flex-end" }}>
+          {notify === 1 && (
+            <ShowNotification type="loading" text="Please wait a while" />
+          )}
+          {notify === 2 && (
+            <ShowNotification
+              type="success"
+              text="Success! Please check your email. We've sent a verification message."
+            />
+          )}
+          {notify === 3 && (
+            <ShowNotification type="fail" text="Sorry! Please try again." />
+          )}
+        </div>
+      </Center>
+    </div>
   );
 }
