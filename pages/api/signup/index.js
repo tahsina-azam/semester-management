@@ -5,6 +5,7 @@ export default async function handler(req, res) {
   try {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const class_id = Date.now();
     console.log(hashedPassword + "<--hashed password");
     console.log("req nom", req.body);
     const result = await executeQuery({
@@ -18,8 +19,11 @@ export default async function handler(req, res) {
         "','" +
         hashedPassword +
         "','" +
-        Date.now() +
+        class_id +
         "','false')",
+    });
+    const controller = await executeQuery({
+      query: "INSERT INTO controller2 VALUES('" + class_id + "',NULL)",
     });
     console.log("ttt", result);
     res.send({
