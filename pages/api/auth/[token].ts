@@ -1,0 +1,63 @@
+import ENV from "../../../lib/server/env";
+import jwt from "jsonwebtoken";
+import axios from "axios";
+interface jwtPayload {
+  email: string;
+  name: string;
+}
+import executeQuery from "../../../config/db";
+export default async function handler(req, res) {
+  const { token } = await req.query;
+  console.log("in the correct place");
+  try {
+<<<<<<< HEAD
+    console.log(token);
+    const data = jwt.verify(token, ENV.JWT_SECRET) as jwtPayload;
+    console.log(data);
+    if (data.email != null) {
+      try {
+        //console.log("req nom", req.body);
+        const result = await executeQuery({
+          query:
+            "UPDATE users SET is_verified='true' WHERE email='" +
+            data.email +
+            "'",
+        });
+        const resultT = await executeQuery({
+          query:
+            "UPDATE teachers SET is_verified='true' WHERE email='" +
+            data.email +
+            "'",
+        });
+        console.log("ttt", result, resultT);
+        res.send(
+          `<html>Your account was activated. You are being redirected...<script>window.location.replace("/")</script></html>`
+        );
+      } catch (error) {
+        console.log(error);
+        return res.send({
+          status: "error",
+          message: "something went wrong, please try again later",
+        });
+      }
+    }
+=======
+    console.log(req.query);
+    const data = jwt.verify(req.query.token, ENV.JWT_SECRET) as jwtPayload;
+    console.log(data.email);
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
+    res.send(
+      `<html>Your account was activated. You are being redirected...<script>window.location.replace("/sign-in")</script></html>`
+    );
+  } catch (err) {
+    console.log(err);
+    res.send(
+      `<html>our account activation was failed. You are being redirected...<script>window.location.replace("/sign-up")</script></html>`
+    );
+  }
+}
+<<<<<<< HEAD
+//////////
+=======
+//////////
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
