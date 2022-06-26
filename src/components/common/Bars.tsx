@@ -30,10 +30,6 @@ export default function AppShellWithRole({
   const buttonOfHeader = roleChangesForHeader(user);
   console.log(buttonOfHeader);
   const [opened, setOpened] = useState(false);
-<<<<<<< HEAD
-  let i = 0;
-=======
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
   return (
     <AppShell
       styles={{
@@ -51,13 +47,8 @@ export default function AppShellWithRole({
           hidden={!opened}
           width={{ sm: 200, lg: 200 }}
         >
-<<<<<<< HEAD
-          {buttonOfHeader.map((but) => (
-            <NavbarButton text={but.name} href={""} key={++i} />
-=======
           {buttonOfHeader.map((but, index) => (
             <NavbarButton text={but.name} href={but.href} key={index} />
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
           ))}
           <NavbarButton text="Edit account" href={""} />
           <Link href={"/sign-in"} passHref>
@@ -108,11 +99,7 @@ export default function AppShellWithRole({
             </Text>
 
             <div style={{ marginLeft: "auto" }}>
-<<<<<<< HEAD
-              <Badge color="cyan" size="lg" ml="%10" variant="dot">
-=======
               <Badge color="cyan" size="lg" ml="md" variant="dot">
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
                 {user.role}
               </Badge>
             </div>
