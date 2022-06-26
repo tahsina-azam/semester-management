@@ -1,19 +1,23 @@
 import { useAuth } from "../../lib/client/context/auth";
-const roles = [
+interface roleAndUsage {
+  role: string;
+  buttonsForHeader: {
+    name: string;
+    onClick?: () => void;
+    href?: string
+  }[]
+}
+const roles :roleAndUsage[]= [
   {
     role: "student",
     buttonsForHeader: [
       {
         name: "Join a class",
-        onClick: () => {
-          console.log("in button 1");
-        },
+        href: ""
       },
       {
         name: "Contact for project",
-        onClick: () => {
-          console.log("in button 2");
-        },
+       href: ""
       },
     ],
   },
@@ -21,16 +25,16 @@ const roles = [
     role: "teacher",
     buttonsForHeader: [
       {
-        name: "Join a class",
-        onClick: () => {
-          console.log("in button 1");
-        },
+        name: "Create a class",
+        href: ""
       },
       {
-        name: "Contact for project",
-        onClick: () => {
-          console.log("in button 2");
-        },
+        name: "Post something",
+        href: ""
+      },
+      {
+        name: "Assign task",
+        href: ""
       },
     ],
   },
@@ -40,11 +44,12 @@ export const roleChangesForHeader = (user: {
   role: string;
   name: string;
 }) => {
-  let arr: { name: string; onClick: () => void }[];
+  let arr: { name: string; onClick?: () => void, href?: string }[];
   roles.map((role) => {
     if (role.role === user.role) {
       arr = role.buttonsForHeader;
     }
   });
+  
   return arr;
 };
