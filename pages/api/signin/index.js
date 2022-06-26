@@ -68,12 +68,15 @@ export default async (req, res) => {
               role: "admin",
               name: admin[0].name,
             },
+<<<<<<< HEAD
           });
         } else if (student[0].is_verified === "false") {
           return res.status(400).send({
             status: "not verified",
             message:
               "you're yet to be verified, make sure you got the verification mail",
+=======
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
           });
         } else {
           return res.send({

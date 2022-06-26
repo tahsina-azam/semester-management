@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import "semantic-ui-css/semantic.min.css";
 // import React, { Component, useRef } from "react";
 // import { Grid, Form } from "semantic-ui-react";
@@ -134,12 +135,15 @@
 // }
 
 // export default FormSignUp;
+=======
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
 import {
   TextInput,
   Group,
   PasswordInput,
   Card,
   Button,
+<<<<<<< HEAD
   NumberInput,
 } from "@mantine/core";
 import { ComposedButton, Center } from "../src/components/common";
@@ -147,6 +151,21 @@ import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
 export default function SignUpTeacher() {
   const { signUpAndVerifyEmail } = useAuth();
+=======
+  Center,
+  NumberInput,
+  Footer,
+} from "@mantine/core";
+import Image from "next/image";
+import { useForm } from "@mantine/form";
+import { useAuth } from "../lib/client/context/auth";
+import { useState } from "react";
+import ShowNotification from "../src/components/common/Notifications";
+import { useRouter } from "next/router";
+export default function SignUp() {
+  const { signUpAndVerifyEmail } = useAuth();
+  const [notify, setNotify] = useState(0);
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
   const onsubmit = async (values: {
     name: string;
     email: string;
@@ -155,11 +174,26 @@ export default function SignUpTeacher() {
     department: string;
   }) => {
     console.log(values);
+<<<<<<< HEAD
     const response = await signUpAndVerifyEmail(values);
     const { status, message } = response;
     if (status === "fail") {
       console.log(response.errorMessage);
     } else console.log({ status, message });
+=======
+    setNotify(1);
+    const response = await signUpAndVerifyEmail(values);
+    const { status, message } = response;
+    if (status === "fail") {
+      setNotify(3);
+      console.log(response.errorMessage);
+      return;
+    } else {
+      console.log({ status, message });
+      setNotify(2);
+      return;
+    }
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
   };
   const form = useForm({
     initialValues: {
@@ -177,12 +211,17 @@ export default function SignUpTeacher() {
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
+<<<<<<< HEAD
       department: (value) =>
         value === null ? "Please set a department" : null,
+=======
+      department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
     },
   });
 
   return (
+<<<<<<< HEAD
     <Center style={{ width: "100%", height: "100vh" }}>
       <Card
         shadow="lg"
@@ -247,5 +286,94 @@ export default function SignUpTeacher() {
         </form>
       </Card>
     </Center>
+=======
+    <div style={{ height: "100vh" }}>
+      <Center style={{ width: "100%", height: "auto"}} mt="lg">
+        <Card
+          sx={{
+            width: "50%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image width={60} height={60} src={"/idea.png"} />
+          <form
+            onSubmit={form.onSubmit((values) => {
+              return onsubmit(values);
+            })}
+            style={{
+              width: "50%",
+            }}
+          >
+            <TextInput
+              required
+              label="Name"
+              placeholder="your full name"
+              {...form.getInputProps("name")}
+            />
+            <TextInput
+              required
+              label="Email"
+              placeholder="your@email.com"
+              {...form.getInputProps("email")}
+            />
+            <TextInput
+              required
+              label="Registration number"
+              placeholder="Your registration number, e.x :2018331001"
+              {...form.getInputProps("department")}
+            ></TextInput>
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="8 digit password"
+              {...form.getInputProps("password")}
+            />
+            <PasswordInput
+              required
+              label="Confirm password"
+              placeholder="Confirm password"
+              {...form.getInputProps("confirm password")}
+            />
+
+            <Center>
+              <Button
+                type="submit"
+                mt="md"
+                sx={(theme) => ({
+                  color: "white",
+                  fontFamily: theme.fontFamilyMonospace,
+                  backgroundColor: theme.colors.indigo[5],
+                  "&:hover": {
+                    backgroundColor: theme.colors.cyan[2],
+                    color: theme.colors.blue[7],
+                  },
+                })}
+              >
+                Submit
+              </Button>
+            </Center>
+          </form>
+        </Card>
+        <div style={{ alignSelf: "flex-end", justifySelf: "flex-end" }}>
+          {notify === 1 && (
+            <ShowNotification type="loading" text="Please wait a while" />
+          )}
+          {notify === 2 && (
+            <ShowNotification
+              type="success"
+              text="Success! Please check your email. We've sent a verification message."
+            />
+          )}
+          {notify === 3 && (
+            <ShowNotification type="fail" text="Sorry! Please try again." />
+          )}
+        </div>
+      </Center>
+    </div>
+>>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
   );
 }
