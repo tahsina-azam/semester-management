@@ -11,13 +11,13 @@ import {
   Segment,
 } from "semantic-ui-react";
 import axios from "axios";
+import { useAuth } from "../../lib/client/context/auth";
 
 class JoinClass extends Component {
   state = {
     code: "",
     submittedCode: "",
   };
-
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
   handleSubmit = () => {
     console.log("inside handle submit");
@@ -30,7 +30,7 @@ class JoinClass extends Component {
     console.log();
     let data = {
       code: code,
-      roll: arr[2],
+      email: "tahsina.sheeva@gmail.com",
     };
     console.log(data);
     axios

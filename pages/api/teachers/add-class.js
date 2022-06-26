@@ -26,21 +26,29 @@ export default async (req, res) => {
     const uniqueId = uuidv4();
 
     const classId = getClassId().toString();
-
-    console.log("req nom", req.body);
-    const result_semester = await executeQuery({
+    const if_same_year = await executeQuery({
       query:
-        "INSERT INTO Semesters VALUES('" +
-        uniqueId +
-        "','" +
+        "SELECT s_date FROM semesters WHERE s_order='" +
         req.body.semester +
-        "','" +
+        "' AND s_year='" +
         req.body.year +
-        "','" +
-        today +
-        "')",
+        "'",
     });
-
+    console.log("req nom", req.body);
+    if (if_same_year.length > 0 && if_same_year[0].s_date != yyyy) {
+      const result_semester = await executeQuery({
+        query:
+          "INSERT INTO Semesters VALUES('" +
+          uniqueId +
+          "','" +
+          req.body.semester +
+          "','" +
+          req.body.year +
+          "','" +
+          yyyy +
+          "')",
+      });
+    }
     const result = await executeQuery({
       query:
         "INSERT INTO Courses VALUES('" +

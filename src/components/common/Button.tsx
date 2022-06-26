@@ -1,18 +1,50 @@
-import { Button, useMantineTheme } from "@mantine/core";
-const ComposedButton = ({ text,variant="normal"}) => {
+import { Button, useMantineTheme, Text } from "@mantine/core";
+import Link from "next/link";
+import { ReactChild, ReactFragment, ReactPortal } from "react";
+export function NavbarButton({ text, href }: { text: string; href: string }) {
   return (
-    <Button
-      size="md"
-      color={variant==="danger"?"red": "teal"}
-      style={{
-        marginTop: "10px",
-        marginBottom: "10px",
-        marginRight: "10px",
-        marginLeft: "10px",
-      }}
-    >
-      {text}
-    </Button>
+    <Link href={href} passHref>
+      <Text
+        m="sm"
+        sx={(theme) => ({
+          color: theme.colors.dark[7],
+          // backgroundColor: theme.colors.gray[0],
+          "&:hover": {
+            backgroundColor: theme.colors.cyan[1],
+            color: theme.colors.indigo[8],
+          },
+        })}
+      >
+        {text}
+      </Text>
+    </Link>
   );
-};
-export default ComposedButton;
+}
+export function ComposedButton({
+  text,
+  onClick,
+  styles,
+}: {
+  text: string;
+  onClick?: () => void;
+  styles?: object;
+}) {
+  return (
+      <Button
+        {... onClick && {onClick: onClick}}
+        {...styles && styles}
+        sx={(theme) => ({
+          color: "white",
+          fontFamily: theme.fontFamilyMonospace,
+          backgroundColor: theme.colors.indigo[5],
+          "&:hover": {
+            backgroundColor: theme.colors.cyan[2],
+            color: theme.colors.blue[7],
+          },
+          
+        })}
+      >
+        {text}
+      </Button>
+  );
+}
