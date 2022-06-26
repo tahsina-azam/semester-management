@@ -24,10 +24,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-<<<<<<< HEAD
-=======
     "firebase": "^9.8.4",
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
     "husky": "^8.0.1",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
