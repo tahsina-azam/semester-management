@@ -32,3 +32,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Husky Setup
+
+Husky can prevent you from bad git commit, git push and more. If you are getting this error check your code syntax, in case if you are getting this error even your code is valid. Please use the below command.
+
+```bash
+git commit -m "message" --no-verify
+```
