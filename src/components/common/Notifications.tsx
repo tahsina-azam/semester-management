@@ -1,5 +1,4 @@
 import { Notification } from "@mantine/core";
-import { ReactNode } from "react";
 import { Check, X } from 'tabler-icons-react';
 export default function ShowNotification({ type, title, text}: {
     type: string,

@@ -14,6 +14,7 @@ import { useAuth } from "../lib/client/context/auth";
 import { useState } from "react";
 import ShowNotification from "../src/components/common/Notifications";
 import { useRouter } from "next/router";
+import { TypeButton } from "../src/components/common/Button";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
   const [notify, setNotify] = useState(0);
@@ -112,21 +113,7 @@ export default function SignUp() {
             />
 
             <Center>
-              <Button
-                type="submit"
-                mt="md"
-                sx={(theme) => ({
-                  color: "white",
-                  fontFamily: theme.fontFamilyMonospace,
-                  backgroundColor: theme.colors.indigo[5],
-                  "&:hover": {
-                    backgroundColor: theme.colors.cyan[2],
-                    color: theme.colors.blue[7],
-                  },
-                })}
-              >
-                Submit
-              </Button>
+              <TypeButton/>
             </Center>
           </form>
         </Card>

@@ -13,11 +13,11 @@ const roles :roleAndUsage[]= [
     buttonsForHeader: [
       {
         name: "Join a class",
-        href: ""
+        href: "/student/join-class",
       },
       {
         name: "Contact for project",
-       href: ""
+       href: "",
       },
     ],
   },
@@ -26,15 +26,15 @@ const roles :roleAndUsage[]= [
     buttonsForHeader: [
       {
         name: "Create a class",
-        href: ""
+        href: "",
       },
       {
         name: "Post something",
-        href: ""
+        href: "",
       },
       {
         name: "Assign task",
-        href: ""
+        href: "/teachers/create-task",
       },
     ],
   },

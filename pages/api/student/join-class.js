@@ -3,7 +3,7 @@ export default async (req, res) => {
   try {
     console.log("req nom", req.body);
     const result = await executeQuery({
-      query: "SELECT * FROM Courses WHERE c_id='" + req.body.code + "'",
+      query: "SELECT * FROM courses WHERE c_id='" + req.body.code + "'",
     });
     console.log("ttt", result);
 
@@ -11,15 +11,20 @@ export default async (req, res) => {
       var feed = { class_code: req.body.code };
       var data = [];
       const student = await executeQuery({
-        query: "SELECT * FROM Users WHERE email='" + req.body.email + "'",
+        query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
       });
       const if_already_exist = await executeQuery({
         query:
           "SELECT * FROM controller3 WHERE id='" +
           student[0].class_id +
-          "' AND c_id='" +
-          req.body.code +
-          "'",
+          "','" +
+          result[0].c_id +
+          "')",
+      });
+      return res.send({
+        status: "success",
+        result: result,
+        link: "/student/classroom/" + req.body.code,
       });
       console.log("if already exist->" + if_already_exist.length);
       if (if_already_exist.length === 0) {
@@ -42,6 +47,7 @@ export default async (req, res) => {
       }
     } else {
       return res.status(400).send({
+        status: "fail",
         message: "Wrong Code",
       });
     }

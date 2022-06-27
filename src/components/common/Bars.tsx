@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { roleChangesForHeader } from "../roleChanges";
 import { User } from "../../../lib/common/types";
-import { NavbarButton, ComposedButton } from "./Button";
+import ComposedButton, { NavbarButton } from "./Button";
 import Link from "next/link";
 export default function AppShellWithRole({
   children,
@@ -48,13 +48,17 @@ export default function AppShellWithRole({
           width={{ sm: 200, lg: 200 }}
         >
           {buttonOfHeader.map((but, index) => (
-            <NavbarButton text={but.name} href={but.href} key={index} />
+            <NavbarButton
+              text={but.name}
+              href={but.href}
+              key={index}
+            />
           ))}
           <NavbarButton text="Edit account" href={""} />
           <Link href={"/sign-in"} passHref>
             <ComposedButton
               text="Logout"
-              styles={{ mt: "auto" }}
+              style={{ mt: "auto" }}
               onClick={() => {
                 localStorage.removeItem("token");
                 console.log("token removed");
