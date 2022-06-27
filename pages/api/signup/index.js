@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const controller = await executeQuery({
       query: "INSERT INTO controller2 VALUES('" + class_id + "',NULL)",
     });
-    console.log("ttt", result);
+    console.log("ttt", result, controller);
     res.send({
       status: "success",
       message: "successfully registered student",

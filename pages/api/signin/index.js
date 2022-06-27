@@ -69,7 +69,7 @@ export default async (req, res) => {
               name: admin[0].name,
             },
           });
-        } else {
+        } else if (student[0].is_verified === "true") {
           return res.send({
             student: student,
             status: "success",
@@ -79,6 +79,11 @@ export default async (req, res) => {
               role: "student",
               name: student[0].name,
             },
+          });
+        } else {
+          return res.status(400).send({
+            status: "fail",
+            message: "you are not verified yet.",
           });
         }
       }
