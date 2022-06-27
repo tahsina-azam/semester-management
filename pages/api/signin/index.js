@@ -69,7 +69,13 @@ export default async (req, res) => {
               name: admin[0].name,
             },
           });
-        } else if (student[0].is_verified === "true") {
+        } else if (student[0].is_verified === "false") {
+          return res.status(400).send({
+            status: "not verified",
+            message:
+              "you're yet to be verified, make sure you got the verification mail",
+          });
+        } else {
           return res.send({
             student: student,
             status: "success",

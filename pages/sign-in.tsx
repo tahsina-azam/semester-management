@@ -9,6 +9,7 @@ import {
 import { useForm } from "@mantine/form";
 import Image from "next/image";
 import { useAuth } from "../lib/client/context/auth";
+import { TypeButton } from "../src/components/common/Button";
 
 export default function Demo() {
   const { signIn } = useAuth();
@@ -68,21 +69,7 @@ export default function Demo() {
             {...form.getInputProps("password")}
           />
           <Center>
-            <Button
-              type="submit"
-              m={"sm"}
-              sx={(theme) => ({
-                color: "white",
-                fontFamily: theme.fontFamilyMonospace,
-                backgroundColor: theme.colors.indigo[5],
-                "&:hover": {
-                  backgroundColor: theme.colors.cyan[2],
-                  color: theme.colors.blue[7],
-                },
-              })}
-            >
-              Submit
-            </Button>
+            <TypeButton/>
           </Center>
 
           {/* <ComposedButton text={"a"} href={""}/> */}
