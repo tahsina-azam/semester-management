@@ -18,6 +18,7 @@
     "@mantine/form": "^4.2.6",
     "@mantine/hooks": "^4.2.6",
     "@mantine/next": "^4.2.6",
+    "@mantine/notifications": "^4.2.11",
     "@mantine/rte": "^4.2.11",
     "@sendgrid/mail": "^7.7.0",
     "@types/jsonwebtoken": "^8.5.8",

@@ -12,12 +12,14 @@ import Image from "next/image";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
 import { useState } from "react";
-import ShowNotification from "../src/components/common/Notifications";
+import ShowNotification, {
+  setNotify,
+} from "../src/components/common/Notifications";
 import { useRouter } from "next/router";
 import { TypeButton } from "../src/components/common/Button";
+import notify from "../src/components/common/Notifications";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
-  const [notify, setNotify] = useState(0);
   const onsubmit = async (values: {
     name: string;
     email: string;
@@ -26,17 +28,38 @@ export default function SignUp() {
     regnum: string;
   }) => {
     console.log(values);
-    setNotify(1);
+    notify({
+      id: "register",
+      loading: true,
+      disallowClose: true,
+      type: "default",
+      title: "Registering!",
+      text: "Please wait for a minute...",
+    });
     const response = await signUpAndVerifyEmail(values);
     const { status, message } = response;
     if (status === "fail") {
-      setNotify(3);
       console.log(response.errorMessage);
-      return;
+      return setTimeout(() => {
+        setNotify({
+          id: "register",
+          type: "fail",
+          title: "Sorry!",
+          text: response.errorMessage,
+          autoClose: 2000,
+        });
+      }, 3000);
     } else {
       console.log({ status, message });
-      setNotify(2);
-      return;
+      return setTimeout(() => {
+        setNotify({
+          id: "register",
+          type: "success",
+          title: "Registered!",
+          text: "We've sent you an email to verify. Please do as instructed in the message",
+          autoClose: 2000,
+        });
+      }, 3000);
     }
   };
   const form = useForm({
@@ -113,24 +136,10 @@ export default function SignUp() {
             />
 
             <Center>
-              <TypeButton/>
+              <TypeButton />
             </Center>
           </form>
         </Card>
-        <div style={{ alignSelf: "flex-end", justifySelf: "flex-end" }}>
-          {notify === 1 && (
-            <ShowNotification type="loading" text="Please wait a while" />
-          )}
-          {notify === 2 && (
-            <ShowNotification
-              type="success"
-              text="Success! Please check your email. We've sent a verification message."
-            />
-          )}
-          {notify === 3 && (
-            <ShowNotification type="fail" text="Sorry! Please try again." />
-          )}
-        </div>
       </Center>
     </div>
   );

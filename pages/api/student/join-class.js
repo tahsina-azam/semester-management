@@ -23,35 +23,20 @@ export default async (req, res) => {
       });
       return res.send({
         status: "success",
+        message: "Welcome to the course!",
         result: result,
         link: "/student/classroom/" + req.body.code,
       });
-      console.log("if already exist->" + if_already_exist.length);
-      if (if_already_exist.length === 0) {
-        const result_semester = await executeQuery({
-          query:
-            "INSERT INTO controller3 VALUES('" +
-            student[0].class_id +
-            "','" +
-            result[0].c_id +
-            "')",
-        });
-        return res.send({
-          result: result,
-          link: "/student/classroom/" + req.body.code,
-        });
-      } else {
-        return res.status(400).send({
-          message: "You already joined the classroom",
-        });
-      }
-    } else {
-      return res.status(400).send({
-        status: "fail",
-        message: "Wrong Code",
-      });
     }
+    return res.status(400).send({
+      status: "fail",
+      message: "Please try again with a correct code.",
+    });
   } catch (error) {
     console.log(error);
+    return res.status(400).send({
+      status: "fail",
+      message: "Please try again.",
+    });
   }
 };
