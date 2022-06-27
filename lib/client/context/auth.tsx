@@ -86,12 +86,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
     console.log({ variables });
     //teacher
-    if (department !== undefined) {
+    if (department !== "") {
       path = path + "/teacher";
       mainVars.department = department;
     }
     //student
-    else if (regnum !== undefined) {
+    else if (regnum !== "") {
       mainVars.regnum = regnum;
     }
     console.log({ path, mainVars });

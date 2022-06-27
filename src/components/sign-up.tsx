@@ -10,20 +10,18 @@ import {
 } from "@mantine/core";
 import Image from "next/image";
 import { useForm } from "@mantine/form";
-import { useAuth } from "../lib/client/context/auth";
-import { useState } from "react";
-import setNotify from "../src/components/common/Notifications";
-import { useRouter } from "next/router";
-import { TypeButton } from "../src/components/common/Button";
-import notify from "../src/components/common/Notifications";
-export default function SignUp() {
+import { useAuth } from "../../lib/client/context/auth";
+import { setNotify } from "../../src/components/common/Notifications";
+import { TypeButton } from "../../src/components/common/Button";
+import notify from "../../src/components/common/Notifications";
+export default function SignUp({ type }: { type: string }) {
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
     email: string;
     password: string;
-    "confirm password": string;
-    regnum: string;
+    regnum?: string;
+    department?: string;
   }) => {
     console.log(values);
     notify({
@@ -40,6 +38,7 @@ export default function SignUp() {
       console.log(response.errorMessage);
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "fail",
           title: "Sorry!",
           text: response.errorMessage,
@@ -50,9 +49,10 @@ export default function SignUp() {
       console.log({ status, message });
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "success",
           title: "Registered!",
-          text: "Please check your email account to verify",
+          text: "We've sent you an email to verify. Please do as instructed in the message",
           autoClose: 2000,
         });
       }, 3000);
@@ -65,6 +65,7 @@ export default function SignUp() {
       password: "",
       "confirm password": "",
       regnum: "",
+      department: "",
     },
 
     validate: {
@@ -75,6 +76,8 @@ export default function SignUp() {
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
       regnum: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      department: (value) =>
+        value === "" ? "Please set your department":null,
     },
   });
 
@@ -112,12 +115,21 @@ export default function SignUp() {
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
+            ...(type==="student" &&
             <TextInput
               required
               label="Registration number"
               placeholder="Your registration number, e.x :2018331001"
               {...form.getInputProps("regnum")}
             ></TextInput>
+            ) ...(type==="teacher" &&
+            <TextInput
+              required
+              label="Department"
+              placeholder="Your department, e.x :CSE"
+              {...form.getInputProps("department")}
+            ></TextInput>
+            )
             <PasswordInput
               required
               label="Password"
@@ -130,7 +142,6 @@ export default function SignUp() {
               placeholder="Confirm password"
               {...form.getInputProps("confirm password")}
             />
-
             <Center>
               <TypeButton />
             </Center>
