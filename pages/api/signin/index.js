@@ -68,17 +68,8 @@ export default async (req, res) => {
               role: "admin",
               name: admin[0].name,
             },
-<<<<<<< HEAD
           });
-        } else if (student[0].is_verified === "false") {
-          return res.status(400).send({
-            status: "not verified",
-            message:
-              "you're yet to be verified, make sure you got the verification mail",
-=======
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
-          });
-        } else {
+        } else if (student[0].is_verified === "true") {
           return res.send({
             student: student,
             status: "success",
@@ -88,6 +79,11 @@ export default async (req, res) => {
               role: "student",
               name: student[0].name,
             },
+          });
+        } else {
+          return res.status(400).send({
+            status: "fail",
+            message: "you are not verified yet.",
           });
         }
       }
@@ -103,7 +99,7 @@ export default async (req, res) => {
 };
 
 //admin->tahsina72@student.sust.edu->123
-//teacher->->12
+//teacher->atahsinam@gmail.com->12345678
 //student->tahsina.sheeva@gmail.com->12345678
 //miko-miko@gmail.com->12
 //chiko@gmail.com->12

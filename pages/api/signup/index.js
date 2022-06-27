@@ -25,16 +25,11 @@ export default async function handler(req, res) {
     const controller = await executeQuery({
       query: "INSERT INTO controller2 VALUES('" + class_id + "',NULL)",
     });
-    console.log("ttt", result);
+    console.log("ttt", result, controller);
     res.send({
       status: "success",
-<<<<<<< HEAD
       message: "successfully registered student",
     });
-=======
-      message: "successfully registered student"
-    })
->>>>>>> fdf9011b31e03f460140b5453e48d26e475abaab
   } catch (error) {
     console.log(error);
     res.status(400).send({
