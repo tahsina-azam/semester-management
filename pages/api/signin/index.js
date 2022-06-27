@@ -99,7 +99,7 @@ export default async (req, res) => {
 };
 
 //admin->tahsina72@student.sust.edu->123
-//teacher->->12
+//teacher->atahsinam@gmail.com->12345678
 //student->tahsina.sheeva@gmail.com->12345678
 //miko-miko@gmail.com->12
 //chiko@gmail.com->12
