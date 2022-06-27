@@ -30,21 +30,20 @@ export function ComposedButton({
   styles?: object;
 }) {
   return (
-      <Button
-        {... onClick && {onClick: onClick}}
-        {...styles && styles}
-        sx={(theme) => ({
-          color: "white",
-          fontFamily: theme.fontFamilyMonospace,
-          backgroundColor: theme.colors.indigo[5],
-          "&:hover": {
-            backgroundColor: theme.colors.cyan[2],
-            color: theme.colors.blue[7],
-          },
-          
-        })}
-      >
-        {text}
-      </Button>
+    <Button
+      {...(onClick && { onClick: onClick })}
+      {...(styles && styles)}
+      sx={(theme) => ({
+        color: "white",
+        fontFamily: theme.fontFamilyMonospace,
+        backgroundColor: theme.colors.indigo[5],
+        "&:hover": {
+          backgroundColor: theme.colors.cyan[2],
+          color: theme.colors.blue[7],
+        },
+      })}
+    >
+      {text}
+    </Button>
   );
 }
