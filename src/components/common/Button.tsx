@@ -45,10 +45,11 @@ export default function ComposedButton({
     </Button>
   );
 }
-export function TypeButton({text="Submit"}:{text?:string}) {
+export function TypeButton({text="Submit", onClick}:{text?:string, onClick?: (e)=> void}) {
   return (
     <Button
       type="submit"
+      onClick={onClick}
       m={"sm"}
       sx={(theme) => ({
         color: "white",
