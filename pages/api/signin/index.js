@@ -86,11 +86,6 @@ export default async (req, res) => {
               name: student[0].name,
             },
           });
-        } else {
-          return res.status(400).send({
-            status: "fail",
-            message: "you are not verified yet.",
-          });
         }
       }
     } else {
