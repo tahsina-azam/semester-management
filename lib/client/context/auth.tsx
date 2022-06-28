@@ -96,15 +96,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     console.log({ path, mainVars });
     try {
-      const response = await axios.post(path, mainVars);
+      const responseForInsertion = await axios.post(path, mainVars);
       const {
-        data: { status, message, errorMessage },
-      } = response;
-      if (status === "fail")
+        data: {
+          statusForInsertion,
+          messageForInsertion,
+          errorMessageForInsertion,
+        },
+      } = responseForInsertion;
+      console.log({responseForInsertion});
+      if (statusForInsertion === "fail")
         return {
-          status,
-          message,
-          errorMessage,
+          status: statusForInsertion,
+          message: messageForInsertion,
+          errorMessage: errorMessageForInsertion,
         };
       try {
         const responseForActivation = await axios.post(
@@ -118,6 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const {
           data: { status, message, errorMessage },
         } = responseForActivation;
+
         if (status === "fail")
           return {
             status,
