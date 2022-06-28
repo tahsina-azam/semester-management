@@ -76,7 +76,7 @@ export default function SignUp() {
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
-      department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      // department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
     },
   });
 
@@ -116,8 +116,8 @@ export default function SignUp() {
             />
             <TextInput
               required
-              label="Registration number"
-              placeholder="Your registration number, e.x :2018331001"
+              label="Department"
+              placeholder="CSE"
               {...form.getInputProps("department")}
             ></TextInput>
             <PasswordInput

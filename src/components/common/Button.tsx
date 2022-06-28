@@ -45,11 +45,13 @@ export default function ComposedButton({
     </Button>
   );
 }
-<<<<<<< HEAD
-export function TypeButton({ text = "Submit" }: { text?: string }) {
-=======
-export function TypeButton({text="Submit", onClick}:{text?:string, onClick?: (e)=> void}) {
->>>>>>> 6be95c96f95bff88b717de3f465f2fc50618dd83
+export function TypeButton({
+  text = "Submit",
+  onClick,
+}: {
+  text?: string;
+  onClick?: (e) => void;
+}) {
   return (
     <Button
       type="submit"

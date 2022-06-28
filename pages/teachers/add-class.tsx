@@ -165,7 +165,6 @@ import { useState } from "react";
 export default function AddClassroom() {
   const [val, setVal] = useState("");
   const onsubmit = async (values) => {
-
     console.log(form.getInputProps("year").value === "");
   };
   const validate = (value) => {
