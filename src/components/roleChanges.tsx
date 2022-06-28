@@ -26,7 +26,7 @@ const roles :roleAndUsage[]= [
     buttonsForHeader: [
       {
         name: "Create a class",
-        href: "",
+        href: "/teachers/add-class",
       },
       {
         name: "Post something",

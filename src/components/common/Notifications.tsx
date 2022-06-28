@@ -1,4 +1,4 @@
-import { Group, Button, MantineTheme } from "@mantine/core";
+import { MantineTheme } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { Bulb, Check, X } from "tabler-icons-react";
 
