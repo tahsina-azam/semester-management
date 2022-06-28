@@ -1,29 +1,30 @@
 import { useAuth } from "../../lib/client/context/auth";
 interface roleAndUsage {
   role: string;
-  buttonsForHeader: {
+  extraType?: string;
+  buttonsForSidebar: {
     name: string;
     onClick?: () => void;
-    href?: string
-  }[]
+    href?: string;
+  }[];
 }
-const roles :roleAndUsage[]= [
+const roles: roleAndUsage[] = [
   {
     role: "student",
-    buttonsForHeader: [
+    buttonsForSidebar: [
       {
         name: "Join a class",
         href: "/student/join-class",
       },
       {
         name: "Contact for project",
-       href: "",
+        href: "",
       },
     ],
   },
   {
     role: "teacher",
-    buttonsForHeader: [
+    buttonsForSidebar: [
       {
         name: "Create a class",
         href: "/teachers/add-class",
@@ -39,17 +40,21 @@ const roles :roleAndUsage[]= [
     ],
   },
 ];
-export const roleChangesForHeader = (user: {
-  email: string;
-  role: string;
-  name: string;
+export const roleChangesForHeader = ({
+  user,
+  extraType,
+}: {
+  user: { email: string; role: string; name: string };
+  extraType?: string;
 }) => {
-  let arr: { name: string; onClick?: () => void, href?: string }[];
+  let arr: { name: string; onClick?: () => void; href?: string }[];
   roles.map((role) => {
-    if (role.role === user.role) {
-      arr = role.buttonsForHeader;
+    if (extraType && role.role === user.role && role.extraType === extraType) {
+      arr = role.buttonsForSidebar;
+    }else if(!extraType && role.role === user.role){
+      arr = role.buttonsForSidebar;
     }
   });
-  
+
   return arr;
 };
