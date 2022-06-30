@@ -12,12 +12,14 @@ import Image from "next/image";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
 import { useState } from "react";
-import ShowNotification from "../src/components/common/Notifications";
+import ShowNotification, {
+  setNotify,
+} from "../src/components/common/Notifications";
 import { useRouter } from "next/router";
 import { TypeButton } from "../src/components/common/Button";
+import notify from "../src/components/common/Notifications";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
-  const [notify, setNotify] = useState(0);
   const onsubmit = async (values: {
     name: string;
     email: string;
@@ -26,17 +28,36 @@ export default function SignUp() {
     department: string;
   }) => {
     console.log(values);
-    setNotify(1);
+    notify({
+      id: "register",
+      loading: true,
+      disallowClose: true,
+      type: "default",
+      title: "Registering!",
+      text: "Please wait for a minute...",
+    });
     const response = await signUpAndVerifyEmail(values);
     const { status, message } = response;
     if (status === "fail") {
-      setNotify(3);
       console.log(response.errorMessage);
-      return;
+      return setTimeout(() => {
+        setNotify({
+          type: "fail",
+          title: "Sorry!",
+          text: response.errorMessage,
+          autoClose: 2000,
+        });
+      }, 3000);
     } else {
       console.log({ status, message });
-      setNotify(2);
-      return;
+      return setTimeout(() => {
+        setNotify({
+          type: "success",
+          title: "Registered!",
+          text: "Please check your email account to verify",
+          autoClose: 2000,
+        });
+      }, 3000);
     }
   };
   const form = useForm({
@@ -55,13 +76,13 @@ export default function SignUp() {
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
-      department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      // department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
     },
   });
 
   return (
     <div style={{ height: "100vh" }}>
-      <Center style={{ width: "100%", height: "auto"}} mt="lg">
+      <Center style={{ width: "100%", height: "auto" }} mt="lg">
         <Card
           sx={{
             width: "50%",
@@ -95,8 +116,8 @@ export default function SignUp() {
             />
             <TextInput
               required
-              label="Registration number"
-              placeholder="Your registration number, e.x :2018331001"
+              label="Department"
+              placeholder="CSE"
               {...form.getInputProps("department")}
             ></TextInput>
             <PasswordInput
@@ -113,24 +134,10 @@ export default function SignUp() {
             />
 
             <Center>
-              <TypeButton/>
+              <TypeButton />
             </Center>
           </form>
         </Card>
-        <div style={{ alignSelf: "flex-end", justifySelf: "flex-end" }}>
-          {notify === 1 && (
-            <ShowNotification type="loading" text="Please wait a while" />
-          )}
-          {notify === 2 && (
-            <ShowNotification
-              type="success"
-              text="Success! Please check your email. We've sent a verification message."
-            />
-          )}
-          {notify === 3 && (
-            <ShowNotification type="fail" text="Sorry! Please try again." />
-          )}
-        </div>
       </Center>
     </div>
   );

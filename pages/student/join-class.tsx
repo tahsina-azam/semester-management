@@ -27,7 +27,6 @@ export default function JoinClass() {
     e.preventDefault();
     console.log("inside handle submit");
     const path = window.location.pathname;
-    const arr = path.split("/");
     console.log();
     let data = {
       code: form.getInputProps("code").value,
