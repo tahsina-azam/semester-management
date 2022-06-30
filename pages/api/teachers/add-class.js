@@ -1,6 +1,7 @@
 import executeQuery from "../../../config/db";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
+
 function getClassId() {
   return Math.floor(100000 + Math.random() * 900000);
 }
