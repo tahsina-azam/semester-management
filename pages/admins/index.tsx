@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "semantic-ui-css/semantic.min.css";
 import axios from "axios";
+import withAuth from "../../src/components/common/withAuth";
 
 function Admins() {
   const [requests, setRequests] = useState([]);
@@ -40,7 +41,7 @@ function Admins() {
   );
 }
 
-export default Admins;
+export default withAuth(Admins);
 
 const Card = ({ name, email, phone, about }) => {
   function handleClick() {
