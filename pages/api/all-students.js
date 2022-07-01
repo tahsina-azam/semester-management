@@ -1,13 +1,14 @@
 import executeQuery from "../../../config/db";
-export default async (_, res) => {
+export default async (res) => {
   try {
     const result = await executeQuery({
-      query: "SELECT * FROM teachers WHERE status='pending'",
+      query: "SELECT reg_no,name FROM users ",
     });
     console.log("ttt", result);
-    return res.send(result);
+    return res.send({
+      result: result,
+    });
   } catch (error) {
     console.log(error);
-    return res.send(error);
   }
 };

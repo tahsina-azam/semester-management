@@ -7,16 +7,17 @@ import {
   Center,
   NumberInput,
   Footer,
+  LoadingOverlay,
 } from "@mantine/core";
 import Image from "next/image";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
 import { useState } from "react";
 import setNotify from "../src/components/common/Notifications";
-import { useRouter } from "next/router";
 import { TypeButton } from "../src/components/common/Button";
 import notify from "../src/components/common/Notifications";
 export default function SignUp() {
+  const [load, setLoad] = useState(false)
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
@@ -25,38 +26,52 @@ export default function SignUp() {
     "confirm password": string;
     regnum: string;
   }) => {
-    console.log(values);
-    notify({
-      id: "register",
-      loading: true,
-      disallowClose: true,
-      type: "default",
-      title: "Registering!",
-      text: "Please wait for a minute...",
-    });
-    const response = await signUpAndVerifyEmail(values);
-    const { status, message } = response;
+    setLoad(true)
+    try {
+      const response = await signUpAndVerifyEmail(values);
+    const { status } = response;
+      
     if (status === "fail") {
-      console.log(response.errorMessage);
+      setLoad(false)
+      if (response.errorMessage)
+        return setTimeout(() => {
+          notify({
+            type: "fail",
+            title: "Sorry!",
+            text: response.errorMessage,
+            autoClose: 2000,
+          });
+        }, 3000);
+      
       return setTimeout(() => {
-        setNotify({
+        notify({
           type: "fail",
           title: "Sorry!",
-          text: response.errorMessage,
-          autoClose: 2000,
-        });
-      }, 3000);
-    } else {
-      console.log({ status, message });
-      return setTimeout(() => {
-        setNotify({
-          type: "success",
-          title: "Registered!",
-          text: "Please check your email account to verify",
+          text: response.message,
           autoClose: 2000,
         });
       }, 3000);
     }
+    console.log({ response });
+    setLoad(false)
+    return setTimeout(() => {
+      notify({
+        type: "success",
+        title: "Registered!",
+        text: "Please check your email account to verify",
+        autoClose: 2000,
+      });
+    }, 3000);
+    }catch(err ) {
+      setLoad(false)
+      notify({
+        type: "fail",
+        title: "Oops!",
+        text: err,
+        autoClose: 2000,
+      });
+    }
+    
   };
   const form = useForm({
     initialValues: {
@@ -68,13 +83,15 @@ export default function SignUp() {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      name: (value) => (value === "" ? "Please set a name" : null),
+      email: (value) => null,
+      name: (value) =>
+        value.length < 2 ? "Name must contain at least 2 characters" : null,
       password: (value) =>
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
-      regnum: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      regnum: (value) =>
+        value.length === 10 ? null : "Must contain 10 numbers",
     },
   });
 
@@ -91,6 +108,7 @@ export default function SignUp() {
             justifyContent: "center",
           }}
         >
+          <LoadingOverlay visible={load}/>
           <Image width={60} height={60} src={"/idea.png"} />
           <form
             onSubmit={form.onSubmit((values) => {
@@ -101,31 +119,27 @@ export default function SignUp() {
             }}
           >
             <TextInput
-              required
               label="Name"
               placeholder="your full name"
               {...form.getInputProps("name")}
             />
             <TextInput
-              required
               label="Email"
+              type="email"
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
             <TextInput
-              required
               label="Registration number"
               placeholder="Your registration number, e.x :2018331001"
               {...form.getInputProps("regnum")}
             ></TextInput>
             <PasswordInput
-              required
               label="Password"
               placeholder="8 digit password"
               {...form.getInputProps("password")}
             />
             <PasswordInput
-              required
               label="Confirm password"
               placeholder="Confirm password"
               {...form.getInputProps("confirm password")}

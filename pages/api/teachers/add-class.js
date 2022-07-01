@@ -1,13 +1,14 @@
 import executeQuery from "../../../config/db";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
+
 function getClassId() {
   return Math.floor(100000 + Math.random() * 900000);
 }
 
 function checkDuplicates(classId) {
   const duplicates = executeQuery({
-    query: "SELECT * FROM Courses WHERE c_id='" + classId + "' ",
+    query: "SELECT * FROM courses WHERE c_id='" + classId + "' ",
   });
   console.log("duplicates" + duplicates.length());
   if (duplicates.length === 0) {
@@ -38,7 +39,7 @@ export default async (req, res) => {
     if (if_same_year.length > 0 && if_same_year[0].s_date != yyyy) {
       const result_semester = await executeQuery({
         query:
-          "INSERT INTO Semesters VALUES('" +
+          "INSERT INTO semesters VALUES('" +
           uniqueId +
           "','" +
           req.body.semester +
@@ -51,7 +52,7 @@ export default async (req, res) => {
     }
     const result = await executeQuery({
       query:
-        "INSERT INTO Courses VALUES('" +
+        "INSERT INTO courses VALUES('" +
         classId +
         "','" +
         req.body.code +
@@ -69,7 +70,16 @@ export default async (req, res) => {
     });
     console.log("ttt", result);
     console.log("mmm", result_semester);
+    res.send({
+      status: "success",
+      message: "Course is created!",
+    });
   } catch (error) {
     console.log(error);
+    res.send({
+      status: "fail",
+      message: "Course creation failed! Please try again.",
+      errorMessage: {error},
+    });
   }
 };

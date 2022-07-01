@@ -1,197 +1,108 @@
-// import "semantic-ui-css/semantic.min.css";
-// import React, { Component, useRef } from "react";
-// import { Grid, Form, Card } from "semantic-ui-react";
-// import axios from "axios";
-// import { useRouter } from "next/router";
-
-// class AddClassrooms extends Component {
-//   state = {
-//     code: "",
-//     submittedCode: "",
-//     title: "",
-//     credit: "",
-//     submittedTitle: "",
-//     submittedCredit: "",
-//     subject: "",
-//     submittedSubject: "",
-//     year: "",
-//     submittedYear: "",
-//     semester: "",
-//     submittedSemester: "",
-//   };
-
-//   handleChange = (e, { name, value }) => this.setState({ [name]: value });
-
-//   handleSubmit = () => {
-//     console.log("inside handle submit");
-//     const { code, title, credit, subject, year, semester } = this.state;
-//     const path = window.location.pathname;
-//     const array = path.split("/");
-//     console.log(array[2]);
-//     this.setState({
-//       submittedCode: code,
-//       submittedTitle: title,
-//       submittedCredit: credit,
-//       submittedSubject: subject,
-//       submittedYear: year,
-//       submittedSemester: semester,
-//     });
-//     let data = {
-//       code: code,
-//       title: title,
-//       credit: credit,
-//       subject: subject,
-//       year: year,
-//       semester: semester,
-//       t_id: array[2],
-//     };
-//     console.log(data);
-//     axios
-//       .post("/api/teachers/add-class", data)
-//       .then((response) => {
-//         console.log(response);
-//       })
-//       .catch((e) => {
-//         console.log(e);
-//       });
-//   };
-
-//   render() {
-//     const { code, title, credit, subject, year, semester } = this.state;
-//     return (
-//       <div>
-//         <Form onSubmit={this.handleSubmit}>
-//           <Grid
-//             style={{ height: "100vh" }}
-//             verticalAlign="middle"
-//             textAlign="center"
-//           >
-//             <Grid.Column style={{ maxWidth: 450 }}>
-//               <div className="field">
-//                 <label>Course Code</label>
-//                 <Form.Input
-//                   type="text"
-//                   name="code"
-//                   placeholder="Course code"
-//                   value={code}
-//                   id="code"
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-
-//               <div className="field">
-//                 <label>Title</label>
-//                 <Form.Input
-//                   type="text"
-//                   name="title"
-//                   placeholder="title you want to give to your classroom"
-//                   value={title}
-//                   id="title"
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-
-//               <div className="field">
-//                 <label>Credit</label>
-//                 <Form.Input
-//                   type="credit"
-//                   name="credit"
-//                   placeholder="3.0"
-//                   value={credit}
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-//               <div className="field">
-//                 <label>Subject</label>
-//                 <Form.Input
-//                   type="text"
-//                   name="subject"
-//                   placeholder="enter your subject"
-//                   value={subject}
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-//               <div className="field">
-//                 <label>Year</label>
-//                 <Form.Input
-//                   fluid
-//                   type="year"
-//                   name="year"
-//                   placeholder="2"
-//                   value={year}
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-//               <div className="field">
-//                 <label>Semester</label>
-//                 <Form.Input
-//                   fluid
-//                   type="year"
-//                   name="semester"
-//                   placeholder="For which semester is this class for"
-//                   value={semester}
-//                   onChange={this.handleChange}
-//                 />
-//               </div>
-//               <Form.Button content="Submit" />
-//             </Grid.Column>
-//           </Grid>
-//         </Form>
-//       </div>
-//     );
-//   }
-// }
-
-// export default AddClassrooms;
-
 import {
   TextInput,
-  Group,
-  PasswordInput,
   Card,
   Button,
   Center,
   NumberInput,
   Footer,
   Select,
+  Group,
 } from "@mantine/core";
-import Image from "next/image";
 import { useForm } from "@mantine/form";
-import { useAuth } from "../../lib/client/context/auth";
-import setNotify from "../../src/components/common/Notifications";
+import Image from "next/image";
+import axios from "axios";
+import notify, { setNotify } from "../../src/components/common/Notifications";
 import { TypeButton } from "../../src/components/common/Button";
-import notify from "../../src/components/common/Notifications";
-import { useState } from "react";
 export default function AddClassroom() {
-  const [val, setVal] = useState("");
-  const onsubmit = async (values) => {
-    console.log(form.getInputProps("year").value === "");
-  };
-  const validate = (value) => {
-    return value === (null || "") ? "Please fillup this field" : "";
-  };
   const form = useForm({
     initialValues: {
       code: "",
       title: "",
       credit: 0,
+      subject: "",
       year: "",
       semester: "",
     },
 
     validate: {
-      code: (value) => validate(true),
-      title: (value) => validate(value),
-      credit: (value) => (value === 0 ? "Please insert the credit" : ""),
-      semester: (value) => validate(value),
+      code: (value) => (value === "" ? "Please fillup this field" : ""),
+      title: (value) => (value === "" ? "Please fillup this field" : ""),
+      credit: (value) => (value < 1 ? "Please fillup this field" : ""),
+      subject: (value) => (value === "" ? "Please fillup this field" : ""),
+      semester: (value) => (value === "" ? "Please fillup this field" : ""),
       year: (value) => (value === "" ? "Please fillup this field" : ""),
     },
   });
 
+  const onsubmit = async (e) => {
+    e.preventDefault();
+    //""?"":0---> because it matches from lthe eft order and ""!==0
+    // this triggers the validation
+    form.onSubmit()(e);
+    console.log("inside handle submit");
+    console.log(Object.values(form.values)[4]);
+    if (Object.values(form.errors).every((e) => !e)) {
+      console.log("all validated");
+      console.log(form.getInputProps("year").value === "");
+    }
+    console.log("inside handle submit");
+    const path = window.location.pathname;
+    const array = path.split("/");
+    console.log(array[2]);
+    let data = {
+      title: Object.values(form.values)[1],
+      code: Object.values(form.values)[0],
+      credit: Object.values(form.values)[2],
+      year: Object.values(form.values)[3],
+      semester: Object.values(form.values)[4],
+      subject: Object.values(form.values)[5],
+      t_id: array[2],
+    };
+    console.log(data);
+    try {
+      notify({
+        id: "course-add",
+        loading: true,
+        disallowClose: true,
+        type: "default",
+        title: "Adding your class...",
+        text: "You cannot close it yet.",
+      });
+      const response = await axios.post("/api/teachers/add-class", data);
+      console.log({ response });
+      const {
+        data: { status, message },
+      } = response;
+      return setTimeout(() => {
+        setNotify({
+          type: status,
+          title: message,
+          text:
+            status === "success"
+              ? "Share this course to your students!"
+              : response.data.errorMessage,
+          autoClose: 2000,
+        });
+      }, 3000);
+    } catch (err) {
+      console.log(err);
+      return setTimeout(() => {
+        setNotify({
+          type: "fail",
+          title: "Sorry!",
+          text: err,
+          autoClose: 2000,
+        });
+      }, 3000);
+    }
+  };
+
   return (
     <div style={{ height: "100vh" }}>
       <Center style={{ width: "100%", height: "auto" }}>
+      
         <Card
+        
           sx={{
             width: "50%",
             height: "100%",
@@ -203,7 +114,7 @@ export default function AddClassroom() {
         >
           <Image width={60} height={60} src={"/idea.png"} />
           <form
-            onSubmit={form.onSubmit((values) => onsubmit(values))}
+            onSubmit={onsubmit}
             style={{
               width: "50%",
             }}
@@ -219,6 +130,12 @@ export default function AddClassroom() {
               label="Title"
               placeholder="Title of the course"
               {...form.getInputProps("title")}
+            />
+            <TextInput
+              required
+              label="Department"
+              placeholder="Department that provides the course"
+              {...form.getInputProps("subject")}
             />
             <NumberInput
               required
@@ -247,9 +164,8 @@ export default function AddClassroom() {
               ]}
               {...form.getInputProps("semester")}
             />
-            <Center>
-              <TypeButton />
-            </Center>
+            
+            <Group position="center"><TypeButton/></Group>
           </form>
         </Card>
       </Center>

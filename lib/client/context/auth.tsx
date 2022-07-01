@@ -22,11 +22,11 @@ interface Auth {
   email: string;
   signUpAndVerifyEmail: (
     variables: vars
-  ) => Promise<{ status: string; message: string; errorMessage?: string }>;
+  ) => Promise<{ status: string; message: string; errorMessage?: any }>;
   signIn: (
     email: string,
     password: string
-  ) => Promise<{ status: string; message: string; errorMessage?: string }>;
+  ) => Promise<{ status: string; message: string; errorMessage?: any }>;
   signOut: () => void;
   setUser: any;
 }
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signUpAndVerifyEmail = async (
     variables: vars
-  ): Promise<{ status: string; message: string; errorMessage?: string }> => {
+  ): Promise<{ status: string; message: string; errorMessage?: any }> => {
     const { name, email, password, department, regnum } = variables;
     console.log("in sign up");
     setEmail(email);
@@ -99,17 +99,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const responseForInsertion = await axios.post(path, mainVars);
       const {
         data: {
-          statusForInsertion,
-          messageForInsertion,
-          errorMessageForInsertion,
+          status,
         },
       } = responseForInsertion;
       console.log({responseForInsertion});
-      if (statusForInsertion === "fail")
+      console.log(status);
+      if (status === "fail")
         return {
-          status: statusForInsertion,
-          message: messageForInsertion,
-          errorMessage: errorMessageForInsertion,
+          status: status,
+          message: responseForInsertion.data.message,
+          errorMessage: responseForInsertion.data.errorMessage,
         };
       try {
         const responseForActivation = await axios.post(
@@ -154,7 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signIn = async (
     email: string,
     password: string
-  ): Promise<{ status: string; message: string; errorMessage?: string }> => {
+  ): Promise<{ status: string; message: string; errorMessage?: any }> => {
     console.log("in sign in");
     try {
       const response = await axios.post("/api/signin", {

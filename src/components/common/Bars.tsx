@@ -21,14 +21,16 @@ import Link from "next/link";
 export default function AppShellWithRole({
   children,
   user,
+  extraType
 }: {
   children: ReactNode;
   user: User;
+  extraType?: string
 }) {
   const theme = useMantineTheme();
   console.log({ user });
-  const buttonOfHeader = roleChangesForHeader(user);
-  console.log(buttonOfHeader);
+  const buttonsForSidebar = roleChangesForHeader({user:user, extraType:extraType});
+  console.log(buttonsForSidebar);
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
@@ -47,7 +49,7 @@ export default function AppShellWithRole({
           hidden={!opened}
           width={{ sm: 200, lg: 200 }}
         >
-          {buttonOfHeader.map((but, index) => (
+          {buttonsForSidebar && buttonsForSidebar.map((but, index) => (
             <NavbarButton
               text={but.name}
               href={but.href}

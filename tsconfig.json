@@ -20,7 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/index.tsx",
-    "pages/api/signup/index.js",
+    "pages/api/signup/index.ts",
     "pages/api/signin/index.js",
     "src/components/common/menubar.tsx"
   ],

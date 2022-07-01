@@ -42,6 +42,7 @@ export default function SignUp() {
       console.log(response.errorMessage);
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "fail",
           title: "Sorry!",
           text: response.errorMessage,
@@ -52,6 +53,7 @@ export default function SignUp() {
       console.log({ status, message });
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "success",
           title: "Registered!",
           text: "Please check your email account to verify",
@@ -70,13 +72,15 @@ export default function SignUp() {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      name: (value) => (value === "" ? "Please set a name" : null),
+      email: (value) => null,
+      name: (value) =>
+        value.length < 2 ? "Name must contain at least 2 characters" : null,
       password: (value) =>
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
-      // department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      department: (value) =>
+        value.length > 2 ? null : "Must contain at least 3 characters",
     },
   });
 
@@ -103,31 +107,27 @@ export default function SignUp() {
             }}
           >
             <TextInput
-              required
               label="Name"
               placeholder="your full name"
               {...form.getInputProps("name")}
             />
             <TextInput
-              required
+              type="email"
               label="Email"
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
             <TextInput
-              required
               label="Department"
               placeholder="CSE"
               {...form.getInputProps("department")}
             ></TextInput>
             <PasswordInput
-              required
               label="Password"
               placeholder="8 digit password"
               {...form.getInputProps("password")}
             />
             <PasswordInput
-              required
               label="Confirm password"
               placeholder="Confirm password"
               {...form.getInputProps("confirm password")}

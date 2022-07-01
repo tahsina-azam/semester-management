@@ -26,10 +26,6 @@ export default function Demo() {
       email: "",
       password: "",
     },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-    },
   });
 
   return (

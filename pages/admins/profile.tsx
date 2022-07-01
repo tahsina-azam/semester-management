@@ -1,5 +1,6 @@
 import React from "react";
 import UserProfile from "../../src/components/userProfile";
+import withAuth from "../../src/components/common/withAuth";
 function profile() {
   return (
     <div>
@@ -8,4 +9,4 @@ function profile() {
   );
 }
 
-export default profile;
+export default withAuth(profile);
