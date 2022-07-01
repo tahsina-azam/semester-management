@@ -68,13 +68,15 @@ export default function SignUp() {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      name: (value) => (value === "" ? "Please set a name" : null),
+      email: (value) => null,
+      name: (value) =>
+        value.length < 2 ? "Name must contain at least 2 characters" : null,
       password: (value) =>
         value.length >= 8 ? null : "Please enter at least 8 digit",
       "confirm password": (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
-      regnum: (value) => (value.length === 10 ? null : "Must be 10 digits"),
+      regnum: (value) =>
+        value.length === 10 ? null : "Must contain 10 numbers",
     },
   });
 
@@ -101,31 +103,27 @@ export default function SignUp() {
             }}
           >
             <TextInput
-              required
               label="Name"
               placeholder="your full name"
               {...form.getInputProps("name")}
             />
             <TextInput
-              required
               label="Email"
+              type="email"
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
             <TextInput
-              required
               label="Registration number"
               placeholder="Your registration number, e.x :2018331001"
               {...form.getInputProps("regnum")}
             ></TextInput>
             <PasswordInput
-              required
               label="Password"
               placeholder="8 digit password"
               {...form.getInputProps("password")}
             />
             <PasswordInput
-              required
               label="Confirm password"
               placeholder="Confirm password"
               {...form.getInputProps("confirm password")}

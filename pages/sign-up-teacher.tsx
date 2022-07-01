@@ -1,18 +1,30 @@
-import { TextInput, PasswordInput, Card, Center } from "@mantine/core";
+import {
+  TextInput,
+  Group,
+  PasswordInput,
+  Card,
+  Button,
+  Center,
+  NumberInput,
+  Footer,
+} from "@mantine/core";
 import Image from "next/image";
-import { z, ZodSchema } from "zod";
+import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
-import { setNotify } from "../src/components/common/Notifications";
+import { useState } from "react";
+import ShowNotification, {
+  setNotify,
+} from "../src/components/common/Notifications";
+import { useRouter } from "next/router";
 import { TypeButton } from "../src/components/common/Button";
 import notify from "../src/components/common/Notifications";
-import { useForm, zodResolver } from "@mantine/form";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
     email: string;
     password: string;
-    confirm: string;
+    "confirm password": string;
     department: string;
   }) => {
     console.log(values);
@@ -34,9 +46,9 @@ export default function SignUp() {
           type: "fail",
           title: "Sorry!",
           text: response.errorMessage,
-          autoClose: 3000,
+          autoClose: 2000,
         });
-      }, 4000);
+      }, 3000);
     } else {
       console.log({ status, message });
       return setTimeout(() => {
@@ -50,24 +62,25 @@ export default function SignUp() {
       }, 3000);
     }
   };
-  const schema = z.object({
-    name: z.string().min(2, { message: "Name should have at least 2 letters" }),
-    email: z.string().email({ message: "Invalid email" }),
-    password: z
-      .string()
-      .min(6, { message: "Password must contain at least 6 characters" }),
-    confirm: z.string(),
-    department:  z.string().min(3, { message: "Department should have at least 2 letters" }),
-  }).refine((data) => data.password === data.confirm, {message:"Passwords don't match"});
-
   const form = useForm({
-    schema: zodResolver(schema),
     initialValues: {
       name: "",
       email: "",
       password: "",
-      confirm: "",
+      "confirm password": "",
       department: "",
+    },
+
+    validate: {
+      email: (value) => null,
+      name: (value) =>
+        value.length < 2 ? "Name must contain at least 2 characters" : null,
+      password: (value) =>
+        value.length >= 8 ? null : "Please enter at least 8 digit",
+      "confirm password": (value, values) =>
+        value !== values.password ? "Passwords did not match" : null,
+      department: (value) =>
+        value.length > 2 ? null : "Must contain at least 3 characters",
     },
   });
 
@@ -94,34 +107,30 @@ export default function SignUp() {
             }}
           >
             <TextInput
-              required
               label="Name"
               placeholder="your full name"
               {...form.getInputProps("name")}
             />
             <TextInput
-              required
+              type="email"
               label="Email"
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
             <TextInput
-              required
               label="Department"
               placeholder="CSE"
               {...form.getInputProps("department")}
             ></TextInput>
             <PasswordInput
-              required
               label="Password"
               placeholder="8 digit password"
               {...form.getInputProps("password")}
             />
             <PasswordInput
-              required
               label="Confirm password"
               placeholder="Confirm password"
-              {...form.getInputProps("confirm")}
+              {...form.getInputProps("confirm password")}
             />
 
             <Center>
