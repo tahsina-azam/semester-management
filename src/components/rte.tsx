@@ -3,7 +3,7 @@ import { RichTextEditor } from "@mantine/rte";
 import storage from "../../config/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import dynamic from "next/dynamic";
-import { Center } from "@mantine/core";
+import { Center, Group } from "@mantine/core";
 import { ComposedButton } from "./common";
 
 const RichText = dynamic(() => import("@mantine/rte"), {
@@ -52,15 +52,12 @@ export default function Rte() {
         value={value}
         onChange={onChange}
         onImageUpload={uploadImage}
-        style={{ width: "70%" }}
       />
-      <div>
         <ComposedButton
           text={"Post"}
           onClick={handleClick}
           style={{ mt: "md" }}
         />
-      </div>
     </Center>
   );
 }

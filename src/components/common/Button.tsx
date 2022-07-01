@@ -1,6 +1,6 @@
 import { Button, useMantineTheme, Text } from "@mantine/core";
 import Link from "next/link";
-import { ReactChild, ReactFragment, ReactPortal } from "react";
+import { ReactChild, ReactFragment, ReactNode, ReactPortal } from "react";
 export function NavbarButton({ text, href }: { text: string; href: string }) {
   return (
     <Text
@@ -68,6 +68,21 @@ export function TypeButton({
       })}
     >
       {text}
+    </Button>
+  );
+}
+export function IconButton({
+  color,
+  Icon,
+  onClick
+}: {
+  color: string;
+  Icon: ReactNode;
+  onClick?: () => void
+}) {
+  return (
+    <Button color={color} size="sm" onClick={onClick}>
+      {Icon}
     </Button>
   );
 }

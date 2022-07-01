@@ -49,7 +49,7 @@ export default function AppShellWithRole({
           hidden={!opened}
           width={{ sm: 200, lg: 200 }}
         >
-          {buttonsForSidebar.map((but, index) => (
+          {buttonsForSidebar && buttonsForSidebar.map((but, index) => (
             <NavbarButton
               text={but.name}
               href={but.href}

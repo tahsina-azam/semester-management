@@ -13,12 +13,16 @@ function MyApp({ Component, pageProps }) {
           @import
           url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
         </style>
+        <style>
+          @import
+          url('https://fonts.googleapis.com/css2?family=Arima&display=swap');
+        </style>
       </Head>
       <AuthProvider>
         <MantineProvider
           theme={{
             colorScheme: "light",
-            fontFamily: "lato",
+            fontFamily: "lato , arima",
 
             headings: { fontFamily: "lato", fontWeight: "normal" },
           }}
