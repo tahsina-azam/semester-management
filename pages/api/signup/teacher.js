@@ -28,7 +28,7 @@ export default async (req, res) => {
     db.query(sql, function (err, result) {
       if (err) {
         console.log(err);
-        return res.status(400).send({
+        return res.send({
           status: "fail",
           message: "try agaun",
           errorMessage: err,
@@ -37,6 +37,7 @@ export default async (req, res) => {
         return res.send({
           status: "successs",
           message: "successfully registered teacher",
+          result: result,
         });
       }
     });
