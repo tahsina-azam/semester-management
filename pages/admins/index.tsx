@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+<<<<<<< HEAD
 import { Button, LoadingOverlay, Modal, SimpleGrid } from "@mantine/core";
 import AppShellWithRole from "../../src/components/common/Bars";
 import { useAuth } from "../../lib/client/context/auth";
@@ -7,6 +8,11 @@ import Cards from "../../src/components/admin-card/card";
 import Router from "next/router";
 import notify from "../../src/components/common/Notifications";
 export default function Admins() {
+=======
+import withAuth from "../../src/components/common/withAuth";
+
+function Admins() {
+>>>>>>> 04d9c9f (protected routes implemented)
   const [requests, setRequests] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [load, setLoad] = useState(false);
@@ -145,3 +151,63 @@ export default function Admins() {
     </AppShellWithRole>
   );
 }
+<<<<<<< HEAD
+=======
+
+export default withAuth(Admins);
+
+const Card = ({ name, email, phone, about }) => {
+  function handleClick() {
+    const data = {
+      name: name,
+      email: email,
+    };
+    axios
+      .post("/api/admin/approve-req", data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function handleDelete() {
+    const data = {
+      email: email,
+    };
+    axios
+      .post("/api/admin/delete-req", data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  return (
+    <div>
+      <div className="ui cards">
+        <div className="card">
+          <div className="content">
+            <div className="header">{name}</div>
+            <div className="meta">{email}</div>
+            <div className="description">{phone}</div>
+            <div className="description">{about}</div>
+          </div>
+          <div className="extra content">
+            <div className="ui two buttons">
+              <div className="ui basic green button" onClick={handleClick}>
+                Approve
+              </div>
+              <div className="ui basic red button" onClick={handleDelete}>
+                Decline
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+const MemoisedCard = React.memo(Card);
+>>>>>>> 04d9c9f (protected routes implemented)
