@@ -1,30 +1,18 @@
-import {
-  TextInput,
-  Group,
-  PasswordInput,
-  Card,
-  Button,
-  Center,
-  NumberInput,
-  Footer,
-} from "@mantine/core";
+import { TextInput, PasswordInput, Card, Center } from "@mantine/core";
 import Image from "next/image";
-import { useForm } from "@mantine/form";
+import { z, ZodSchema } from "zod";
 import { useAuth } from "../lib/client/context/auth";
-import { useState } from "react";
-import ShowNotification, {
-  setNotify,
-} from "../src/components/common/Notifications";
-import { useRouter } from "next/router";
+import { setNotify } from "../src/components/common/Notifications";
 import { TypeButton } from "../src/components/common/Button";
 import notify from "../src/components/common/Notifications";
+import { useForm, zodResolver } from "@mantine/form";
 export default function SignUp() {
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
     email: string;
     password: string;
-    "confirm password": string;
+    confirm: string;
     department: string;
   }) => {
     console.log(values);
@@ -42,16 +30,18 @@ export default function SignUp() {
       console.log(response.errorMessage);
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "fail",
           title: "Sorry!",
           text: response.errorMessage,
-          autoClose: 2000,
+          autoClose: 3000,
         });
-      }, 3000);
+      }, 4000);
     } else {
       console.log({ status, message });
       return setTimeout(() => {
         setNotify({
+          id: "register",
           type: "success",
           title: "Registered!",
           text: "Please check your email account to verify",
@@ -60,23 +50,24 @@ export default function SignUp() {
       }, 3000);
     }
   };
+  const schema = z.object({
+    name: z.string().min(2, { message: "Name should have at least 2 letters" }),
+    email: z.string().email({ message: "Invalid email" }),
+    password: z
+      .string()
+      .min(6, { message: "Password must contain at least 6 characters" }),
+    confirm: z.string(),
+    department:  z.string().min(3, { message: "Department should have at least 2 letters" }),
+  }).refine((data) => data.password === data.confirm, {message:"Passwords don't match"});
+
   const form = useForm({
+    schema: zodResolver(schema),
     initialValues: {
       name: "",
       email: "",
       password: "",
-      "confirm password": "",
+      confirm: "",
       department: "",
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      name: (value) => (value === "" ? "Please set a name" : null),
-      password: (value) =>
-        value.length >= 8 ? null : "Please enter at least 8 digit",
-      "confirm password": (value, values) =>
-        value !== values.password ? "Passwords did not match" : null,
-      // department: (value) => (value.length === 10 ? null : "Must be 10 digits"),
     },
   });
 
@@ -130,7 +121,7 @@ export default function SignUp() {
               required
               label="Confirm password"
               placeholder="Confirm password"
-              {...form.getInputProps("confirm password")}
+              {...form.getInputProps("confirm")}
             />
 
             <Center>
