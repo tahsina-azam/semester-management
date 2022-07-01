@@ -7,16 +7,17 @@ import {
   Center,
   NumberInput,
   Footer,
+  LoadingOverlay,
 } from "@mantine/core";
 import Image from "next/image";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../lib/client/context/auth";
 import { useState } from "react";
 import setNotify from "../src/components/common/Notifications";
-import { useRouter } from "next/router";
 import { TypeButton } from "../src/components/common/Button";
 import notify from "../src/components/common/Notifications";
 export default function SignUp() {
+  const [load, setLoad] = useState(false)
   const { signUpAndVerifyEmail } = useAuth();
   const onsubmit = async (values: {
     name: string;
@@ -25,38 +26,52 @@ export default function SignUp() {
     "confirm password": string;
     regnum: string;
   }) => {
-    console.log(values);
-    notify({
-      id: "register",
-      loading: true,
-      disallowClose: true,
-      type: "default",
-      title: "Registering!",
-      text: "Please wait for a minute...",
-    });
-    const response = await signUpAndVerifyEmail(values);
-    const { status, message } = response;
+    setLoad(true)
+    try {
+      const response = await signUpAndVerifyEmail(values);
+    const { status } = response;
+      
     if (status === "fail") {
-      console.log(response.errorMessage);
+      setLoad(false)
+      if (response.errorMessage)
+        return setTimeout(() => {
+          notify({
+            type: "fail",
+            title: "Sorry!",
+            text: response.errorMessage,
+            autoClose: 2000,
+          });
+        }, 3000);
+      
       return setTimeout(() => {
-        setNotify({
+        notify({
           type: "fail",
           title: "Sorry!",
-          text: response.errorMessage,
-          autoClose: 2000,
-        });
-      }, 3000);
-    } else {
-      console.log({ status, message });
-      return setTimeout(() => {
-        setNotify({
-          type: "success",
-          title: "Registered!",
-          text: "Please check your email account to verify",
+          text: response.message,
           autoClose: 2000,
         });
       }, 3000);
     }
+    console.log({ response });
+    setLoad(false)
+    return setTimeout(() => {
+      notify({
+        type: "success",
+        title: "Registered!",
+        text: "Please check your email account to verify",
+        autoClose: 2000,
+      });
+    }, 3000);
+    }catch(err ) {
+      setLoad(false)
+      notify({
+        type: "fail",
+        title: "Oops!",
+        text: err,
+        autoClose: 2000,
+      });
+    }
+    
   };
   const form = useForm({
     initialValues: {
@@ -93,6 +108,7 @@ export default function SignUp() {
             justifyContent: "center",
           }}
         >
+          <LoadingOverlay visible={load}/>
           <Image width={60} height={60} src={"/idea.png"} />
           <form
             onSubmit={form.onSubmit((values) => {
