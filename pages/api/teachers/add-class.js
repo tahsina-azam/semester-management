@@ -73,6 +73,7 @@ export default async (req, res) => {
     res.send({
       status: "success",
       message: "Course is created!",
+      link: `/teachers/classroom/${classId}`
     });
   } catch (error) {
     console.log(error);

@@ -38,7 +38,38 @@ const roles: roleAndUsage[] = [
         href: "/teachers/create-task",
       },
     ],
+    
   },
+  {
+    role: "teacher",
+    extraType: "classroom",
+    buttonsForSidebar: [
+      {
+        name: "Post something",
+        href: "",
+      },
+      {
+        name: "Assign task",
+        href: "/teachers/create-task",
+      },
+    ],
+    
+  },
+  {
+    role: "student",
+    extraType: "classroom",
+    buttonsForSidebar: [
+      {
+        name: "Get Posts",
+        href: "",
+      },
+      {
+        name: "Get task",
+        href: "",
+      },
+    ],
+    
+  }
 ];
 export const roleChangesForHeader = ({
   user,

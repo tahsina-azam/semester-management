@@ -1,10 +1,7 @@
 import axios from "axios";
-import React from "react";
 
-function query() {
-  axios.get("/api/all-students").then((response) => {
-    console.log(response);
-  });
-}
-
-export default query;
+export const getAllStudents = function (): { query: string } {
+  return {
+    query: "SELECT reg_no,name FROM users ",
+  };
+};

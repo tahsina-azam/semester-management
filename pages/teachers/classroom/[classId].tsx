@@ -14,7 +14,7 @@ export default function classId() {
         const data = {
           code: classId,
         };
-        const response = await axios.post("/api/student/view-classroom", {
+        const response = await axios.post("/api/teachers/view-classroom", {
           data,
         });
         console.log({ response });
@@ -22,6 +22,7 @@ export default function classId() {
         console.log(err);
       }
     }
+    fetchClassInfo();
   }, []);
   return (
     <AppShellWithRole user={user} extraType="classroom">
