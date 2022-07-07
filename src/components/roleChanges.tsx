@@ -11,6 +11,7 @@ interface roleAndUsage {
 const roles: roleAndUsage[] = [
   {
     role: "student",
+    extraType: "default",
     buttonsForSidebar: [
       {
         name: "Join a class",
@@ -24,21 +25,13 @@ const roles: roleAndUsage[] = [
   },
   {
     role: "teacher",
+    extraType: "default",
     buttonsForSidebar: [
       {
         name: "Create a class",
         href: "/teachers/add-class",
       },
-      {
-        name: "Post something",
-        href: "",
-      },
-      {
-        name: "Assign task",
-        href: "/teachers/create-task",
-      },
     ],
-    
   },
   {
     role: "teacher",
@@ -53,7 +46,6 @@ const roles: roleAndUsage[] = [
         href: "/teachers/create-task",
       },
     ],
-    
   },
   {
     role: "student",
@@ -68,21 +60,19 @@ const roles: roleAndUsage[] = [
         href: "",
       },
     ],
-    
-  }
+  },
 ];
 export const roleChangesForHeader = ({
   user,
-  extraType,
+  extraType = "default",
 }: {
   user: { email: string; role: string; name: string };
   extraType?: string;
 }) => {
   let arr: { name: string; onClick?: () => void; href?: string }[];
+  
   roles.map((role) => {
-    if (extraType && role.role === user.role && role.extraType === extraType) {
-      arr = role.buttonsForSidebar;
-    }else if(!extraType && role.role === user.role){
+    if (role.role === user.role && extraType && role.extraType === extraType) {
       arr = role.buttonsForSidebar;
     }
   });

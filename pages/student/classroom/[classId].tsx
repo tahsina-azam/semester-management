@@ -8,7 +8,9 @@ export default function classId() {
   const { user } = useAuth();
   const router = useRouter();
   const { classId } = router.query;
+  
   useEffect(() => {
+    console.log(classId)
     async function fetchClassInfo() {
       try {
         const data = {
@@ -22,6 +24,7 @@ export default function classId() {
         console.log(err);
       }
     }
+    fetchClassInfo()
   }, []);
   return (
     <AppShellWithRole user={user} extraType="classroom">

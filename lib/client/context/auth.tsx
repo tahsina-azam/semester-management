@@ -61,9 +61,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // else router.push("/sign-in");
         return;
       }
-      const { name, role, email } = token;
-      setUser({ name, role, email } as User);
-      console.log({ name, role, email });
+      const { name, role, email,id } = token;
+      setUser({ name, role, email,id } as User);
+      console.log({ name, role, email,id });
       console.log({ token });
       //console.log({user})
       setLoggedIn(true);
@@ -98,11 +98,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const responseForInsertion = await axios.post(path, mainVars);
       const {
-        data: {
-          status,
-        },
+        data: { status },
       } = responseForInsertion;
-      console.log({responseForInsertion});
+      console.log({ responseForInsertion });
       console.log(status);
       if (status === "fail")
         return {
@@ -168,12 +166,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (status === "fail") {
         return { status, message };
       }
-      const { role, name } = data;
-      const token = { email, name, role };
+      const { role, name, id } = data;
+      const token = { email, name, role, id };
       localStorage.setItem("token", JSON.stringify(token));
       console.log(`token ${localStorage.getItem("token")}`);
       setLoggedIn(true);
-      setUser({ role, email, name } as User);
+      setUser({ role, email, name, id } as User);
       router.push(link);
       setLoading(false);
       return { status: "success", message };

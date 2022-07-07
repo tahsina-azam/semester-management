@@ -48,8 +48,8 @@ export default function Rte() {
   const tags = [
     { id: 1, value: "JavaScript" },
     { id: 2, value: "TypeScript" },
-    { id: 3, value: "Ruby" },
-    { id: 3, value: "Python" },
+    { id: 3, value: "Mantine" },
+    { id: 3, value: "Next" },
   ];
   useEffect(() => {
     async function fetchClassInfo() {

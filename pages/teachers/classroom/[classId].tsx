@@ -11,11 +11,8 @@ export default function classId() {
   useEffect(() => {
     async function fetchClassInfo() {
       try {
-        const data = {
-          code: classId,
-        };
         const response = await axios.post("/api/teachers/view-classroom", {
-          data,
+          classId,
         });
         console.log({ response });
       } catch (err) {

@@ -33,7 +33,7 @@ export default function AppShellWithRole({
   const buttonsForSidebar = extraType
     ? roleChangesForHeader({ user, extraType })
     : roleChangesForHeader({ user });
-  console.log(buttonsForSidebar);
+  console.log({buttonsForSidebar});
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
