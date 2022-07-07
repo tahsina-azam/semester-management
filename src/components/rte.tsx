@@ -81,8 +81,17 @@ export default function Rte() {
     []
   );
   return (
-    <Center style={{ flexDirection: "column", alignItems: "flex-start" }}>
+    <Center
+      style={{
+        flexDirection: "column",
+        alignItems: "flex-start",
+        width: "100%",
+        height: "auto",
+      }}
+      p="xl"
+    >
       <RichText
+        style={{ width: "100%"}}
         value={value}
         onChange={onChange}
         onImageUpload={uploadImage}
@@ -91,7 +100,7 @@ export default function Rte() {
       <ComposedButton
         text={"Post"}
         onClick={handleClick}
-        style={{ mt: "md" }}
+        style={{ mt: "xl" }}
       />
     </Center>
   );

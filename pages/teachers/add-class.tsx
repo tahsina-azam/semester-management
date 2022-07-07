@@ -11,7 +11,9 @@ import {
 import { useForm } from "@mantine/form";
 import Image from "next/image";
 import axios from "axios";
-import notify, { setNotify } from "../../src/components/common/Notifications";
+import notify, {
+  setNotify,
+} from "../../src/components/common/Notifications";
 import { TypeButton } from "../../src/components/common/Button";
 import { useAuth } from "../../lib/client/context/auth";
 import Router from "next/router";

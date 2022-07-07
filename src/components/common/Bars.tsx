@@ -4,14 +4,10 @@ import {
   AppShell,
   Navbar,
   Header,
-  Footer,
-  Aside,
   Text,
   MediaQuery,
   Burger,
-  Button,
   useMantineTheme,
-  Title,
   Badge,
 } from "@mantine/core";
 import { roleChangesForHeader } from "../roleChanges";
@@ -22,16 +18,18 @@ export default function AppShellWithRole({
   children,
   user,
   extraType,
+  id
 }: {
   children: ReactNode;
   user: User;
   extraType?: string;
+  id?: string
 }) {
   const theme = useMantineTheme();
   console.log({ user });
 
   const buttonsForSidebar = extraType
-    ? roleChangesForHeader({ user, extraType })
+    ? roleChangesForHeader({ user, extraType,id })
     : roleChangesForHeader({ user });
   console.log({buttonsForSidebar});
   const [opened, setOpened] = useState(false);

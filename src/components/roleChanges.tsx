@@ -43,7 +43,7 @@ const roles: roleAndUsage[] = [
       },
       {
         name: "Assign task",
-        href: "/teachers/create-task",
+        href: "/teachers/add-task",
       },
     ],
   },
@@ -65,17 +65,23 @@ const roles: roleAndUsage[] = [
 export const roleChangesForHeader = ({
   user,
   extraType = "default",
+  id = "",
 }: {
   user: { email: string; role: string; name: string };
   extraType?: string;
+  id?: string;
 }) => {
   let arr: { name: string; onClick?: () => void; href?: string }[];
-  
+
   roles.map((role) => {
     if (role.role === user.role && extraType && role.extraType === extraType) {
       arr = role.buttonsForSidebar;
     }
   });
+  if (id)
+    arr.map((button) => {
+      button.href = button.href + "/" + id;
+    });
 
   return arr;
 };
