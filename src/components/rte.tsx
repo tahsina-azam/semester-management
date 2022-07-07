@@ -88,7 +88,7 @@ export default function Rte() {
         width: "100%",
         height: "auto",
       }}
-      p="xl"
+      p="sm"
     >
       <RichText
         style={{ width: "100%"}}
