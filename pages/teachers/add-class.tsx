@@ -11,9 +11,7 @@ import {
 import { useForm } from "@mantine/form";
 import Image from "next/image";
 import axios from "axios";
-import notify, {
-  setNotify,
-} from "../../src/components/common/Notifications";
+import notify, { setNotify } from "../../src/components/common/Notifications";
 import { TypeButton } from "../../src/components/common/Button";
 import { useAuth } from "../../lib/client/context/auth";
 import Router from "next/router";
@@ -39,15 +37,21 @@ export default function AddClassroom() {
     },
   });
 
-  const onsubmit = async (e, values: any) => {
-    e.preventDefault();
+  const onsubmit = async (values: {
+    code: string;
+    title: string;
+    credit: number;
+    subject: string;
+    semester: string;
+    year: string;
+  }) => {
     //""?"":0---> because it matches from lthe eft order and ""!==0
     // this triggers the validation
     console.log("inside handle submit");
-    console.log("inside handle submit");
+    console.log({ values });
     console.log({ user });
     let data = {
-      values,
+      ...values,
       t_id: user.id,
     };
     try {
@@ -106,7 +110,9 @@ export default function AddClassroom() {
         >
           <Image width={60} height={60} src={"/idea.png"} />
           <form
-            onSubmit={(form.onSubmit = (e, values) => onsubmit(e, values))}
+            onSubmit={form.onSubmit((values) => {
+              return onsubmit(values);
+            })}
             style={{
               width: "50%",
             }}
@@ -132,6 +138,10 @@ export default function AddClassroom() {
             <NumberInput
               required
               label="Credits"
+              precision={2}
+              min={0.5}
+              max={4}
+              step={0.5}
               placeholder="The credit of the course"
               {...form.getInputProps("credit")}
             ></NumberInput>

@@ -24,7 +24,9 @@ export default async (req, res) => {
     let yyyy = today.getFullYear();
     let todayString = mm + "/" + dd + "/" + yyyy;
     const uniqueId = uuidv4();
-    const { title, code, credit, year, semester, subject, t_id } = req.body.data;
+    const { title, code, credit, year, semester, subject, t_id } =
+      req.body.data;
+    console.log(req.body);
     const classId = getClassId().toString();
     const if_same_year: any = await executeQuery({
       query:
