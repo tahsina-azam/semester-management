@@ -1,24 +1,34 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AppShellWithRole from "../../../src/components/common/Bars";
+import { useAuth } from "../../../lib/client/context/auth";
 
-function classId() {
+export default function classId() {
+  const { user } = useAuth();
   const router = useRouter();
   const { classId } = router.query;
-  const [result, setResult] = useState([]);
-  let inputList = [];
-  let data = {
-    code: classId,
-  };
-  axios
-    .post("/api/student/view-classroom", data)
-    .then((response) => {
-      console.log(response.data.result);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  return <div>this is classroom</div>;
+  
+  useEffect(() => {
+    console.log(classId)
+    async function fetchClassInfo() {
+      try {
+        const data = {
+          code: classId,
+        };
+        const response = await axios.post("/api/student/view-classroom", {
+          data,
+        });
+        console.log({ response });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchClassInfo()
+  }, []);
+  return (
+    <AppShellWithRole user={user} extraType="classroom">
+      <></>
+    </AppShellWithRole>
+  );
 }
-
-export default classId;

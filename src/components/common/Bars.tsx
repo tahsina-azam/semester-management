@@ -4,14 +4,10 @@ import {
   AppShell,
   Navbar,
   Header,
-  Footer,
-  Aside,
   Text,
   MediaQuery,
   Burger,
-  Button,
   useMantineTheme,
-  Title,
   Badge,
 } from "@mantine/core";
 import { roleChangesForHeader } from "../roleChanges";
@@ -21,16 +17,21 @@ import Link from "next/link";
 export default function AppShellWithRole({
   children,
   user,
-  extraType
+  extraType,
+  id
 }: {
   children: ReactNode;
   user: User;
-  extraType?: string
+  extraType?: string;
+  id?: string
 }) {
   const theme = useMantineTheme();
   console.log({ user });
-  const buttonsForSidebar = roleChangesForHeader({user:user, extraType:extraType});
-  console.log(buttonsForSidebar);
+
+  const buttonsForSidebar = extraType
+    ? roleChangesForHeader({ user, extraType,id })
+    : roleChangesForHeader({ user });
+  console.log({buttonsForSidebar});
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
@@ -49,13 +50,10 @@ export default function AppShellWithRole({
           hidden={!opened}
           width={{ sm: 200, lg: 200 }}
         >
-          {buttonsForSidebar && buttonsForSidebar.map((but, index) => (
-            <NavbarButton
-              text={but.name}
-              href={but.href}
-              key={index}
-            />
-          ))}
+          {buttonsForSidebar &&
+            buttonsForSidebar.map((but, index) => (
+              <NavbarButton text={but.name} href={but.href} key={index} />
+            ))}
           <NavbarButton text="Edit account" href={""} />
           <Link href={"/sign-in"} passHref>
             <ComposedButton

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, LoadingOverlay, Modal, SimpleGrid } from "@mantine/core";
 import AppShellWithRole from "../../src/components/common/Bars";
 import { useAuth } from "../../lib/client/context/auth";
-import Cards from "../../src/components/admin-card/card";
+import Cards from "../../src/components/card/teacher-card";
 import Router from "next/router";
 import notify from "../../src/components/common/Notifications";
 export default function Admins() {

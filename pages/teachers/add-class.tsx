@@ -13,7 +13,10 @@ import Image from "next/image";
 import axios from "axios";
 import notify, { setNotify } from "../../src/components/common/Notifications";
 import { TypeButton } from "../../src/components/common/Button";
+import { useAuth } from "../../lib/client/context/auth";
+import Router from "next/router";
 export default function AddClassroom() {
+  const { user } = useAuth();
   const form = useForm({
     initialValues: {
       code: "",
@@ -25,40 +28,32 @@ export default function AddClassroom() {
     },
 
     validate: {
-      code: (value) => (value === "" ? "Please fillup this field" : ""),
-      title: (value) => (value === "" ? "Please fillup this field" : ""),
-      credit: (value) => (value < 1 ? "Please fillup this field" : ""),
-      subject: (value) => (value === "" ? "Please fillup this field" : ""),
-      semester: (value) => (value === "" ? "Please fillup this field" : ""),
-      year: (value) => (value === "" ? "Please fillup this field" : ""),
+      code: (value) => (value === "" ? "Please fillup this field" : null),
+      title: (value) => (value === "" ? "Please fillup this field" : null),
+      credit: (value) => (value < 1 ? "Please fillup this field" : null),
+      subject: (value) => (value === "" ? "Please fillup this field" : null),
+      semester: (value) => (value === "" ? "Please fillup this field" : null),
+      year: (value) => (value === "" ? "Please fillup this field" : null),
     },
   });
 
-  const onsubmit = async (e) => {
-    e.preventDefault();
+  const onsubmit = async (values: {
+    code: string;
+    title: string;
+    credit: number;
+    subject: string;
+    semester: string;
+    year: string;
+  }) => {
     //""?"":0---> because it matches from lthe eft order and ""!==0
     // this triggers the validation
-    form.onSubmit()(e);
     console.log("inside handle submit");
-    console.log(Object.values(form.values)[4]);
-    if (Object.values(form.errors).every((e) => !e)) {
-      console.log("all validated");
-      console.log(form.getInputProps("year").value === "");
-    }
-    console.log("inside handle submit");
-    const path = window.location.pathname;
-    const array = path.split("/");
-    console.log(array[2]);
+    console.log({ values });
+    console.log({ user });
     let data = {
-      title: Object.values(form.values)[1],
-      code: Object.values(form.values)[0],
-      credit: Object.values(form.values)[2],
-      year: Object.values(form.values)[3],
-      semester: Object.values(form.values)[4],
-      subject: Object.values(form.values)[5],
-      t_id: array[2],
+      ...values,
+      t_id: user.id,
     };
-    console.log(data);
     try {
       notify({
         id: "course-add",
@@ -68,13 +63,15 @@ export default function AddClassroom() {
         title: "Adding your class...",
         text: "You cannot close it yet.",
       });
-      const response = await axios.post("/api/teachers/add-class", data);
-      console.log({ response });
+      const response = await axios.post("/api/teachers/add-class", { data });
       const {
         data: { status, message },
       } = response;
+      console.log({ status });
+      if (status === "success") Router.push(response.data.link);
       return setTimeout(() => {
         setNotify({
+          id: "course-add",
           type: status,
           title: message,
           text:
@@ -88,6 +85,7 @@ export default function AddClassroom() {
       console.log(err);
       return setTimeout(() => {
         setNotify({
+          id: "course-add",
           type: "fail",
           title: "Sorry!",
           text: err,
@@ -100,9 +98,7 @@ export default function AddClassroom() {
   return (
     <div style={{ height: "100vh" }}>
       <Center style={{ width: "100%", height: "auto" }}>
-      
         <Card
-        
           sx={{
             width: "50%",
             height: "100%",
@@ -114,7 +110,9 @@ export default function AddClassroom() {
         >
           <Image width={60} height={60} src={"/idea.png"} />
           <form
-            onSubmit={onsubmit}
+            onSubmit={form.onSubmit((values) => {
+              return onsubmit(values);
+            })}
             style={{
               width: "50%",
             }}
@@ -140,6 +138,10 @@ export default function AddClassroom() {
             <NumberInput
               required
               label="Credits"
+              precision={2}
+              min={0.5}
+              max={4}
+              step={0.5}
               placeholder="The credit of the course"
               {...form.getInputProps("credit")}
             ></NumberInput>
@@ -164,8 +166,10 @@ export default function AddClassroom() {
               ]}
               {...form.getInputProps("semester")}
             />
-            
-            <Group position="center"><TypeButton/></Group>
+
+            <Group position="center">
+              <TypeButton />
+            </Group>
           </form>
         </Card>
       </Center>

@@ -11,6 +11,7 @@ interface roleAndUsage {
 const roles: roleAndUsage[] = [
   {
     role: "student",
+    extraType: "default",
     buttonsForSidebar: [
       {
         name: "Join a class",
@@ -24,37 +25,63 @@ const roles: roleAndUsage[] = [
   },
   {
     role: "teacher",
+    extraType: "default",
     buttonsForSidebar: [
       {
         name: "Create a class",
         href: "/teachers/add-class",
       },
+    ],
+  },
+  {
+    role: "teacher",
+    extraType: "classroom",
+    buttonsForSidebar: [
       {
         name: "Post something",
         href: "",
       },
       {
         name: "Assign task",
-        href: "/teachers/create-task",
+        href: "/teachers/add-task",
+      },
+    ],
+  },
+  {
+    role: "student",
+    extraType: "classroom",
+    buttonsForSidebar: [
+      {
+        name: "Get Posts",
+        href: "",
+      },
+      {
+        name: "Get task",
+        href: "",
       },
     ],
   },
 ];
 export const roleChangesForHeader = ({
   user,
-  extraType,
+  extraType = "default",
+  id = "",
 }: {
   user: { email: string; role: string; name: string };
   extraType?: string;
+  id?: string;
 }) => {
   let arr: { name: string; onClick?: () => void; href?: string }[];
+
   roles.map((role) => {
-    if (extraType && role.role === user.role && role.extraType === extraType) {
-      arr = role.buttonsForSidebar;
-    }else if(!extraType && role.role === user.role){
+    if (role.role === user.role && extraType && role.extraType === extraType) {
       arr = role.buttonsForSidebar;
     }
   });
+  if (id)
+    arr.map((button) => {
+      button.href = button.href + "/" + id;
+    });
 
   return arr;
 };

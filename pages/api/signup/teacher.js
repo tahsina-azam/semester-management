@@ -45,7 +45,7 @@ export default async (req, res) => {
     console.log(err);
     res.status(400).send({
       status: "fail",
-      message: "try agaun",
+      message: "try again",
       errorMessage: err,
     });
   }

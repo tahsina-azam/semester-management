@@ -27,6 +27,7 @@ export default async (req, res) => {
           message: "invalid password",
         });
       } else if (teacher.length > 0) {
+        console.log(teacher[0].id)
         if (teacher[0].is_verified === "false") {
           return res.status(400).send({
             status: "not verified",
@@ -47,6 +48,7 @@ export default async (req, res) => {
             data: {
               role: "teacher",
               name: teacher[0].name,
+              id: teacher[0].id
             },
           });
         }
@@ -67,6 +69,7 @@ export default async (req, res) => {
             data: {
               role: "admin",
               name: admin[0].name,
+              id: admin[0].id
             },
           });
         } else if (student[0].is_verified === "false") {
@@ -84,6 +87,7 @@ export default async (req, res) => {
             data: {
               role: "student",
               name: student[0].name,
+              id: student[0].reg_no
             },
           });
         }
