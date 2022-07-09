@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Center, Group } from "@mantine/core";
 import { ComposedButton } from "./common";
 import axios from "axios";
+import useSWR, { useSWRConfig } from "swr";
 
 const RichText = dynamic(() => import("@mantine/rte"), {
   // Disable during server side rendering
@@ -33,45 +34,26 @@ function uploadImage(image: File): Promise<any> {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url: any) => {
           console.log(url);
-          resolve({ data: { link: url } });
+          resolve(url);
         });
       }
     );
   });
 }
-const initialValue =
-  "<p>Your initial <b>html value</b> or an empty string to init editor without value</p>";
-
-export default function Rte() {
-  const [value, onChange] = useState(initialValue);
-  const [people, setPeople] = useState<{ id: number; value: string }[]>([]);
+export default function Rte(props?: any) {
   const tags = [
     { id: 1, value: "JavaScript" },
     { id: 2, value: "TypeScript" },
     { id: 3, value: "Mantine" },
     { id: 3, value: "Next" },
   ];
-  useEffect(() => {
-    async function fetchClassInfo() {
-      try {
-        const response: any = await axios.post("/api/all-students", {});
-        setPeople(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchClassInfo();
-  }, []);
-  const handleClick = () => {
-    console.log({ value, onChange });
-    console.log({ people });
-  };
+  const { data } = useSWR("students", fetcher);
   const mentions = useMemo(
     () => ({
       allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
       mentionDenotationChars: ["@", "#"],
       source: (searchTerm, renderList, mentionChar) => {
-        const list = mentionChar === "@" ? people : tags;
+        const list = data && mentionChar === "@" ? data : tags;
         const includesSearchTerm = list.filter((item) =>
           item.value.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -90,18 +72,25 @@ export default function Rte() {
       }}
       p="sm"
     >
-      <RichText
-        style={{ width: "100%"}}
-        value={value}
-        onChange={onChange}
-        onImageUpload={uploadImage}
-        mentions={mentions}
-      />
-      <ComposedButton
-        text={"Post"}
-        onClick={handleClick}
-        style={{ mt: "xl" }}
-      />
+      {data && (
+        <RichText
+          placeholder="use @ to mention students"
+          style={{ width: "100%" }}
+          value={props.value}
+          onChange={props.onChange}
+          onImageUpload={uploadImage}
+          mentions={mentions}
+        />
+      )}
+      {/* <ComposedButton text={"Post"} onClick={mutate} style={{ mt: "xl" }} /> */}
     </Center>
   );
 }
+const fetcher = async () => {
+  try {
+    const response: any = await axios.post("/api/all-students", {});
+    return response.data.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
