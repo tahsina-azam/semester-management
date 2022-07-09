@@ -39,7 +39,7 @@ const roles: roleAndUsage[] = [
     buttonsForSidebar: [
       {
         name: "Post something",
-        href: "",
+        href: "/teachers/add-post",
       },
       {
         name: "Assign task",
@@ -78,10 +78,13 @@ export const roleChangesForHeader = ({
       arr = role.buttonsForSidebar;
     }
   });
+  console.log({ arr });
   if (id)
     arr.map((button) => {
+      const butt = button.href.slice(-6);
+      if (butt === id) return;
       button.href = button.href + "/" + id;
     });
-
+  console.log({ arr });
   return arr;
 };

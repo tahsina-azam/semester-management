@@ -1,32 +1,70 @@
-import AppShellWithRole from "../../../src/components/common/Bars";
-import Rte from "../../../src/components/rte";
-import { DatePicker, TimeInput } from "@mantine/dates";
 import { useAuth } from "../../../lib/client/context/auth";
+import axios from "axios";
 import { useState } from "react";
-import { Center, Group, SimpleGrid } from "@mantine/core";
-export default function CreateTask() {
+import notify from "../../../src/components/common/Notifications";
+import UseRte from "../../../src/components/rte-related";
+export default function () {
   const { user } = useAuth();
-  const [valueForDate, onChangeForDate] = useState(new Date());
-  
-  return (
-    <Center
-      style={{ flexDirection: "column", alignItems: "flex-start" }}
-      p="xl"
-      m="xl"
-    >
-      <SimpleGrid cols={2}>
-        <DatePicker
-          placeholder="Pick a date"
-          label="Deadline"
-          value={valueForDate}
-          onChange={onChangeForDate}
-          required
-          p="sm"
-        />
-        <TimeInput required value={new Date()} label="Time" p="sm" />
-      </SimpleGrid>
+  const [visible, setVisible] = useState(false);
 
-      <Rte />
-    </Center>
+  const onSubmit = async (values) => {
+    const { rte, date, time, title, score } = values;
+    console.log({ values });
+    const assignedDate: Date = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      time.getSeconds()
+    );
+    console.log({ assignedDate });
+    const timeStampDate: string = assignedDate.toUTCString();
+    // console.log({timeStampDate})
+    setVisible(true);
+    try {
+      const response: {
+        data: { status: string; message?: string; errorMessage?: string };
+      } = await axios.post("/api/teachers/add", {
+        data: {
+          rte,
+          title,
+          score,
+          timeStampDate: timeStampDate,
+          c_id: user.id,
+        },
+      });
+      setVisible(false);
+      const {
+        data: { status },
+      } = response;
+      const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
+      const text =
+        status === "success"
+          ? "Succesfully created a task!"
+          : response.data.errorMessage
+          ? response.data.errorMessage
+          : response.data.message;
+      notify({ type: status, title: titleForNotify, text });
+      console.log({ response });
+    } catch (err) {
+      console.log(err);
+      notify({
+        type: "fail",
+        title: "An error occured!",
+        text: err.toString(),
+      });
+    }
+  };
+  return (
+    <UseRte
+      date
+      time
+      title
+      score
+      visible={visible}
+      onSubmit={onSubmit}
+      titlePlaceholder={"Title of the task"}
+    />
   );
 }

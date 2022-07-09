@@ -4,7 +4,7 @@ import { useAuth } from "../../lib/client/context/auth";
 import AppShellWithRole from "../../src/components/common/Bars";
 import Class from "../../src/components/card/class-card";
 import { SimpleGrid } from "@mantine/core";
-import useSWR, { mutate, useSWRConfig } from "swr";
+import useSWR, {useSWRConfig } from "swr";
 
 const fetchCourse = async (id: string) => {
   
