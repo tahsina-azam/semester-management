@@ -2,7 +2,8 @@ import { useAuth } from "../../../lib/client/context/auth";
 import axios from "axios";
 import { useState } from "react";
 import notify from "../../../src/components/common/Notifications";
-import UseRte from "../../../src/components/rte-related";
+import RteForm from "../../../src/components/rte-form";
+
 export default function () {
   const { user } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -57,14 +58,13 @@ export default function () {
     }
   };
   return (
-    <UseRte
-      date
-      time
-      title
-      score
-      visible={visible}
+    <RteForm
+      type="task"
+      dateb
+      timeb
+      scoreb
       onSubmit={onSubmit}
-      titlePlaceholder={"Title of the task"}
+      visible={visible}
     />
   );
 }

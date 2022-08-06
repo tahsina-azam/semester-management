@@ -10,7 +10,7 @@ export const getCourseOne = function (classId: string): { query: string } {
     query: `SELECT * FROM courses WHERE c_id = ${classId};`,
   };
 };
-export const insertCourseOne = function (data: {
+export const insertTaskOne = function (data: {
   rte: string;
   title: string;
   score: number;
@@ -26,6 +26,22 @@ export const insertCourseOne = function (data: {
       "' ,'" +
       data.score +
       "' ,'" +
+      data.title +
+      "', '" +
+      data.c_id +
+      "')",
+  };
+};
+export const insertPostOne = function (data: {
+  rte: string;
+  title: string;
+  c_id: string
+}): { query: string } {
+  return {
+    query:
+      "INSERT INTO posts(content, title, c_id) VALUES('" +
+      data.rte +
+      "', '" +
       data.title +
       "', '" +
       data.c_id +
