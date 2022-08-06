@@ -1,4 +1,4 @@
-import Rte from "../../src/components/rte";
+import Rte from "./rte";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import {
   Center,
@@ -9,7 +9,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { TypeButton } from "../../src/components/common/Button";
+import { TypeButton } from "./Button";
 import { Calendar, Clock, PencilMinus, Numbers } from "tabler-icons-react";
 export default function UseRte({
   date = false,
@@ -37,10 +37,17 @@ export default function UseRte({
       time: new Date(),
     },
     validate: {
-      date: (value) =>
-        value >= new Date() ? null : "please enter a valid date",
+      date: (value) => {
+        if (date && value >= new Date()) return "please enter a valid date";
+        return null;
+      },
       title: (value) => (value === "" ? "Please provide a title" : null),
-      score: (value) => (value === 0 ? "please provide a proper value" : null),
+      score: (value: number) => {
+        if (score && value === 0) {
+          return "Please put a valid value";
+        }
+        return null;
+      },
     },
   });
   return (
@@ -94,7 +101,7 @@ export default function UseRte({
             {score && (
               <NumberInput
                 label="Score"
-                {...form.getInputProps("score")}
+                {...(score && form.getInputProps("score"))}
                 icon={<Numbers size={16} />}
               />
             )}

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { RichTextEditor } from "@mantine/rte";
-import storage from "../../config/firebase";
+import storage from "../../../config/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import dynamic from "next/dynamic";
 import { Center, Group } from "@mantine/core";
-import { ComposedButton } from "./common";
+import { ComposedButton } from "../common";
 import axios from "axios";
 import useSWR, { useSWRConfig } from "swr";
 

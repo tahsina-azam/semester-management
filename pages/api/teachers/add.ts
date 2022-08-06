@@ -1,10 +1,11 @@
 import executeQuery from "../../../config/db";
-import { insertCourseOne } from "../../../lib/client/query";
+import { insertPostOne, insertTaskOne } from "../../../lib/client/query";
 
 export default async function (
   req: {
     body: {
       data: {
+        type: string;
         rte: string;
         title: string;
         score: number;
@@ -16,22 +17,22 @@ export default async function (
   res: any
 ) {
   const { data } = req.body;
-  const query = insertCourseOne(data);
+  const query = data.type==="task"?insertTaskOne(data): insertPostOne(data);
   console.log({ query });
   try {
     const response: any = await executeQuery(query);
     console.log({ response });
     if (response.affectedRows)
-      res.send({
+      res.json( {
         status: "success",
       });
     else
-      res.send({
+      res.json( {
         status: "fail",
         message: "Couldn't insert data",
       });
   } catch (err) {
-    res.send({
+    res.json( {
       status: "fail",
       message: "Error occured. Please try again.",
       errorMessage: err.toString(),
