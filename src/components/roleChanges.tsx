@@ -45,6 +45,10 @@ const roles: roleAndUsage[] = [
         name: "Assign task",
         href: "/teachers/add-task",
       },
+      {
+        name: "Add resource",
+        href: "/teachers/add-resource",
+      },
     ],
   },
   {

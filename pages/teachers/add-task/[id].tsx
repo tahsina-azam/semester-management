@@ -2,12 +2,13 @@ import { useAuth } from "../../../lib/client/context/auth";
 import axios from "axios";
 import { useState } from "react";
 import notify from "../../../src/components/common/Notifications";
-import RteForm from "../../../src/components/rte-form";
+import { useRouter } from "next/router";
+import UseRte from "../../../src/components/common/rte-related";
 
 export default function () {
-  const { user } = useAuth();
   const [visible, setVisible] = useState(false);
-
+  const router = useRouter();
+  console.log(router.query);
   const onSubmit = async (values) => {
     const { rte, date, time, title, score } = values;
     console.log({ values });
@@ -32,7 +33,7 @@ export default function () {
           title,
           score,
           timeStampDate: timeStampDate,
-          c_id: user.id,
+          c_id: router.query.id,
         },
       });
       setVisible(false);
@@ -58,11 +59,12 @@ export default function () {
     }
   };
   return (
-    <RteForm
-      type="task"
-      dateb
-      timeb
-      scoreb
+    <UseRte
+      date
+      time
+      score
+      title
+      titlePlaceholder="Title of the task"
       onSubmit={onSubmit}
       visible={visible}
     />

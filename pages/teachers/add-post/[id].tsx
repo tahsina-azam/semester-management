@@ -2,10 +2,11 @@ import { useAuth } from "../../../lib/client/context/auth";
 import axios from "axios";
 import { useState } from "react";
 import notify from "../../../src/components/common/Notifications";
-import RteForm from "../../../src/components/rte-form";
+import { useRouter } from "next/router";
+import UseRte from "../../../src/components/common/rte-related";
 export default function () {
   const [visible, setVisible] = useState(false);
-  const { user } = useAuth();
+  const router = useRouter();
   const onSubmit = async (values) => {
     const { rte, title } = values;
     console.log({ values });
@@ -18,11 +19,11 @@ export default function () {
           type: "post",
           rte,
           title,
-          c_id: user.id,
+          c_id: router.query.id,
         },
       });
       setVisible(false);
-      console.log({response})
+      console.log({ response });
       const {
         data: { status },
       } = response;
@@ -46,5 +47,12 @@ export default function () {
       return;
     }
   };
-  return <RteForm type="post" onSubmit={onSubmit} visible={visible} />;
+  return (
+    <UseRte
+      title
+      titlePlaceholder="Title of the post"
+      onSubmit={onSubmit}
+      visible={visible}
+    />
+  );
 }
