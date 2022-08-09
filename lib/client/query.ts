@@ -48,3 +48,25 @@ export const insertPostOne = function (data: {
       "')",
   };
 };
+export const insertResourceOne = function (data: {
+  link: string;
+  description: string;
+  uploader_type: string;
+  uploader_mail: string;
+  c_id: string
+}): { query: string } {
+  return {
+    query:
+      "INSERT INTO resources(link, description, uploader_mail, uploader_type, c_id) VALUES('" +
+      data.link +
+      "', '" +
+      data.description +
+      "', '" +
+      data.uploader_mail +
+      "', '" +
+      data.uploader_type +
+      "', '" +
+      data.c_id +
+      "')",
+  };
+};
