@@ -1,5 +1,6 @@
 import executeQuery from "../../../config/db";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "../../../config/db";
 
 function getClassId() {
   return Math.floor(100000 + Math.random() * 900000);
@@ -27,6 +28,7 @@ export default async (req, res) => {
     const { title, code, credit, year, semester, subject, t_id } =
       req.body.data;
     console.log(req.body);
+    const concatSemester = year + "-" + semester;
     const classId = getClassId().toString();
     const if_same_year: any = await executeQuery({
       query:
@@ -70,6 +72,14 @@ export default async (req, res) => {
         t_id +
         "')",
     });
+    const result_control: any = await executeQuery({
+      query:
+        "INSERT INTO controller1 (c_id, s_id)  VALUES('" +
+        classId +
+        "','" +
+        concatSemester +
+        "')",
+    });
     console.log("a");
     console.log({
       query:
@@ -89,7 +99,7 @@ export default async (req, res) => {
         t_id +
         "')",
     });
-    console.log({ result });
+    console.log({ result, result_control });
     //console.log({result_semester});
     if (result.error)
       return res.send({
