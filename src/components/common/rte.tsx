@@ -1,12 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { RichTextEditor } from "@mantine/rte";
+import {  useMemo, useState } from "react";
 import storage from "../../../config/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import dynamic from "next/dynamic";
-import { Center, Group } from "@mantine/core";
-import { ComposedButton } from "../common";
+import { Center } from "@mantine/core";
 import axios from "axios";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 const RichText = dynamic(() => import("@mantine/rte"), {
   // Disable during server side rendering
