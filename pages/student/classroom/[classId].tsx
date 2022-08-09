@@ -11,6 +11,8 @@ export default function classId() {
 
   useEffect(() => {
     console.log(classId);
+    
+    console.log(router.query);
     async function fetchClassInfo() {
       try {
         const data = {
