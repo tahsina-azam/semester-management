@@ -1,20 +1,22 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../lib/client/context/auth";
 import AppShellWithRole from "../../src/components/common/Bars";
 
 export default function Student() {
   const { user } = useAuth();
-  let data = {
-    id: user.id,
-  };
-  axios
-    .post("/api/student/joined-classes", data)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    const data = user.id
+    const fetch = async function () {
+      const response = await axios.put("/api/student/joined-classes", {data});
+      const arr = response.data;
+      setCourses(arr);
+      console.log({ courses });
+    };
+    fetch();
+  }, []);
+
   return (
     <AppShellWithRole user={user}>
       <div></div>
