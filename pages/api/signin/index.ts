@@ -15,18 +15,20 @@ export default async (req, res) => {
         "' UNION ALL SELECT password FROM admins WHERE email='" +
         email +
         "'",
+      values: [],
     });
     const teacher = await executeQuery({
       query: "SELECT * FROM teachers WHERE email='" + email + "'",
+      values: [],
     });
     console.log("ttt", result);
-    if (result.length > 0) {
+    if (Array.isArray(result) && result.length > 0) {
       if (!(await bcrypt.compare(password, result[0].password))) {
         return res.status(400).send({
           status: "fail",
           message: "invalid password",
         });
-      } else if (teacher.length > 0) {
+      } else if (Array.isArray(teacher) && teacher.length > 0) {
         console.log(teacher[0].id);
         if (teacher[0].is_verified === "false") {
           return res.status(400).send({
@@ -55,12 +57,14 @@ export default async (req, res) => {
       } else {
         const student = await executeQuery({
           query: "SELECT * FROM users WHERE email='" + email + "'",
+          values: [],
         });
 
         const admin = await executeQuery({
           query: "SELECT * FROM admins WHERE email='" + email + "'",
+          values: [],
         });
-        if (admin.length > 0) {
+        if (Array.isArray(admin) && admin.length > 0) {
           return res.send({
             admin: admin,
             status: "success",

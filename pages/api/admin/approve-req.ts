@@ -7,6 +7,7 @@ export default async (req, res) => {
         "UPDATE teachers SET status='approved' WHERE email='" +
         req.body.email +
         "'",
+      values: [],
     });
     console.log("ttt", result);
     return res.send({
