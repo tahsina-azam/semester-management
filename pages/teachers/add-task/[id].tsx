@@ -29,6 +29,7 @@ export default function () {
         data: { status: string; message?: string; errorMessage?: string };
       } = await axios.post("/api/teachers/add", {
         data: {
+          type: "task",
           rte,
           title,
           score,

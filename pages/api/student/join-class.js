@@ -17,10 +17,21 @@ export default async (req, res) => {
         query:
           "SELECT * FROM controller3 WHERE id='" +
           student[0].class_id +
-          "','" +
+          "' AND c_id='" +
           result[0].c_id +
           "')",
       });
+      if (if_already_exist.length <= 0) {
+        const insert = await executeQuery({
+          query:
+            "INSERT INTO controller3 VALUES('" +
+            student[0].class_id +
+            "','" +
+            result[0].c_id +
+            "')",
+        });
+      }
+      console.log(insert);
       return res.send({
         status: "success",
         message: "Welcome to the course!",

@@ -23,7 +23,7 @@ export default function classId() {
       }
     }
     fetchClassInfo();
-  }, [classId]);
+  }, [router.query]);
   return (
     <AppShellWithRole user={user} extraType="classroom">
       <></>
