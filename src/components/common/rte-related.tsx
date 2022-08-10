@@ -38,7 +38,7 @@ export default function UseRte({
     },
     validate: {
       date: (value) => {
-        if (date && value >= new Date()) return "please enter a valid date";
+        if (date && value < new Date()) return "please enter a valid date";
         return null;
       },
       title: (value) => (value === "" ? "Please provide a title" : null),

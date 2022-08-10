@@ -21,6 +21,7 @@ export default function Classroom({
   const { user } = useAuth();
   const { c_id, c_code, c_credit, s_subject, c_title, c_date, t_id } =
     classInfo;
+  console.log({classInfo});
   const drawerInfo = [
     {
       title: "Course Title ",
@@ -32,7 +33,7 @@ export default function Classroom({
     },
     {
       title: "Assigned Teacher ",
-      val: user.name,
+      val: t_id,
     },
     {
       title: "Course Credit ",
