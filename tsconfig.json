@@ -21,7 +21,7 @@
     "**/*.tsx",
     "pages/index.tsx",
     "pages/api/signup/index.ts",
-    "pages/api/signin/index.js",
+    "pages/api/signin/index.ts",
     "src/components/common/menubar.tsx"
   ],
   "exclude": ["node_modules"]

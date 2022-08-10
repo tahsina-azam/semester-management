@@ -6,14 +6,17 @@ export default async (req, res) => {
     if (req.body.role === "admin") {
       result = await executeQuery({
         query: "SELECT * FROM admins WHERE email='" + req.body.email + "'",
+        values: [],
       });
     } else if (req.body.role === "teacher") {
       result = await executeQuery({
         query: "SELECT * FROM teachers WHERE email='" + req.body.email + "'",
+        values: [],
       });
     } else {
       result = await executeQuery({
         query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
+        values: [],
       });
     }
 

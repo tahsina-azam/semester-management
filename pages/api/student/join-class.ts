@@ -2,16 +2,18 @@ import executeQuery from "../../../config/db";
 export default async (req, res) => {
   try {
     console.log("req nom", req.body);
-    const result = await executeQuery({
+    var result = await executeQuery({
       query: "SELECT * FROM courses WHERE c_id='" + req.body.code + "'",
+      values: [],
     });
     console.log("ttt", result);
 
-    if (result.length > 0) {
+    if (Array.isArray(result) && result.length > 0) {
       var feed = { class_code: req.body.code };
       var data = [];
       const student = await executeQuery({
         query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
+        values: [],
       });
       const if_already_exist = await executeQuery({
         query:
@@ -20,9 +22,10 @@ export default async (req, res) => {
           "' AND c_id='" +
           req.body.code +
           "'",
+        values: [],
       });
       console.log(if_already_exist);
-      if (if_already_exist.length <= 0) {
+      if (Array.isArray(if_already_exist) && if_already_exist.length <= 0) {
         const insert = await executeQuery({
           query:
             "INSERT INTO controller3 (id,c_id) VALUES('" +
@@ -30,6 +33,7 @@ export default async (req, res) => {
             "','" +
             result[0].c_id +
             "')",
+          values: [],
         });
         console.log(insert);
       }

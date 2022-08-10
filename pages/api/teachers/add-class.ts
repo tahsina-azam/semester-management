@@ -6,17 +6,6 @@ function getClassId() {
   return Math.floor(100000 + Math.random() * 900000);
 }
 
-function checkDuplicates(classId) {
-  const duplicates: any = executeQuery({
-    query: "SELECT * FROM courses WHERE c_id='" + classId + "' ",
-  });
-  //console.log("duplicates" + duplicates.length());
-  if (duplicates.length === 0) {
-    return true;
-  }
-  return false;
-}
-
 export default async (req, res) => {
   try {
     let today = new Date();
@@ -37,6 +26,7 @@ export default async (req, res) => {
         "' AND s_year='" +
         year +
         "'",
+      values: [],
     });
     if (if_same_year.length > 0 && if_same_year[0].s_date != yyyy) {
       await executeQuery({
@@ -50,6 +40,7 @@ export default async (req, res) => {
           "','" +
           yyyy +
           "')",
+        values: [],
       });
     }
     console.log("body");
@@ -71,6 +62,7 @@ export default async (req, res) => {
         "','" +
         t_id +
         "')",
+      values: [],
     });
     const result_control: any = await executeQuery({
       query:
@@ -79,6 +71,7 @@ export default async (req, res) => {
         "','" +
         concatSemester +
         "')",
+      values: [],
     });
     console.log("a");
     console.log({
@@ -98,6 +91,7 @@ export default async (req, res) => {
         "','" +
         t_id +
         "')",
+      values: [],
     });
     console.log({ result, result_control });
     //console.log({result_semester});
