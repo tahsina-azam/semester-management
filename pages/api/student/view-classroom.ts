@@ -3,11 +3,9 @@ import { db } from "../../../config/db";
 export default async (req, res) => {
   try {
     console.log("req nom", req.body);
-    // const result = await executeQuery({
-    //   query: "SELECT * FROM courses WHERE c_id='" + req.body.code + "'",
-    // });
-    // console.log("ttt", result);
-    var sql = "SELECT * FROM courses WHERE c_id='" + req.body.code + "'";
+    var desired_class = [];
+    var sql =
+      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name ,teachers.email FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_0900_ai_ci ";
 
     db.query(sql, function (err, result) {
       if (err) {
@@ -38,28 +36,22 @@ export default async (req, res) => {
                   errorMessage: err,
                 });
               } else {
+                result.map((courses) => {
+                  if (courses.c_id === req.body.code) {
+                    desired_class.push(courses);
+                  }
+                });
                 return res.send({
                   status: "successs",
                   message: "successfully registered teacher",
-                  result: result,
+                  result: desired_class,
                   post: posts,
                   task: tasks,
                 });
               }
             });
-            // return res.send({
-            //   status: "successs",
-            //   message: "successfully registered teacher",
-            //   result: result,
-            //   post: posts,
-            // });
           }
         });
-        // return res.send({
-        //   status: "successs",
-        //   message: "successfully registered teacher",
-        //   result: result,
-        // });
       }
     });
   } catch (error) {
