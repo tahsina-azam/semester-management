@@ -13,34 +13,34 @@ export default async (req, res) => {
       const student = await executeQuery({
         query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
       });
-      // const if_already_exist = await executeQuery({
-      //   query:
-      //     "SELECT * FROM controller3 WHERE id='" +
-      //     student[0].class_id +
-      //     "' AND c_id='" +
-      //     req.body.code +
-      //     "')",
-      // });
-      // console.log(if_already_exist);
-      // if (if_already_exist.length <= 0) {
-      const insert = await executeQuery({
+      const if_already_exist = await executeQuery({
         query:
-          "INSERT INTO controller3 VALUES('" +
+          "SELECT * FROM controller3 WHERE id='" +
           student[0].class_id +
-          "','" +
-          result[0].c_id +
-          "')",
+          "' AND c_id='" +
+          req.body.code +
+          "'",
       });
-      console.log(insert);
-    }
+      console.log(if_already_exist);
+      if (if_already_exist.length <= 0) {
+        const insert = await executeQuery({
+          query:
+            "INSERT INTO controller3 (id,c_id) VALUES('" +
+            student[0].class_id +
+            "','" +
+            result[0].c_id +
+            "')",
+        });
+        console.log(insert);
+      }
 
-    return res.send({
-      status: "success",
-      message: "Welcome to the course!",
-      result: result,
-      link: "/student/classroom/" + req.body.code,
-    });
-    //}
+      return res.send({
+        status: "success",
+        message: "Welcome to the course!",
+        result: result,
+        link: "/student/classroom/" + req.body.code,
+      });
+    }
     return res.status(400).send({
       status: "fail",
       message: "Please try again with a correct code.",
