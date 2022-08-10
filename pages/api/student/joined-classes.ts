@@ -3,8 +3,8 @@ import { db } from "../../../config/db";
 
 export default async (req, res) => {
   try {
-    console.log(req.body.data);
-    const sql = "SELECT * FROM users WHERE reg_no='" + req.body.data + "'";
+    console.log(req.body);
+    const sql = "SELECT * FROM users WHERE reg_no='" + req.body.id + "'";
     await db.query(sql, async function (err, result) {
       if (err) {
         console.log(err);
@@ -34,7 +34,7 @@ export default async (req, res) => {
           }
           console.log({result})
           res.send({
-            status: "successs",
+            status: "success",
             message: "successfully fetched joined classes",
             result: result,
           });
