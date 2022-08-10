@@ -2,73 +2,59 @@ import executeQuery from "../../../config/db";
 import { db } from "../../../config/db";
 export default async (req, res) => {
   try {
-    console.log("req nom", req.query);
-    var sql = "SELECT * FROM courses WHERE c_id='" + req.query.classId + "'";
+    console.log("req nom", req.body);
+    var desired_class = [];
+    var sql =
+      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name ,teachers.email FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_0900_ai_ci ";
 
     db.query(sql, function (err, result) {
-      if (err)
-        return res.send({
-          status: "fail",
-          message: "Failed to find a course with this ID! with error",
-          errorMessage: err,
-        });
-      if (!result[0])
+      if (err) {
+        console.log(err);
         return res.send({
           status: "fail",
           message: "Failed to find a course with this ID!",
+          errorMessage: err,
         });
-      console.log({ result });
-      sql = "SELECT * FROM posts WHERE c_id='" + req.query.classId + "'";
-      db.query(sql, function (err, posts) {
-        if (err)
-          return res.send({
-            status: "fail",
-            message: "Failed to find a post with this ID!",
-            errorMessage: err,
-          });
-        if (!posts[0])
-          return res.send({
-            status: "success",
-            data: result,
-            posts: [],
-            tasks: [],
-            message: "Failed to find a post with this ID!",
-          });
-
-        sql = "SELECT * FROM tasks WHERE c_id='" + req.query.classId + "'";
-        db.query(sql, function (err, tasks) {
-          if (err)
+      } else {
+        sql = "SELECT * FROM posts WHERE c_id='" + req.body.code + "'";
+        db.query(sql, function (err, posts) {
+          if (err) {
+            console.log(err);
             return res.send({
               status: "fail",
-              message: "Failed to find a task with this ID!",
+              message: "Failed to find a course with this ID!",
               errorMessage: err,
             });
-          console.log({ tasks });
-          if (!tasks[0])
-            return res.send({
-              status: "success",
-              data: result,
-              posts: posts,
-              tasks: [],
-              message: "Failed to find a task with this ID!",
+          } else {
+            sql = "SELECT * FROM tasks WHERE c_id='" + req.body.code + "'";
+            db.query(sql, function (err, tasks) {
+              if (err) {
+                console.log(err);
+                return res.send({
+                  status: "fail",
+                  message: "Failed to find a course with this ID!",
+                  errorMessage: err,
+                });
+              } else {
+                result.map((courses) => {
+                  if (courses.c_id === req.body.code) {
+                    desired_class.push(courses);
+                  }
+                });
+                return res.send({
+                  status: "successs",
+                  message: "successfully registered teacher",
+                  result: desired_class,
+                  post: posts,
+                  task: tasks,
+                });
+              }
             });
-
-          return res.send({
-            status: "success",
-            message: "successfully found",
-            data: result,
-            posts: posts,
-            tasks: tasks,
-          });
+          }
         });
-      });
+      }
     });
   } catch (error) {
     console.log(error);
-    res.send({
-      status: "fail",
-      message: "Failed to find a course with this ID!",
-      errorMessage: error,
-    });
   }
 };
