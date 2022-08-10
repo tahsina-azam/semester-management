@@ -10,23 +10,20 @@ export default function classId() {
   const { classId } = router.query;
 
   useEffect(() => {
-    
     console.log(classId);
     async function fetchClassInfo() {
       try {
         const data = {
           code: classId,
         };
-        const response = await axios.post("/api/student/view-classroom", 
-          data,
-        );
+        const response = await axios.post("/api/student/view-classroom", data);
         console.log({ response });
       } catch (err) {
         console.log(err);
       }
     }
     fetchClassInfo();
-  }, []);
+  }, [router.query]);
   return (
     <AppShellWithRole user={user} extraType="classroom">
       <></>
