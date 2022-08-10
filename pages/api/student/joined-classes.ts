@@ -1,4 +1,3 @@
-import executeQuery from "../../../config/db";
 import { db } from "../../../config/db";
 
 export default async (req, res) => {
@@ -20,7 +19,7 @@ export default async (req, res) => {
           message: "no sql found",
         });
       try {
-        console.log(result[0])
+        console.log(result[0]);
         const sql2 =
           "SELECT * FROM controller3 WHERE id='" + result[0].class_id + "'";
         await db.query(sql2, function (err, result) {
@@ -28,16 +27,35 @@ export default async (req, res) => {
             console.log(err);
             res.send({
               status: "fail",
-              message: "try again",
+              message: "failed to fetch courses",
               errorMessage: err,
             });
           }
-          console.log({result})
-          res.send({
-            status: "success",
-            message: "successfully fetched joined classes",
-            result: result,
+          const sql3 =
+            "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci ,teachers.email COLLATE utf8mb4_unicode_ci  FROM controller3 INNER JOIN courses ON controller3.c_id=courses.c_id LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci ";
+          db.query(sql3, function (err, class_details) {
+            if (err) {
+              console.log(err);
+              res.send({
+                status: "fail",
+                message: "failed to fetch course details",
+                errorMessage: err,
+              });
+            } else {
+              res.send({
+                status: "success",
+                message: "successfully fetched joined classes",
+                result: result,
+                class_details: class_details,
+              });
+            }
           });
+          console.log({ result });
+          // res.send({
+          //   status: "success",
+          //   message: "successfully fetched joined classes",
+          //   result: result,
+          // });
         });
       } catch (error) {
         res.send({
