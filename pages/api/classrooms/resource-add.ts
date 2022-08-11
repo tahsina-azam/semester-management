@@ -1,23 +1,32 @@
 import executeQuery from "../../../config/db";
-import { insertPostOne, insertResourceOne, insertTaskOne } from "../../../lib/client/query";
+import {
+  insertResourceOne,
+  insertTaskCompletionOne,
+} from "../../../lib/client/query";
 
 export default async function (
   req: {
     body: {
       data: {
+        type: string;
         link: string;
         description: string;
         uploader_type: string;
         uploader_mail: string;
-        c_id: string
+        c_id: string;
+        user: string;
+        task: string;
       };
     };
   },
   res: any
 ) {
   const { data } = req.body;
-  const query = insertResourceOne(data)
-  console.log({ query });
+  const query =
+    data.type === "task-upload"
+      ? insertTaskCompletionOne(data)
+      : insertResourceOne(data);
+
   try {
     const response: any = await executeQuery(query);
     console.log({ response });

@@ -24,7 +24,7 @@ export default function ComposedButton({
   style,
 }: {
   text: string;
-  onClick?: () => void;
+  onClick?: void |( () => void);
   style?: object;
 }) {
   return (

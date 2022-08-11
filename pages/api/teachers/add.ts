@@ -20,7 +20,7 @@ export default async function (
   const sql = data.type === "task" ? insertTaskOne(data) : insertPostOne(data);
   console.log({ sql });
   try {
-    const response: any = await executeQuery({ query: sql, values: [] });
+    const response: any = await executeQuery({ query: sql.query, values: [] });
     console.log({ response });
     if (response.affectedRows)
       res.json({

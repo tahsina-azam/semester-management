@@ -20,9 +20,13 @@ import { useRouter } from "next/router";
 export default function AddResource({
   c_id,
   vis,
+  type,
+  taskid
 }: {
   c_id: string | string[];
   vis: Dispatch<SetStateAction<boolean>>;
+  type: string;
+  taskid?: string
 }) {
   const [value, setValue] = useState<File | null>(null);
   const [valueText, setValueText] = useState("");
@@ -64,11 +68,14 @@ export default function AddResource({
         data: { status: string; message?: string; errorMessage?: string };
       } = await axios.post("/api/classrooms/resource-add", {
         data: {
+          type: type,
           link: link,
           description: valueText,
           uploader_type: user.role,
           uploader_mail: user.email,
           c_id: c_id,
+          user: user.id,
+          task: taskid
         },
       });
       setVisible(false);
@@ -103,7 +110,11 @@ export default function AddResource({
         <LoadingOverlay visible={visible} />
         <FileInput
           label="File input"
-          placeholder="Upload your task here"
+          placeholder={
+            type === "task-upload"
+              ? "Upload your task here"
+              : "Upload the file here"
+          }
           value={value}
           onChange={setValue}
           required

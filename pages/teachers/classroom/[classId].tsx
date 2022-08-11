@@ -35,7 +35,7 @@ export default function classId() {
         onClose={() => setVisible(false)}
         title="Add a file"
       >
-        <AddResource c_id={classId} vis={setVisible}/>
+        <AddResource c_id={classId} vis={setVisible} type="resource"/>
       </Modal>
     <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible}/>
     </>:null
