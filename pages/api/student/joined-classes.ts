@@ -42,6 +42,7 @@ export default async (req, res) => {
                 message: "failed to fetch course details",
                 errorMessage: err,
               });
+<<<<<<< HEAD
             } else {
               // --------------------------->
               const sql4 =
@@ -73,6 +74,8 @@ export default async (req, res) => {
               //   result: joinedCourses,
               //   class_details: class_details,
               // });
+=======
+>>>>>>> 91abfab (post half)
             }
             if (!class_details[0])
               res.send({
