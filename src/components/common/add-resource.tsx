@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Card,
   Center,
@@ -17,12 +17,17 @@ import { useAuth } from "../../../lib/client/context/auth";
 import notify from "../../../src/components/common/Notifications";
 import { useRouter } from "next/router";
 
-export default function AddResource() {
-  const [value, setValue] = useState(null);
+export default function AddResource({
+  c_id,
+  vis,
+}: {
+  c_id: string | string[];
+  vis: Dispatch<SetStateAction<boolean>>;
+}) {
+  const [value, setValue] = useState<File | null>(null);
   const [valueText, setValueText] = useState("");
   const [visible, setVisible] = useState(false);
   const { user } = useAuth();
-  const router = useRouter();
   function uploadFile(file: File): Promise<any> {
     return new Promise((resolve, reject) => {
       if (!file) return;
@@ -48,28 +53,22 @@ export default function AddResource() {
       );
     });
   }
-  const onChange = (e) => {
-    e.preventDefault();
-    setVisible(true);
-    console.log(e.target.files[0]);
-    const file = e.target.files[0];
-    uploadFile(file);
-    setVisible(false);
-  };
   const onSubmit = async () => {
     console.log({ value });
-    console.log({ valueText });
     setVisible(true);
+    const link = await uploadFile(value);
+    console.log({ valueText });
+
     try {
       const response: {
         data: { status: string; message?: string; errorMessage?: string };
       } = await axios.post("/api/classrooms/resource-add", {
         data: {
-          link: value,
+          link: link,
           description: valueText,
           uploader_type: user.role,
           uploader_mail: user.email,
-          c_id: router.query.id,
+          c_id: c_id,
         },
       });
       setVisible(false);
@@ -86,6 +85,7 @@ export default function AddResource() {
           : response.data.message;
       notify({ type: status, title: titleForNotify, text });
       console.log({ response });
+      vis(false);
       return;
     } catch (err) {
       console.log(err);
@@ -98,23 +98,28 @@ export default function AddResource() {
     }
   };
   return (
-    <Center style={{ width: "100%", height: "100vh" }}>
-      <Card withBorder style={{ width: "auto", height: "auto" }}>
-        <Center>
-          <LoadingOverlay visible={visible} />
-          <FileInput label="File input" placeholder="Upload your task here" />
-        </Center>
-
-        <TextInput
-          placeholder="Write about the file"
-          mt="xl"
-          style={{ width: "auto", height: "70%" }}
-          onChange={(e) => setValueText(e.target.value)}
+    <Card withBorder style={{ width: "auto", height: "auto" }}>
+      <Center>
+        <LoadingOverlay visible={visible} />
+        <FileInput
+          label="File input"
+          placeholder="Upload your task here"
+          value={value}
+          onChange={setValue}
+          required
         />
-        <Center mt={"xl"}>
-          <ComposedButton text="submit" onClick={onSubmit} />
-        </Center>
-      </Card>
-    </Center>
+      </Center>
+
+      <TextInput
+        label="Description of the file(if needed)"
+        placeholder="Write about the file"
+        mt="xl"
+        style={{ width: "auto", height: "70%" }}
+        onChange={(e) => setValueText(e.target.value)}
+      />
+      <Center mt={"xl"}>
+        <ComposedButton text="submit" onClick={onSubmit} />
+      </Center>
+    </Card>
   );
 }

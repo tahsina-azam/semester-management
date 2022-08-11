@@ -21,7 +21,7 @@ export default function classId() {
   const router = useRouter();
   const {classId}=router.query;
   const [visible, setVisible] = useState(false)
-  console.log(classId);
+  console.log({classId});
   
   const { data, error } = useSWR("post-task "+classId,
   fetchCourse
@@ -33,9 +33,9 @@ export default function classId() {
     <Modal
         opened={visible}
         onClose={() => setVisible(false)}
-        title="Introduce yourself!"
+        title="Add a file"
       >
-        <AddResource/>
+        <AddResource c_id={classId} vis={setVisible}/>
       </Modal>
     <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible}/>
     </>:null

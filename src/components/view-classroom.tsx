@@ -1,19 +1,9 @@
-import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import AppShellWithRole from "../../src/components/common/Bars";
 import { useAuth } from "../../lib/client/context/auth";
 import Classroom from "../../src/components/classroom";
 import useSWR from "swr";
-import { ParsedUrlQuery, StringifyOptions } from "querystring";
 import { Tabs } from "@mantine/core";
-import {
-  IconPhoto,
-  IconMessageCircle,
-  IconSettings,
-  IconCertificate,
-  IconCoin,
-  IconTruck,
-} from "@tabler/icons";
 import FeaturesAsymmetrical from "./post-task";
 
 export default function ClassView({
@@ -55,13 +45,13 @@ export default function ClassView({
           <Tabs.Tab value="third">Resource</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="first">
-          <FeaturesAsymmetrical data={posts} type={"post"} />
+          <FeaturesAsymmetrical data={posts} type={"post"}  c_id={classId} />
         </Tabs.Panel>
         <Tabs.Panel value="second">
-          <FeaturesAsymmetrical data={tasks} type={"task"} />
+          <FeaturesAsymmetrical data={tasks} type={"task"}  c_id={classId}/>
         </Tabs.Panel>
         <Tabs.Panel value="third">
-          <FeaturesAsymmetrical data={tasks} type={"resource"} vis={vis}/>
+          <FeaturesAsymmetrical data={tasks} type={"resource"} vis={vis} c_id={classId}/>
         </Tabs.Panel>
       </Tabs>
       {data && <Classroom classInfo={data} />}

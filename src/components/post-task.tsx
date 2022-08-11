@@ -117,6 +117,7 @@ export default function FeaturesAsymmetrical({
   data,
   type,
   vis,
+  c_id,
 }: {
   data: {
     id: string;
@@ -129,9 +130,9 @@ export default function FeaturesAsymmetrical({
   }[];
   type: string;
   vis?: Dispatch<SetStateAction<boolean>>;
+  c_id: string;
 }) {
   console.log({ data });
-  const { c_id } = data[0];
   const { user } = useAuth();
 
   const items = data.map((item, index) => <Feature {...item} key={index} />);
@@ -142,8 +143,11 @@ export default function FeaturesAsymmetrical({
         {user.role === "teacher" && (
           <TeacherButton type={type} c_id={c_id} vis={vis} />
         )}
+        {user.role === "student" && type === "resource" && (
+          <TeacherButton type={type} c_id={c_id} vis={vis} />
+        )}
       </Group>
-
+      {data.length === 0 && <Text>No {type} is uploaded</Text>}
       <SimpleGrid
         cols={3}
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
@@ -164,7 +168,7 @@ const TeacherButton = ({
   vis: Dispatch<SetStateAction<boolean>>;
 }) => {
   const onClick = () => {
-    if(type==="resource")vis(true)
+    if (type === "resource") vis(true);
     else Router.push(`/teachers/add-${type}/${c_id}`);
   };
   return <ComposedButton text={`Add ${type}`} onClick={onClick} />;

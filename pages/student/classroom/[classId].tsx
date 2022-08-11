@@ -5,6 +5,8 @@ import AppShellWithRole from "../../../src/components/common/Bars";
 import { useAuth } from "../../../lib/client/context/auth";
 import ClassView from "../../../src/components/view-classroom";
 import useSWR from "swr";
+import { Modal } from "@mantine/core";
+import AddResource from "../../../src/components/common/add-resource";
 
 const fetchCourse = async (url) => {
   const classId=url.split(" ")[1]
@@ -18,6 +20,8 @@ const fetchCourse = async (url) => {
 export default function classId() {
   const router = useRouter();
   const {classId}=router.query;
+  const [visible, setVisible] = useState(false)
+
   console.log(classId);
   
   const { data, error } = useSWR("post-task "+classId,
@@ -26,7 +30,16 @@ export default function classId() {
   if (!data) return null;
   console.log({ data, error });
   return (
-    classId ?<ClassView posts={data.posts} tasks={data.tasks}/>:null
+    classId ?<>
+    <Modal
+        opened={visible}
+        onClose={() => setVisible(false)}
+        title="Add a file"
+      >
+        <AddResource c_id={classId} vis={setVisible}/>
+      </Modal>
+    <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible}/>
+    </>:null
   );
   
 }
