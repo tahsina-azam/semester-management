@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import AppShellWithRole from "../../src/components/common/Bars";
 import { useAuth } from "../../lib/client/context/auth";
 import Classroom from "../../src/components/classroom";
@@ -19,7 +19,8 @@ import FeaturesAsymmetrical from "./post-task";
 export default function ClassView({
   classId,
   posts,
-  tasks
+  tasks,
+  vis
 }: {
   classId?: string;
   posts: {
@@ -36,25 +37,32 @@ export default function ClassView({
     created_at: any;
     c_id: string;
     deadline: string;
-    score: number
+    score: number;
   }[];
+  vis?: Dispatch<SetStateAction<boolean>>
 }) {
   const { user } = useAuth();
   const { data, error } = useSWR(`courses/${classId}`);
   const [activeTab, setActiveTab] = useState<string | null>("first");
   if (error) return null;
-  console.log({posts})
+  console.log({ posts });
   return (
-    <AppShellWithRole user={user} extraType="classroom" id={classId}>
+    <AppShellWithRole user={user} extraType="nosidebar" id={classId}>
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.List>
           <Tabs.Tab value="first">Posts</Tabs.Tab>
           <Tabs.Tab value="second">Tasks</Tabs.Tab>
+          <Tabs.Tab value="third">Resource</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="first">
-          <FeaturesAsymmetrical data={posts} />
+          <FeaturesAsymmetrical data={posts} type={"post"} />
         </Tabs.Panel>
-        <Tabs.Panel value="second"> <FeaturesAsymmetrical data={tasks} /></Tabs.Panel>
+        <Tabs.Panel value="second">
+          <FeaturesAsymmetrical data={tasks} type={"task"} />
+        </Tabs.Panel>
+        <Tabs.Panel value="third">
+          <FeaturesAsymmetrical data={tasks} type={"resource"} vis={vis}/>
+        </Tabs.Panel>
       </Tabs>
       {data && <Classroom classInfo={data} />}
     </AppShellWithRole>

@@ -17,7 +17,7 @@ import { useAuth } from "../../../lib/client/context/auth";
 import notify from "../../../src/components/common/Notifications";
 import { useRouter } from "next/router";
 
-export default function () {
+export default function AddResource() {
   const [value, setValue] = useState(null);
   const [valueText, setValueText] = useState("");
   const [visible, setVisible] = useState(false);

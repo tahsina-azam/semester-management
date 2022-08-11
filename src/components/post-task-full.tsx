@@ -8,24 +8,26 @@ import {
   TypographyStylesProvider,
   Group,
   FileInput,
+  Card,
+  Center,
+  SimpleGrid,
+  Container,
 } from "@mantine/core";
+import { Quote } from "tabler-icons-react";
+import { IconButton } from "./common/Button";
 // import image from './image.svg';
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: "flex",
     alignItems: "center",
     padding: theme.spacing.xl * 2,
-    borderRadius: theme.radius.md,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
-    border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[3]
-    }`,
 
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      flexDirection: "column-reverse",
-      padding: theme.spacing.xl,
-    },
+    // [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    //   flexDirection: "column-reverse",
+    //   padding: theme.spacing.xl,
+    // },
   },
 
   image: {
@@ -80,6 +82,7 @@ const useStyles = createStyles((theme) => ({
   control: {
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
+    margin: 10
   },
 }));
 
@@ -103,36 +106,78 @@ export default function Banner({
   const { classes } = useStyles();
   console.log({ score });
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.body}>
-        <Group position="right" className={classes.deadline}>
-          Deadline: {deadline}
-        </Group>
-        <Group position="right" className={classes.score}>
-          Score: {score}
-        </Group>
-        <Group position="right" >
-          <FileInput label="Upload file" placeholder="Submit your task"/>
-        </Group>
-        <Title className={classes.title}>{title}</Title>
-        <Text weight={500} size="lg" mb={5}>
-          Created at: {created_at}
-        </Text>
+      <Container pb="xl"
+        style={{ width: "100%", height: "100vh", flexDirection: "column" }}
+      >
+        <Center style={{ flexDirection: "column" }} p="xl">
+          <Text color="teal" weight="bold">
+            Score: {score}
+          </Text>
+          <Text color="red" weight="bold">
+            Deadline: {deadline}
+          </Text>
+        </Center>
 
-        <Text size="sm" color="dimmed">
-          <TypographyStylesProvider>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-          </TypographyStylesProvider>
-        </Text>
+        <Card withBorder style={{ width: "100%", height: "auto" }}>
+          <Card.Section>
+            <SimpleGrid cols={2} style={{ width: "100%" }} p="xl">
+              <Group position="left">
+                <Title>{title}</Title>
+              </Group>
+              <Group position="right">
+                <FileInput
+                  label="File input"
+                  placeholder="Upload your task here"
+                />
+              </Group>
+            </SimpleGrid>
+          </Card.Section>
 
-        <div className={classes.controls}>
-          <TextInput
-            placeholder="Write a comment"
-            classNames={{ input: classes.input, root: classes.inputWrapper }}
-          />
-          <Button className={classes.control}>Comment</Button>
-        </div>
-      </div>
-    </div>
+          <Text size="sm" color="dimmed">
+            <TypographyStylesProvider>
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            </TypographyStylesProvider>
+          </Text>
+        </Card>
+             <div className={classes.controls}>
+           <TextInput
+             placeholder="Write a comment"
+             classNames={{ input: classes.input, root: classes.inputWrapper }}
+           />
+           <IconButton color={"indigo"} Icon={<Quote/>}/>
+         </div>
+      </Container>
+    // <div className={classes.wrapper}>
+    //   <div className={classes.body}>
+    //     <Group position="right" className={classes.deadline}>
+    //       Deadline: {deadline}
+    //     </Group>
+    //     <Group position="right" className={classes.score}>
+    //       Score: {score}
+    //     </Group>
+    //     <Group  >
+    //     <Title className={classes.title}>{title}</Title>
+    //       <FileInput label="Upload file" placeholder="Submit your task" />
+    //     </Group>
+
+    //     <Text weight={500} size="lg" mb={5}>
+    //       Created at: {created_at}
+    //     </Text>
+
+    //     <Text size="sm" color="dimmed">
+    //       <TypographyStylesProvider>
+    //         <div dangerouslySetInnerHTML={{ __html: content }} />
+    //       </TypographyStylesProvider>
+    //     </Text>
+
+    //     <div className={classes.controls}>
+    //       <TextInput
+    //         placeholder="Write a comment"
+    //         classNames={{ input: classes.input, root: classes.inputWrapper }}
+    //       />
+    //       <Button className={classes.control}>Comment</Button>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }

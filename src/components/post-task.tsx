@@ -5,10 +5,15 @@ import {
   Container,
   TypographyStylesProvider,
   Card,
+  Group,
 } from "@mantine/core";
 import Router from "next/router";
+import { Dispatch, SetStateAction } from "react";
+import { Button } from "semantic-ui-react";
 import useSWR from "swr";
 import { News } from "tabler-icons-react";
+import { useAuth } from "../../lib/client/context/auth";
+import ComposedButton from "./common/Button";
 
 const useStyles = createStyles((theme) => ({
   feature: {
@@ -43,7 +48,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-
 interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   id: string;
   title: string;
@@ -51,7 +55,7 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   created_at: string;
   c_id: string;
   deadline?: string;
-  score?: number
+  score?: number;
 }
 
 function Feature({
@@ -62,10 +66,10 @@ function Feature({
   created_at,
   c_id,
   deadline,
-  score
+  score,
 }: FeatureProps) {
   const { classes, cx } = useStyles();
-  const url = score? `task/${id}`:`post/${id}`
+  const url = score ? `task/${id}` : `post/${id}`;
   const { data, error } = useSWR(url, () => {
     return {
       id,
@@ -74,17 +78,18 @@ function Feature({
       created_at,
       c_id,
       score,
-      deadline
-
+      deadline,
     };
   });
 
   const onClick = () => {
     console.log("ok");
-    console.log({data});
+    console.log({ data });
     console.log({ id, title, content, created_at, c_id });
-    const url = score?`/student/classroom/tasks/${id}`:`/student/classroom/posts/${id}`
-    Router.push(url)
+    const url = score
+      ? `/student/classroom/tasks/${id}`
+      : `/student/classroom/posts/${id}`;
+    Router.push(url);
   };
 
   return (
@@ -110,6 +115,8 @@ function Feature({
 
 export default function FeaturesAsymmetrical({
   data,
+  type,
+  vis,
 }: {
   data: {
     id: string;
@@ -118,14 +125,25 @@ export default function FeaturesAsymmetrical({
     created_at: any;
     c_id: string;
     deadline?: string;
-    score?: number
+    score?: number;
   }[];
+  type: string;
+  vis?: Dispatch<SetStateAction<boolean>>;
 }) {
-  console.log({data})
+  console.log({ data });
+  const { c_id } = data[0];
+  const { user } = useAuth();
+
   const items = data.map((item, index) => <Feature {...item} key={index} />);
 
   return (
     <Container mt={30} mb={30} size="lg">
+      <Group position="right" m={"sm"}>
+        {user.role === "teacher" && (
+          <TeacherButton type={type} c_id={c_id} vis={vis} />
+        )}
+      </Group>
+
       <SimpleGrid
         cols={3}
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
@@ -136,3 +154,18 @@ export default function FeaturesAsymmetrical({
     </Container>
   );
 }
+const TeacherButton = ({
+  type,
+  c_id,
+  vis,
+}: {
+  type: string;
+  c_id: string;
+  vis: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const onClick = () => {
+    if(type==="resource")vis(true)
+    else Router.push(`/teachers/add-${type}/${c_id}`);
+  };
+  return <ComposedButton text={`Add ${type}`} onClick={onClick} />;
+};

@@ -43,8 +43,8 @@ export default function AppShellWithRole({
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar={
-        <Navbar
+      navbar= {
+        extraType!=="nosidebar" && <Navbar
           p="md"
           hiddenBreakpoint="sm"
           hidden={!opened}
