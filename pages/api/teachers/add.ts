@@ -17,22 +17,22 @@ export default async function (
   res: any
 ) {
   const { data } = req.body;
-  const query = data.type==="task"?insertTaskOne(data): insertPostOne(data);
-  console.log({ query });
+  const sql = data.type === "task" ? insertTaskOne(data) : insertPostOne(data);
+  console.log({ sql });
   try {
-    const response: any = await executeQuery(query);
+    const response: any = await executeQuery({ query: sql, values: [] });
     console.log({ response });
     if (response.affectedRows)
-      res.json( {
+      res.json({
         status: "success",
       });
     else
-      res.json( {
+      res.json({
         status: "fail",
         message: "Couldn't insert data",
       });
   } catch (err) {
-    res.json( {
+    res.json({
       status: "fail",
       message: "Error occured. Please try again.",
       errorMessage: err.toString(),

@@ -4,10 +4,9 @@ import { useAuth } from "../../lib/client/context/auth";
 import AppShellWithRole from "../../src/components/common/Bars";
 import Class from "../../src/components/card/class-card";
 import { SimpleGrid } from "@mantine/core";
-import useSWR, {useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 const fetchCourse = async (id: string) => {
-  
   const response = await axios.post("/api/teachers/view-all-courses", { id });
   console.log({ response });
   return response.data.status === "success" ? response.data.data : [];
