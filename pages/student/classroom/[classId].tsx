@@ -6,46 +6,28 @@ import { useAuth } from "../../../lib/client/context/auth";
 import ClassView from "../../../src/components/view-classroom";
 import useSWR from "swr";
 
-const fetchCourse = async (classId) => {
-  const data1 = {
-    code: classId,
-  };
-  const response = await axios.post("/api/student/view-classroom", data1);
+const fetchCourse = async (url) => {
+  const classId=url.split(" ")[1]
+  console.log(classId)
+  const response = await axios.get(`/api/student/view-classroom?classId=${classId}`);
   console.log({ response });
-  return response.data.status === "success" ? response.data.data : [];
+  const posts = response.data.status === "success" ? response.data.posts : [];
+  const tasks = response.data.status === "success" ? response.data.tasks : [];
+  return { posts, tasks };
 };
 export default function classId() {
-  const { user } = useAuth();
   const router = useRouter();
-  const { classId } = router.query;
-<<<<<<< HEAD
-
-  useEffect(() => {
-    console.log(classId);
-    
-    console.log(router.query);
-    async function fetchClassInfo() {
-      try {
-        const data = {
-          code: classId,
-        };
-        const response = await axios.post("/api/student/view-classroom", data);
-        console.log({ response });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchClassInfo();
-  }, [router.query]);
-  return (
-    <AppShellWithRole user={user} extraType="classroom">
-      <></>
-    </AppShellWithRole>
-  );
-=======
-  const { data, error } = useSWR("courses", () => fetchCourse(classId));
-  if (error) return null;
+  const {classId}=router.query;
+  console.log(classId);
+  
+  const { data, error } = useSWR("post-task "+classId,
+  fetchCourse
+);
   if (!data) return null;
-  return data && <ClassView data={data} id={user.id} user={user} />;
->>>>>>> 27a94e2 (partial fixed)
+  console.log({ data, error });
+  return (
+    classId ?<ClassView posts={data.posts} />:null
+  );
+  
 }
+

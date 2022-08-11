@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { useAuth } from "../../lib/client/context/auth";
-import { ComposedButton } from "./common";
+import  ComposedButton  from "./common/Button";
 
 export default function Classroom({
   classInfo,

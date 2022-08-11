@@ -23,7 +23,9 @@ export default function Class({
   const { user } = useAuth();
   const { data, error } = useSWR(`courses/${c_id}`);
   const handleClick = () => {
-    router.push(`/teachers/classroom/${c_id}`)
+    user.role === "teacher"
+      ? router.push(`/teachers/classroom/${c_id}`)
+      : router.push(`/student/classroom/${c_id}`);
   };
   const handleDelete = () => {};
   console.log({ data });

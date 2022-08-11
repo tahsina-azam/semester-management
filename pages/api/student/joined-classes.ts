@@ -41,14 +41,17 @@ export default async (req, res) => {
                 message: "failed to fetch course details",
                 errorMessage: err,
               });
-            } else {
-              res.send({
-                status: "success",
-                message: "successfully fetched joined classes",
-                result: result,
-                class_details: class_details,
-              });
             }
+            if (!class_details[0])
+              res.send({
+                status: "fail",
+                message: "no sql found for class details",
+              });
+            res.send({
+              status: "success",
+              message: "successfully fetched joined classes",
+              data: class_details,
+            });
           });
           console.log({ result });
           // res.send({
