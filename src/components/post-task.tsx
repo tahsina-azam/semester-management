@@ -121,6 +121,7 @@ export default function FeaturesAsymmetrical({
     score?: number
   }[];
 }) {
+  console.log({data})
   const items = data.map((item, index) => <Feature {...item} key={index} />);
 
   return (

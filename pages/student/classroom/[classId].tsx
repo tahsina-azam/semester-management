@@ -26,11 +26,7 @@ export default function classId() {
   if (!data) return null;
   console.log({ data, error });
   return (
-<<<<<<< HEAD
     classId ?<ClassView posts={data.posts} tasks={data.tasks}/>:null
-=======
-    classId ?<ClassView posts={data.posts} />:null
->>>>>>> 3c0e5dc (post half)
   );
   
 }
