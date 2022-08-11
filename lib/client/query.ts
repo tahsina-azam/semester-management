@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const getAllStudents = function (): { query: string } {
   return {
     query: "SELECT reg_no,name FROM users ",
@@ -35,7 +33,7 @@ export const insertTaskOne = function (data: {
 export const insertPostOne = function (data: {
   rte: string;
   title: string;
-  c_id: string
+  c_id: string;
 }): { query: string } {
   return {
     query:
@@ -53,7 +51,7 @@ export const insertResourceOne = function (data: {
   description: string;
   uploader_type: string;
   uploader_mail: string;
-  c_id: string
+  c_id: string;
 }): { query: string } {
   return {
     query:
@@ -68,5 +66,29 @@ export const insertResourceOne = function (data: {
       "', '" +
       data.c_id +
       "')",
+  };
+};
+export const insertTaskCompletionOne = function (data: {
+  link: string;
+  user: string;
+  task: string;
+  description: string;
+}): { query: string } {
+  return {
+    query:
+      "INSERT INTO taskcompletion(link, user, task, description) VALUES('" +
+      data.link +
+      "', '" +
+      data.user +
+      "', '" +
+      data.task +
+      "', '" +
+      data.description +
+      "')",
+  };
+};
+export const getStatus = function (data: { user: string }): { query: string } {
+  return {
+    query: "SELECT * from taskcompletion WHERE user='" + data.user + "';",
   };
 };

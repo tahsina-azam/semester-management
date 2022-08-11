@@ -14,6 +14,7 @@ import { roleChangesForHeader } from "../roleChanges";
 import { User } from "../../../lib/common/types";
 import ComposedButton, { NavbarButton } from "./Button";
 import Link from "next/link";
+import Router from "next/router";
 export default function AppShellWithRole({
   children,
   user,
@@ -43,8 +44,8 @@ export default function AppShellWithRole({
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar={
-        <Navbar
+      navbar= {
+        extraType!=="nosidebar" && <Navbar
           p="md"
           hiddenBreakpoint="sm"
           hidden={!opened}
@@ -94,9 +95,14 @@ export default function AppShellWithRole({
               p="md"
               variant="gradient"
               gradient={{ from: "indigo", to: "cyan", deg: 40 }}
+              onClick={() => {
+                if(user.role==="teacher")Router.push("/teachers/")
+                else Router.push("/student/")
+              }}
               style={{
                 fontSize: "20px",
                 fontWeight: "bold",
+                cursor:"pointer"
               }}
             >
               Classademia

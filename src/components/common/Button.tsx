@@ -24,7 +24,7 @@ export default function ComposedButton({
   style,
 }: {
   text: string;
-  onClick?: () => void;
+  onClick?: void |( () => void);
   style?: object;
 }) {
   return (
@@ -74,11 +74,11 @@ export function TypeButton({
 export function IconButton({
   color,
   Icon,
-  onClick
+  onClick,
 }: {
   color: string;
   Icon: ReactNode;
-  onClick?: () => void
+  onClick?: () => void;
 }) {
   return (
     <Button color={color} size="sm" onClick={onClick}>
