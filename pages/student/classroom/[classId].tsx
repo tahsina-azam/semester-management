@@ -26,7 +26,7 @@ export default function classId() {
   if (!data) return null;
   console.log({ data, error });
   return (
-    classId ?<ClassView posts={data.posts} />:null
+    classId ?<ClassView posts={data.posts} tasks={data.tasks}/>:null
   );
   
 }

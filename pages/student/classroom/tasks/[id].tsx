@@ -6,18 +6,21 @@ export default function Post() {
   const router = useRouter();
   const { id } = router.query;
   console.log(id);
-  const { data, error } = useSWR(`post/${id}`);
+  const { data, error } = useSWR(`task/${id}`);
   if (!data) return null;
   console.log({ data, error });
-  const { id: pid, title, content, created_at, c_id } = data;
+  const { id: tid, title, content, created_at, c_id, deadline, score } = data;
   return id ? (
-    <Center><Banner
-    id={pid}
-    title={title}
-    content={content}
-    created_at={created_at}
-    c_id={c_id}
-  /></Center>
-    
+    <Center>
+      <Banner
+        id={tid}
+        title={title}
+        content={content}
+        created_at={created_at}
+        c_id={c_id}
+        score={score}
+        deadline={deadline}
+      />
+    </Center>
   ) : null;
 }

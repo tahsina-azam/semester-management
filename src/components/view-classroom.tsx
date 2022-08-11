@@ -14,19 +14,29 @@ import {
   IconCoin,
   IconTruck,
 } from "@tabler/icons";
-import FeaturesAsymmetrical from "./common/post-task";
+import FeaturesAsymmetrical from "./post-task";
 
 export default function ClassView({
   classId,
   posts,
+  tasks
 }: {
   classId?: string;
-  posts?: {
+  posts: {
     id: string;
     content: string;
     title: string;
     created_at: any;
     c_id: string;
+  }[];
+  tasks: {
+    id: string;
+    content: string;
+    title: string;
+    created_at: any;
+    c_id: string;
+    deadline: string;
+    score: number
   }[];
 }) {
   const { user } = useAuth();
@@ -44,7 +54,7 @@ export default function ClassView({
         <Tabs.Panel value="first">
           <FeaturesAsymmetrical data={posts} />
         </Tabs.Panel>
-        <Tabs.Panel value="second">Second panel</Tabs.Panel>
+        <Tabs.Panel value="second"> <FeaturesAsymmetrical data={tasks} /></Tabs.Panel>
       </Tabs>
       {data && <Classroom classInfo={data} />}
     </AppShellWithRole>

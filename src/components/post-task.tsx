@@ -50,6 +50,8 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   content: string;
   created_at: string;
   c_id: string;
+  deadline?: string;
+  score?: number
 }
 
 function Feature({
@@ -59,24 +61,30 @@ function Feature({
   className,
   created_at,
   c_id,
+  deadline,
+  score
 }: FeatureProps) {
   const { classes, cx } = useStyles();
-  const { data, error } = useSWR(`post/${id}`, () => {
+  const url = score? `task/${id}`:`post/${id}`
+  const { data, error } = useSWR(url, () => {
     return {
       id,
       title,
       content,
       created_at,
       c_id,
+      score,
+      deadline
+
     };
   });
 
   const onClick = () => {
     console.log("ok");
-
     console.log({data});
     console.log({ id, title, content, created_at, c_id });
-    Router.push(`/student/classroom/posts/${id}`)
+    const url = score?`/student/classroom/tasks/${id}`:`/student/classroom/posts/${id}`
+    Router.push(url)
   };
 
   return (
@@ -109,6 +117,8 @@ export default function FeaturesAsymmetrical({
     title: string;
     created_at: any;
     c_id: string;
+    deadline?: string;
+    score?: number
   }[];
 }) {
   const items = data.map((item, index) => <Feature {...item} key={index} />);
