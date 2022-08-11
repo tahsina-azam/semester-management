@@ -19,7 +19,7 @@ export const insertTaskOne = function (data: {
 }): { query: string } {
   return {
     query:
-      "INSERT INTO tasks(description, deadline, score, title, c_id) VALUES('" +
+      "INSERT INTO tasks(content, deadline, score, title, c_id) VALUES('" +
       data.rte +
       "', '" +
       data.timeStampDate +

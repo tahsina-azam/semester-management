@@ -74,6 +74,16 @@ export default async (req, res) => {
               //   class_details: class_details,
               // });
             }
+            if (!class_details[0])
+              res.send({
+                status: "fail",
+                message: "no sql found for class details",
+              });
+            res.send({
+              status: "success",
+              message: "successfully fetched joined classes",
+              data: class_details,
+            });
           });
           console.log({ result });
         });
