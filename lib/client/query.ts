@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const getAllStudents = function (): { query: string } {
   return {
     query: "SELECT reg_no,name FROM users ",
@@ -87,5 +85,10 @@ export const insertTaskCompletionOne = function (data: {
       "', '" +
       data.description +
       "')",
+  };
+};
+export const getStatus = function (data: { user: string }): { query: string } {
+  return {
+    query: "SELECT * from taskcompletion WHERE user='" + data.user + "';",
   };
 };

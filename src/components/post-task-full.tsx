@@ -12,6 +12,7 @@ import {
   Center,
   SimpleGrid,
   Container,
+  Badge,
 } from "@mantine/core";
 import { Dispatch, SetStateAction } from "react";
 import { Quote } from "tabler-icons-react";
@@ -96,7 +97,8 @@ export default function Banner({
   c_id,
   score,
   deadline,
-  vis
+  vis,
+  stat,
 }: {
   id: string;
   title: string;
@@ -104,13 +106,21 @@ export default function Banner({
   created_at: string;
   c_id: string;
   vis: Dispatch<SetStateAction<boolean>>;
+  stat?: number;
   score?: number;
   deadline?: string;
-  
 }) {
   const { classes } = useStyles();
   const { user } = useAuth();
-  console.log({ score });
+  const deadlineDate = new Date(deadline + "+6:00").getTimezoneOffset();
+  const diffInMin =
+    (Date.parse(deadline + "+6:00") - Date.now() + deadlineDate) / (60 * 1000);
+  const diffOfday = Math.floor(diffInMin.valueOf() / (24 * 60));
+  const diffOfhr = Math.floor(
+    (diffInMin.valueOf() - diffOfday.valueOf() * 24) / 60
+  );
+  const diffOfmin = Math.floor(diffInMin.valueOf() - diffOfhr.valueOf() * 60);
+  console.log({diffOfday, diffOfhr, diffOfmin})
   return (
     <Container
       pb="xl"
@@ -123,9 +133,22 @@ export default function Banner({
           </Text>
         )}
         {deadline && (
-          <Text color="red" weight="bold">
-            Deadline: {deadline}
-          </Text>
+          <Group>
+            <Text color="red" weight="bold">
+              Deadline: {deadline}
+            </Text>
+            {diffOfmin >= 0 && diffOfday >= 0 && diffOfhr >= 0 && (
+              <Text color="blue" weight="bold">
+                [Ending in {diffOfmin} minutes, {diffOfhr} hours and {diffOfday}{" "}
+                days]
+              </Text>
+            )}
+            {(diffOfmin <0 || diffOfday < 0 || diffOfhr < 0) && (
+              <Text color="green" weight="bold">
+                [Ended]
+              </Text>
+            )}
+          </Group>
         )}
       </Center>
 
@@ -136,13 +159,36 @@ export default function Banner({
               <Title>{title}</Title>
             </Group>
             <Group position="right">
-              {score && user.role === "student" && 
-              (
-                <ComposedButton text="Submit task" onClick={() =>vis(true)} />
-              )
-              }
+              {score && user.role === "student" && (
+                <ComposedButton text="Submit task" onClick={() => vis(true)} />
+              )}
             </Group>
           </SimpleGrid>
+          <Group position="left">
+            <Text pl="lg" color="dimmed" size="sm">
+              Uploaded at: {created_at}
+            </Text>
+            {stat === 1 && (
+              <Badge
+                size="lg"
+                radius="sm"
+                variant="gradient"
+                gradient={{ from: "indigo", to: "cyan" }}
+              >
+                Done
+              </Badge>
+            )}
+            {stat === 0 && (
+              <Badge
+                size="lg"
+                radius="sm"
+                variant="gradient"
+                gradient={{ from: "red", to: "orange" }}
+              >
+                Not Done
+              </Badge>
+            )}
+          </Group>
         </Card.Section>
 
         <Text size="sm" color="dimmed">
@@ -159,37 +205,5 @@ export default function Banner({
         <IconButton color={"indigo"} Icon={<Quote />} />
       </div>
     </Container>
-    // <div className={classes.wrapper}>
-    //   <div className={classes.body}>
-    //     <Group position="right" className={classes.deadline}>
-    //       Deadline: {deadline}
-    //     </Group>
-    //     <Group position="right" className={classes.score}>
-    //       Score: {score}
-    //     </Group>
-    //     <Group  >
-    //     <Title className={classes.title}>{title}</Title>
-    //       <FileInput label="Upload file" placeholder="Submit your task" />
-    //     </Group>
-
-    //     <Text weight={500} size="lg" mb={5}>
-    //       Created at: {created_at}
-    //     </Text>
-
-    //     <Text size="sm" color="dimmed">
-    //       <TypographyStylesProvider>
-    //         <div dangerouslySetInnerHTML={{ __html: content }} />
-    //       </TypographyStylesProvider>
-    //     </Text>
-
-    //     <div className={classes.controls}>
-    //       <TextInput
-    //         placeholder="Write a comment"
-    //         classNames={{ input: classes.input, root: classes.inputWrapper }}
-    //       />
-    //       <Button className={classes.control}>Comment</Button>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
