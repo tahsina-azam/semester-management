@@ -70,6 +70,7 @@ function Feature({
 }: FeatureProps) {
   const { classes, cx } = useStyles();
   const url = score ? `task/${id}` : `post/${id}`;
+  const {user} = useAuth()
   const { data, error } = useSWR(url, () => {
     return {
       id,
@@ -86,9 +87,10 @@ function Feature({
     console.log("ok");
     console.log({ data });
     console.log({ id, title, content, created_at, c_id });
-    const url = score
+    const url = user.role==="student"?score
       ? `/student/classroom/tasks/${id}`
-      : `/student/classroom/posts/${id}`;
+      : `/student/classroom/posts/${id}`:score?`/teachers/classroom/tasks/${id}`
+      : `/teachers/classroom/posts/${id}`;
     Router.push(url);
   };
 

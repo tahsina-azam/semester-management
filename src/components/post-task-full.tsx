@@ -14,6 +14,7 @@ import {
   Container,
 } from "@mantine/core";
 import { Quote } from "tabler-icons-react";
+import { useAuth } from "../../lib/client/context/auth";
 import { IconButton } from "./common/Button";
 // import image from './image.svg';
 const useStyles = createStyles((theme) => ({
@@ -104,18 +105,19 @@ export default function Banner({
   deadline?: string;
 }) {
   const { classes } = useStyles();
+  const {user} = useAuth()
   console.log({ score });
   return (
       <Container pb="xl"
         style={{ width: "100%", height: "100vh", flexDirection: "column" }}
       >
         <Center style={{ flexDirection: "column" }} p="xl">
-          <Text color="teal" weight="bold">
+          {score && <Text color="teal" weight="bold">
             Score: {score}
-          </Text>
-          <Text color="red" weight="bold">
+          </Text>}
+          {deadline && <Text color="red" weight="bold">
             Deadline: {deadline}
-          </Text>
+          </Text>}
         </Center>
 
         <Card withBorder style={{ width: "100%", height: "auto" }}>
@@ -125,10 +127,10 @@ export default function Banner({
                 <Title>{title}</Title>
               </Group>
               <Group position="right">
-                <FileInput
+                {score && user.role==="student" && <FileInput
                   label="File input"
                   placeholder="Upload your task here"
-                />
+                />}
               </Group>
             </SimpleGrid>
           </Card.Section>

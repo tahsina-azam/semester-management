@@ -17,7 +17,7 @@ const fetchCourse = async (url) => {
   const tasks = response.data.status === "success" ? response.data.tasks : [];
   return { posts, tasks };
 };
-export default function classId() {
+export default function Task() {
   const router = useRouter();
   const {classId}=router.query;
   const [visible, setVisible] = useState(false)
