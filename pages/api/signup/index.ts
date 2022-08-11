@@ -24,6 +24,7 @@ export default async function handler(
         "' OR reg_no='" +
         regnum +
         "'",
+      values: [],
     });
     if (if_already_exist.length > 0) {
       console.log("already exist");
@@ -46,9 +47,11 @@ export default async function handler(
         "','" +
         class_id +
         "','false')",
+      values: [],
     });
     const controller = await executeQuery({
       query: "INSERT INTO controller2 VALUES('" + class_id + "',NULL)",
+      values: [],
     });
     if (!result) {
       throw new Error("Insert error");
