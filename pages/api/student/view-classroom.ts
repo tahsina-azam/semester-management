@@ -5,7 +5,7 @@ export default async (req, res) => {
     console.log("req nom", req.query);
     var desired_class = [];
     var sql =
-      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name ,teachers.email  FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id";
+      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci ,teachers.email COLLATE utf8mb4_unicode_ci FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci";
 
     db.query(sql, function (err, result) {
       console.log({ result });
