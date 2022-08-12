@@ -1,4 +1,5 @@
 import { db } from "../../../config/db";
+import executeQuery from "../../../config/db";
 
 export default async (req, res) => {
   try {
@@ -42,7 +43,23 @@ export default async (req, res) => {
                 errorMessage: err,
               });
             } else {
-              // --------------------------->
+              // --------------------------->check if semester is present
+              const sql5 =
+                "SELECT controller2.s_id FROM users INNER JOIN controller2 ON users.reg_no='" +
+                req.body.id +
+                "' AND controller2.id=users.class_id";
+              const semester = executeQuery({ query: sql5, values: [] });
+              console.log("semester is:->" + semester);
+              if (semester[0] === null) {
+                return res.send({
+                  status: "success",
+                  message: "successfully fetched joined classes",
+                  result: joinedCourses,
+                  data: class_details,
+                  other_courses: "no semester",
+                });
+              }
+
               const sql4 =
                 "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name , teachers.email FROM users INNER JOIN controller2 ON users.reg_no='" +
                 req.body.id +
@@ -61,7 +78,7 @@ export default async (req, res) => {
                       status: "fail",
                       message: "no sql found for class details",
                     });
-                  res.send({
+                  return res.send({
                     status: "success",
                     message: "successfully fetched joined classes",
                     result: joinedCourses,
