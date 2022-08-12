@@ -44,6 +44,7 @@ export default function Rte(props?: any) {
     { id: 3, value: "Next" },
   ];
   const { data } = useSWR("students", fetcher);
+  console.log({data})
   const mentions = useMemo(
     () => ({
       allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
