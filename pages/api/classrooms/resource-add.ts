@@ -1,3 +1,4 @@
+import { SetValues } from "@mantine/form/lib/types";
 import executeQuery from "../../../config/db";
 import {
   insertResourceOne,
@@ -10,6 +11,7 @@ export default async function (
       data: {
         type: string;
         link: string;
+        title: string;
         description: string;
         uploader_type: string;
         uploader_mail: string;

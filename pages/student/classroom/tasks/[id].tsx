@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import AddResource from "../../../../src/components/common/add-resource";
-import Banner from "../../../../src/components/post-task-full";
+import Banner from "../../../../src/components/common/post-task-full";
 import axios from "axios";
 import { useAuth } from "../../../../lib/client/context/auth";
 export default function Post() {

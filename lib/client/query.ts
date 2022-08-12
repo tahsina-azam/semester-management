@@ -52,10 +52,13 @@ export const insertResourceOne = function (data: {
   uploader_type: string;
   uploader_mail: string;
   c_id: string;
+  title: string
 }): { query: string } {
   return {
     query:
-      "INSERT INTO resources(link, description, uploader_mail, uploader_type, c_id) VALUES('" +
+      "INSERT INTO resources(title, link, description, uploader_mail, uploader_type, c_id) VALUES('" +
+      data.title +
+      "', '" +
       data.link +
       "', '" +
       data.description +

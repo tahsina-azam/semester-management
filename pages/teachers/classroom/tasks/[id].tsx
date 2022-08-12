@@ -1,7 +1,7 @@
 import { Center } from "@mantine/core";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Banner from "../../../../src/components/post-task-full";
+import Banner from "../../../../src/components/common/post-task-full";
 export default function Post() {
   const router = useRouter();
   const { id } = router.query;

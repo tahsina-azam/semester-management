@@ -1,6 +1,6 @@
 import { Button, useMantineTheme, Text } from "@mantine/core";
 import Link from "next/link";
-import { ReactChild, ReactFragment, ReactNode, ReactPortal } from "react";
+import { Dispatch, ReactChild, ReactFragment, ReactNode, ReactPortal, SetStateAction } from "react";
 export function NavbarButton({ text, href }: { text: string; href: string }) {
   return (
     <Text
@@ -24,7 +24,7 @@ export default function ComposedButton({
   style,
 }: {
   text: string;
-  onClick?: void |( () => void);
+  onClick?:void |( () => void);
   style?: object;
 }) {
   return (

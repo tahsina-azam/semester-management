@@ -7,15 +7,12 @@ import {
   TextInput,
 } from "@mantine/core";
 import ComposedButton, {
-  TypeButton,
 } from "../../../src/components/common/Button";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import storage from "../../../config/firebase";
-import { Input } from "semantic-ui-react";
 import axios from "axios";
 import { useAuth } from "../../../lib/client/context/auth";
 import notify from "../../../src/components/common/Notifications";
-import { useRouter } from "next/router";
 
 export default function AddResource({
   c_id,
@@ -70,6 +67,7 @@ export default function AddResource({
         data: {
           type: type,
           link: link,
+          title: value.name,
           description: valueText,
           uploader_type: user.role,
           uploader_mail: user.email,

@@ -15,7 +15,8 @@ const fetchCourse = async (url) => {
   console.log({ response });
   const posts = response.data.status === "success" ? response.data.posts : [];
   const tasks = response.data.status === "success" ? response.data.tasks : [];
-  return { posts, tasks };
+  const resources = response.data.status === "success" ? response.data.resources : [];
+  return { posts, tasks, resources };
 };
 export default function classId() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function classId() {
       >
         <AddResource c_id={classId} vis={setVisible} type="resource"/>
       </Modal>
-    <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible}/>
+    <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible} resources={data.resources}/>
     </>:null
   );
   

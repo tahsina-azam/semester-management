@@ -12,8 +12,8 @@ import { Dispatch, SetStateAction } from "react";
 import { Button } from "semantic-ui-react";
 import useSWR from "swr";
 import { News } from "tabler-icons-react";
-import { useAuth } from "../../lib/client/context/auth";
-import ComposedButton from "./common/Button";
+import { useAuth } from "../../../lib/client/context/auth";
+import ComposedButton from "./Button";
 
 const useStyles = createStyles((theme) => ({
   feature: {
@@ -50,48 +50,45 @@ const useStyles = createStyles((theme) => ({
 
 interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   id: string;
-  title: string;
-  content: string;
+  link: string;
+  description: string;
+  uploader_mail: string;
+  uploader_type: string;
   created_at: string;
-  c_id: string;
-  deadline?: string;
-  score?: number;
 }
 
 function Feature({
   id,
-  title,
-  content,
+  link,
+  description,
+  uploader_mail,
+  uploader_type,
   className,
   created_at,
-  c_id,
-  deadline,
-  score,
 }: FeatureProps) {
   const { classes, cx } = useStyles();
-  const url = score ? `task/${id}` : `post/${id}`;
-  const {user} = useAuth()
-  const { data, error } = useSWR(url, () => {
+  const { user } = useAuth();
+  const { data, error } = useSWR(`resource/${id}`, () => {
     return {
       id,
-      title,
-      content,
+      link,
+      description,
+      uploader_mail,
+      uploader_type,
       created_at,
-      c_id,
-      score,
-      deadline,
     };
   });
-
+  if(error)return null;
   const onClick = () => {
-    console.log("ok");
     console.log({ data });
-    console.log({ id, title, content, created_at, c_id });
-    const url = user.role==="student"?score
-      ? `/student/classroom/tasks/${id}`
-      : `/student/classroom/posts/${id}`:score?`/teachers/classroom/tasks/${id}`
-      : `/teachers/classroom/posts/${id}`;
-    Router.push(url);
+    console.log({
+      id,
+      link,
+      description,
+      uploader_mail,
+      uploader_type,
+      created_at,
+    });
   };
 
   return (
@@ -100,37 +97,32 @@ function Feature({
       <div className={classes.content}>
         <News size={38} className={classes.icon} />
         <Text weight={700} size="lg" mb="xs" mt={5} className={classes.title}>
-          {title}
+            {description}
+          </Text>
+          <Text color="dimmed" size="sm">
+          {uploader_mail}
         </Text>
         <Text color="dimmed" size="sm">
           {created_at}
-        </Text>
-        <Text color="dimmed" size="sm" lineClamp={3}>
-          <TypographyStylesProvider>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-          </TypographyStylesProvider>
         </Text>
       </div>
     </div>
   );
 }
 
-export default function FeaturesAsymmetrical({
+export default function FeaturesAsymmetricalResource({
   data,
-  type,
   vis,
   c_id,
 }: {
   data: {
     id: string;
-    content: string;
-    title: string;
-    created_at: any;
-    c_id: string;
-    deadline?: string;
-    score?: number;
+    link: string;
+    description: string;
+    uploader_mail: string;
+    uploader_type: string;
+    created_at: string;
   }[];
-  type: string;
   vis?: Dispatch<SetStateAction<boolean>>;
   c_id: string;
 }) {
@@ -142,14 +134,9 @@ export default function FeaturesAsymmetrical({
   return (
     <Container mt={30} mb={30} size="lg">
       <Group position="right" m={"sm"}>
-        {user.role === "teacher" && (
-          <TeacherButton type={type} c_id={c_id} vis={vis} />
-        )}
-        {user.role === "student" && type === "resource" && (
-          <TeacherButton type={type} c_id={c_id} vis={vis} />
-        )}
+        <ComposedButton text="Add a file" onClick={() => vis(true)} />
       </Group>
-      {data.length === 0 && <Text>No {type} is uploaded</Text>}
+      {data.length === 0 && <Text>No resource is uploaded</Text>}
       <SimpleGrid
         cols={3}
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
@@ -160,18 +147,3 @@ export default function FeaturesAsymmetrical({
     </Container>
   );
 }
-const TeacherButton = ({
-  type,
-  c_id,
-  vis,
-}: {
-  type: string;
-  c_id: string;
-  vis: Dispatch<SetStateAction<boolean>>;
-}) => {
-  const onClick = () => {
-    if (type === "resource") vis(true);
-    else Router.push(`/teachers/add-${type}/${c_id}`);
-  };
-  return <ComposedButton text={`Add ${type}`} onClick={onClick} />;
-};
