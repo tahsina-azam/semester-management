@@ -57,6 +57,14 @@ export default function AppShellWithRole({
                 <NavbarButton text={but.name} href={but.href} key={index} />
               ))}
             <NavbarButton text="Edit account" href={"/student/profile"} />
+            <NavbarButton
+              text="Contact for project"
+              href={
+                user.role === "teacher"
+                  ? "/teachers/project"
+                  : "/student/project"
+              }
+            />
             <Link href={"/sign-in"} passHref>
               <ComposedButton
                 text="Logout"
@@ -71,13 +79,6 @@ export default function AppShellWithRole({
           </Navbar>
         )
       }
-      // aside={
-      //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-      //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-      //       <Text>Application sidebar</Text>
-      //     </Aside>
-      //   </MediaQuery>
-      // }
       header={
         <Header height={60} p="md">
           <div
