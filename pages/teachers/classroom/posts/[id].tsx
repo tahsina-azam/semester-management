@@ -17,7 +17,8 @@ export default function Post() {
     content={content}
     created_at={created_at}
     c_id={c_id}
-  /></Center>
+  />
+  </Center>
     
   ) : null;
 }

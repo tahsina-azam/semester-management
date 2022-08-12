@@ -117,7 +117,6 @@ export default function Banner({
     (diffInMin.valueOf() - diffOfday.valueOf() * 24) / 60
   );
   const diffOfmin = Math.floor(diffInMin.valueOf() - diffOfhr.valueOf() * 60);
-  console.log({ diffOfday, diffOfhr, diffOfmin });
   return (
     <Container
       pb="xl"

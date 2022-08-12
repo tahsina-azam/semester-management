@@ -45,12 +45,13 @@ export default async (req, res) => {
             } else {
               // --------------------------->check if semester is present
               const sql5 =
-                "SELECT controller2.s_id FROM users INNER JOIN controller2 ON users.reg_no='" +
+                "SELECT * FROM users INNER JOIN controller2 ON users.reg_no='" +
                 req.body.id +
                 "' AND controller2.id=users.class_id";
-              const semester = await executeQuery({ query: sql5});
-              console.log("semester is:->" + {semester});
-              if (!semester[0]) {
+              const semester = await executeQuery({ query: sql5 });
+              console.log("semester is:->" + semester[0].s_id);
+              if (!semester[0].s_id) {
+                console.log({ joinedCourses, class_details });
                 return res.send({
                   status: "success",
                   message: "successfully fetched joined classes",

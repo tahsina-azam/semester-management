@@ -5,7 +5,7 @@ export default async (req, res) => {
     console.log("req nom", req.body);
     var desired_class = [];
     var sql =
-      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci ,teachers.email COLLATE utf8mb4_unicode_ci FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci";
+      "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name ,teachers.email FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id";
 
     db.query(sql, function (err, result) {
       console.log({ result });
@@ -69,6 +69,7 @@ export default async (req, res) => {
                 desired_class.push(courses);
               }
             });
+            console.log({posts,tasks})
             return res.send({
               status: "success",
               message: "successfully found classes",
