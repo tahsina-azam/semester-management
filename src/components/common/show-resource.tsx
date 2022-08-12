@@ -55,6 +55,7 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   created_at: string;
   title?: string;
   user?: string;
+  type?: string
 }
 
 function Feature({
@@ -67,6 +68,7 @@ function Feature({
   created_at,
   title,
   user,
+  type
 }: FeatureProps) {
   const { classes, cx } = useStyles();
   const { data, error } = useSWR(`resource/${id}`, () => {
@@ -113,6 +115,7 @@ function Feature({
 export default function FeaturesAsymmetricalResource({
   data,
   vis,
+  type
 }: {
   data: {
     id: string;
@@ -123,16 +126,18 @@ export default function FeaturesAsymmetricalResource({
     created_at: string;
     title?: string;
     user?: string;
+    type?: string
   }[];
   vis?: Dispatch<SetStateAction<boolean>>;
+  type: string
 }) {
   console.log({ data });
   const items = data.map((item, index) => <Feature {...item} key={index} />);
   return (
     <Container mt={30} mb={30} size="lg">
-      <Group position="right" m={"sm"}>
+      {type!=="nobut" && <Group position="right" m={"sm"}>
         <ComposedButton text="Add a file" onClick={() => vis(true)} />
-      </Group>
+      </Group>}
       {data.length === 0 && <Text>No resource is uploaded</Text>}
       <SimpleGrid
         cols={3}

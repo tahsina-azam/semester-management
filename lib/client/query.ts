@@ -100,3 +100,8 @@ export const getTaskComplete = function (data: { t_id: string }): { query: strin
     query: "SELECT * from taskcompletion WHERE task='" + data.t_id + "';",
   };
 };
+export const getPostOne = function (data: { id: string }): { query: string } {
+  return {
+    query: "SELECT * from posts WHERE id='" + data.id + "';",
+  };
+};

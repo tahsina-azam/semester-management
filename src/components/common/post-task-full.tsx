@@ -96,6 +96,9 @@ export default function Banner({
   deadline,
   vis,
   stat,
+  onComment,
+  comment,
+  commentSet,
 }: {
   id: string;
   title: string;
@@ -103,9 +106,15 @@ export default function Banner({
   created_at: string;
   c_id: string;
   vis?: Dispatch<SetStateAction<boolean>>;
-  stat?: number;
+  stat?: 1|0;
   score?: number;
   deadline?: string;
+  onComment: () => void;
+  comment: Dispatch<SetStateAction<string>>;
+  commentSet: {
+    body: string;
+    name: string
+  }[];
 }) {
   const { classes } = useStyles();
   const { user } = useAuth();
@@ -117,6 +126,7 @@ export default function Banner({
     (diffInMin.valueOf() - diffOfday.valueOf() * 24) / 60
   );
   const diffOfmin = Math.floor(diffInMin.valueOf() - diffOfhr.valueOf() * 60);
+  console.log({ commentSet });
   return (
     <Container
       pb="xl"
@@ -200,10 +210,19 @@ export default function Banner({
       <div className={classes.controls}>
         <TextInput
           placeholder="Write a comment"
+          onChange={(e) => comment(e.target.value)}
           classNames={{ input: classes.input, root: classes.inputWrapper }}
         />
-        <IconButton color={"indigo"} Icon={<Quote />} />
+        <IconButton color={"indigo"} Icon={<Quote />} onClick={onComment} />
       </div>
+      {commentSet.length!==0 && commentSet.map((comm) => (
+        <Card withBorder className={classes.controls}>
+          <Text color={"indigo"} pr="lg">
+            {comm.name}:
+          </Text>
+          <Text>{comm.body}</Text>
+        </Card>
+      ))}
     </Container>
   );
 }
