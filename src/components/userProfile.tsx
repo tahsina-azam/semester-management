@@ -1,46 +1,28 @@
 import "semantic-ui-css/semantic.min.css";
-import React, { Component, useRef } from "react";
-import { Grid, Form } from "semantic-ui-react";
+import React from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useAuth } from "../../lib/client/context/auth";
-import { useState, useEffect } from "react";
-
+import useSWR from "swr";
+import { useForm } from "@mantine/form";
+import { Center, TextInput, Card, Select } from "@mantine/core";
+import { TypeButton } from "./common/Button";
+const getProfile = async (user) => {
+  const response = await axios.post("/api/profile", {
+    email: user.email,
+    role: user.role,
+  });
+  console.log({ response });
+  return response.data?.result;
+};
 function FormSignUp() {
-  const [name, setName] = useState("");
-  const [semester, setSemester] = useState("");
-  const [phone, setPhone] = useState("");
-  const [about, setAbout] = useState("");
-  var info = [];
   const { user } = useAuth();
-  // useEffect(() => {
-  //   return () => {
-  //     axios
-  //       .post("/api/profile", { email: user.email, role: user.role })
-  //       .then((response) => {
-  //         console.log({ response });
-  //         info = response.data;
-  //         console.log("this is info" + info);
-  //       })
-  //       .catch((e) => {
-  //         console.log(e);
-  //       });
-  //   };
-  // }, []);
-
+  const info = useSWR("profile", () => getProfile(user));
+  console.log({ info });
+  if (!info) return null;
   console.log("user->" + { user });
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
     console.log("inside handle submit");
-
-    let data = {
-      name: name,
-      semester: semester,
-      email: user.email,
-      phone: phone,
-      about: about,
-      role: user.role,
-    };
-    console.log(data);
     axios
       .post("/api/profile/update", data)
       .then((response) => {
@@ -50,68 +32,76 @@ function FormSignUp() {
         console.log(e);
       });
   };
-
+  const form = useForm({
+    initialValues: {
+      name: info.data.name,
+      phone: info.data.phone,
+      about: info.data.about,
+      year: "",
+      semester: "",
+    },
+  });
   return (
-    <div>
-      <Form>
-        <Grid
-          style={{ height: "100vh" }}
-          verticalAlign="middle"
-          textAlign="center"
+    <div style={{ height: "100vh" }}>
+      <Center style={{ width: "100%", height: "auto" }}>
+        <Card
+          sx={{
+            width: "50%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Image width={60} height={60} src={"/idea.png"} />
-            <div className="field">
-              <label>Name</label>
-              <Form.Input
-                type="text"
-                name="name"
-                placeholder={user.name}
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="field">
-              <label>Semester</label>
-              <Form.Input
-                type="text"
-                name="Semester"
-                placeholder=""
-                value={semester}
-                onChange={(e) => setSemester(e.target.value)}
-              />
-            </div>
-            <div className="field">
-              <label>Phone</label>
-              <Form.Input
-                fluid
-                type="text"
-                name="phone"
-                placeholder=""
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div className="field">
-              <label>About</label>
-              <Form.Input
-                fluid
-                type="text"
-                name="about"
-                placeholder=""
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-              />
-            </div>
-            <Form.Button
-              content="Submit"
-              color="violet"
-              onClick={handleSubmit}
+          <Image width={60} height={60} src={"/idea.png"} />
+          <form
+            onSubmit={form.onSubmit((values) => {
+              return handleSubmit(values);
+            })}
+            style={{
+              width: "50%",
+            }}
+          >
+            <TextInput required label="Name" {...form.getInputProps("name")} />
+            <TextInput
+              required
+              label="Phone Number"
+              {...form.getInputProps("phone")}
             />
-          </Grid.Column>
-        </Grid>
-      </Form>
+            <TextInput
+              required
+              label="About"
+              {...form.getInputProps("about")}
+            />
+            <Select
+              required
+              label="Year"
+              placeholder="Pick one"
+              data={[
+                { value: "1", label: "1st" },
+                { value: "2", label: "2nd" },
+                { value: "3", label: "3rd" },
+                { value: "4", label: "4th" },
+              ]}
+              {...form.getInputProps("year")}
+            />
+            <Select
+              label="Semester"
+              placeholder="Pick one"
+              data={[
+                { value: "1", label: "1st" },
+                { value: "2", label: "2nd" },
+              ]}
+              {...form.getInputProps("semester")}
+            />
+
+            <Center>
+              <TypeButton />
+            </Center>
+          </form>
+        </Card>
+      </Center>
     </div>
   );
 }

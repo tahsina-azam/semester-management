@@ -22,7 +22,7 @@ export default async (req, res) => {
 
     console.log("ttt", result);
     return res.send({
-      result: result,
+      result: result[0],
     });
   } catch (error) {
     console.log(error);
