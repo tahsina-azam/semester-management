@@ -29,7 +29,7 @@ export default function Post() {
   );
   if (!data) return null;
   console.log({ data, error });
-  if(!datacomment)return null;
+  if (!datacomment) return null;
   const { id: pid, title, content, created_at, c_id } = data;
   const onComment = async () => {
     console.log({ val });
@@ -79,3 +79,24 @@ export default function Post() {
     </Center>
   ) : null;
 }
+
+// const [fields,setFields]=useState(arr); //arr contains an array containing all the posts
+//   return (
+//     <>
+//       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginTop: 10 }}>
+//         <AdminLibrarySearch items={arr}
+//               updateParent={setFields}/>
+//       </Container>
+//       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginTop: 12 }}>
+//         <Grid container spacing={3}>
+//           {fields.map((item) => (
+//             <MemoisedCard
+//               key={item.type}
+//               type={item.type}
+//               link={item.link}
+//             />
+//           ))}
+//         </Grid>
+//       </Container>
+//     </>
+//   );
