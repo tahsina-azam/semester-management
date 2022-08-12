@@ -77,7 +77,7 @@ export default function SignUp({ type }: { type: string }) {
         value !== values.password ? "Passwords did not match" : null,
       regnum: (value) => (value.length === 10 ? null : "Must be 10 digits"),
       department: (value) =>
-        value === "" ? "Please set your department":null,
+        value === "" ? "Please set your department" : null,
     },
   });
 
@@ -115,21 +115,21 @@ export default function SignUp({ type }: { type: string }) {
               placeholder="your@email.com"
               {...form.getInputProps("email")}
             />
-            ...(type==="student" &&
+
             <TextInput
               required
               label="Registration number"
               placeholder="Your registration number, e.x :2018331001"
               {...form.getInputProps("regnum")}
             ></TextInput>
-            ) ...(type==="teacher" &&
+
             <TextInput
               required
               label="Department"
               placeholder="Your department, e.x :CSE"
               {...form.getInputProps("department")}
             ></TextInput>
-            )
+
             <PasswordInput
               required
               label="Password"

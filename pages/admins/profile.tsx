@@ -1,5 +1,5 @@
 import React from "react";
-import UserProfile from "../../src/components/userProfile";
+import UserProfile from "../../src/components/adminProfile";
 import withAuth from "../../src/components/common/withAuth";
 function profile() {
   return (

@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 
 function FormSignUp() {
   const [name, setName] = useState("");
-  const [semester, setSemester] = useState("");
   const [phone, setPhone] = useState("");
   const [about, setAbout] = useState("");
   var info = [];
@@ -34,7 +33,6 @@ function FormSignUp() {
 
     let data = {
       name: name,
-      semester: semester,
       email: user.email,
       phone: phone,
       about: about,
@@ -70,16 +68,6 @@ function FormSignUp() {
                 value={name}
                 id="name"
                 onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="field">
-              <label>Semester</label>
-              <Form.Input
-                type="text"
-                name="Semester"
-                placeholder=""
-                value={semester}
-                onChange={(e) => setSemester(e.target.value)}
               />
             </div>
             <div className="field">
