@@ -23,7 +23,7 @@ export default async (req, res) => {
         console.log(result[0]);
         const sql2 =
           "SELECT * FROM controller3 WHERE id='" + result[0].class_id + "'";
-        await db.query(sql2, function (err, joinedCourses) {
+        await db.query(sql2, async function (err, joinedCourses) {
           if (err) {
             console.log(err);
             res.send({
@@ -33,8 +33,8 @@ export default async (req, res) => {
             });
           }
           const sql3 =
-            "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci ,teachers.email COLLATE utf8mb4_unicode_ci  FROM controller3 INNER JOIN courses ON controller3.c_id=courses.c_id LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci ";
-          db.query(sql3, function (err, class_details) {
+            "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name,teachers.email FROM controller3 INNER JOIN courses ON controller3.c_id=courses.c_id LEFT JOIN teachers ON courses.t_id=teachers.id";
+          db.query(sql3, async function (err, class_details) {
             if (err) {
               console.log(err);
               res.send({
@@ -48,9 +48,9 @@ export default async (req, res) => {
                 "SELECT controller2.s_id FROM users INNER JOIN controller2 ON users.reg_no='" +
                 req.body.id +
                 "' AND controller2.id=users.class_id";
-              const semester = executeQuery({ query: sql5, values: [] });
-              console.log("semester is:->" + semester);
-              if (semester[0] === null) {
+              const semester = await executeQuery({ query: sql5});
+              console.log("semester is:->" + {semester});
+              if (!semester[0]) {
                 return res.send({
                   status: "success",
                   message: "successfully fetched joined classes",
@@ -61,10 +61,10 @@ export default async (req, res) => {
               }
 
               const sql4 =
-                "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci , teachers.email COLLATE utf8mb4_unicode_ci FROM users INNER JOIN controller2 ON users.reg_no='" +
+                "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name, teachers.email FROM users INNER JOIN controller2 ON users.reg_no='" +
                 req.body.id +
-                "' AND controller2.id=users.class_id INNER JOIN controller1 ON controller1.s_id=controller2.s_id INNER JOIN courses ON controller1.c_id=courses.c_id INNER JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci AND courses.c_id NOT IN (SELECT courses.c_id  FROM controller3 INNER JOIN courses ON controller3.c_id=courses.c_id)";
-              db.query(sql4, function (err, other_courses) {
+                "' AND controller2.id=users.class_id INNER JOIN controller1 ON controller1.s_id=controller2.s_id INNER JOIN courses ON controller1.c_id=courses.c_id INNER JOIN teachers ON courses.t_id=teachers.id AND courses.c_id NOT IN (SELECT courses.c_id  FROM controller3 INNER JOIN courses ON controller3.c_id=courses.c_id)";
+              db.query(sql4, async function (err, other_courses) {
                 if (err) {
                   console.log(err);
                   res.send({

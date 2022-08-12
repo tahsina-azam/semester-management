@@ -2,7 +2,7 @@ import executeQuery from "../../../config/db";
 import { db } from "../../../config/db";
 export default async (req, res) => {
   try {
-    console.log("req nom", req.query);
+    console.log("req nom", req.body);
     var desired_class = [];
     var sql =
       "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name COLLATE utf8mb4_unicode_ci ,teachers.email COLLATE utf8mb4_unicode_ci FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id COLLATE utf8mb4_unicode_ci";
@@ -17,7 +17,7 @@ export default async (req, res) => {
           errorMessage: err,
         });
       }
-      sql = "SELECT * FROM posts WHERE c_id='" + req.query.classId + "'";
+      sql = "SELECT * FROM posts WHERE c_id='" + req.body.classId + "'";
       db.query(sql, function (err, posts) {
         console.log({ posts });
         if (err) {
@@ -28,7 +28,7 @@ export default async (req, res) => {
             errorMessage: err,
           });
         }
-        sql = "SELECT * FROM tasks WHERE c_id='" + req.query.classId + "'";
+        sql = "SELECT * FROM tasks WHERE c_id='" + req.body.classId + "'";
         db.query(sql, function (err, tasks) {
           console.log({ tasks });
           if (err) {
@@ -43,15 +43,15 @@ export default async (req, res) => {
           //---------------------------------->
           // sql =
           //   "SELECT * FROM resources WHERE c_id='" + req.query.classId + "'";
-          if (req.student.type === "student") {
+          if (req.body.type === "student") {
             sql =
               "SELECT * FROM resources INNER JOIN users ON users.email='" +
-              req.query.email +
+              req.body.email +
               "' AND resources.uploader_mail=users.email";
           } else {
             sql =
               "SELECT * FROM resources INNER JOIN teachers ON teachers.email='" +
-              req.query.email +
+              req.body.email +
               "' AND resources.uploader_mail=teachers.email";
           }
           db.query(sql, function (err, resources) {
@@ -65,7 +65,7 @@ export default async (req, res) => {
               });
             }
             result.map((courses) => {
-              if (courses.c_id === req.query.classId) {
+              if (courses.c_id === req.body.classId) {
                 desired_class.push(courses);
               }
             });
