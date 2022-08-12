@@ -57,14 +57,14 @@ export default function AppShellWithRole({
                 <NavbarButton text={but.name} href={but.href} key={index} />
               ))}
             <NavbarButton text="Edit account" href={"/student/profile"} />
-            <NavbarButton
+            {user.role==="teacher" && <NavbarButton
               text="Contact for project"
               href={
                 user.role === "teacher"
                   ? "/teachers/project"
                   : "/student/project"
               }
-            />
+            />}
             <Link href={"/sign-in"} passHref>
               <ComposedButton
                 text="Logout"
