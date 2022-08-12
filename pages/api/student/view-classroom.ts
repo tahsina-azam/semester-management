@@ -2,15 +2,15 @@ import executeQuery from "../../../config/db";
 import { db } from "../../../config/db";
 export default async (req, res) => {
   try {
-    console.log("req nom", req.body);
+    //console.log("req nom", req.body);
     var desired_class = [];
     var sql =
       "SELECT courses.c_id,courses.c_code,courses.c_credit,courses.s_subject,courses.c_title,courses.c_date,teachers.name ,teachers.email FROM courses LEFT JOIN teachers ON courses.t_id=teachers.id";
 
     db.query(sql, function (err, result) {
-      console.log({ result });
+      //console.log({ result });
       if (err) {
-        console.log(err);
+        //console.log(err);
         return res.send({
           status: "fail",
           message: "Failed to find a course with this ID!",
@@ -19,9 +19,9 @@ export default async (req, res) => {
       }
       sql = "SELECT * FROM posts WHERE c_id='" + req.body.classId + "'";
       db.query(sql, function (err, posts) {
-        console.log({ posts });
+        //console.log({ posts });
         if (err) {
-          console.log(err);
+          //console.log(err);
           return res.send({
             status: "fail",
             message: "Failed to find a post with this ID!",
@@ -55,9 +55,9 @@ export default async (req, res) => {
               "' AND resources.uploader_mail=teachers.email";
           }
           db.query(sql, function (err, resources) {
-            console.log({ tasks });
+            //console.log({ tasks });
             if (err) {
-              console.log(err);
+              //console.log(err);
               return res.send({
                 status: "fail",
                 message: "Failed to find a resource with this ID!",
@@ -69,7 +69,7 @@ export default async (req, res) => {
                 desired_class.push(courses);
               }
             });
-            console.log({posts,tasks})
+            //console.log({posts,tasks})
             return res.send({
               status: "success",
               message: "successfully found classes",
@@ -96,7 +96,7 @@ export default async (req, res) => {
       });
     });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.send({
       status: "fail",
       message: "Failed to find a course with this ID!",

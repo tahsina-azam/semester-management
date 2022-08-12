@@ -18,5 +18,5 @@ export default function TaskComplete() {
    if (!data || error) return null;
    console.log({data,error});
    if(data.length===0)return<Center>No submission found</Center>
-  return  <><FeaturesAsymmetricalResource data={data}/></> ;
+  return  <><FeaturesAsymmetricalResource type="nobut" data={data}/></> ;
 }
