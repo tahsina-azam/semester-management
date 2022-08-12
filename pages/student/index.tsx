@@ -1,4 +1,4 @@
-import { SimpleGrid } from "@mantine/core";
+import { SimpleGrid, Text } from "@mantine/core";
 import axios from "axios";
 import { Key, useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
@@ -9,7 +9,11 @@ import AppShellWithRole from "../../src/components/common/Bars";
 const fetchCourse = async (id: string) => {
   const response = await axios.post("/api/student/joined-classes", { id });
   console.log({ response });
-  return response.data.status === "success" ? response.data.data : [];
+  console.log(response.data.other_courses);
+  const data = response.data.status === "success" ? response.data.data : [];
+  const other_courses =
+    response.data.status === "success" ? response.data.other_courses : [];
+    return {data, other_courses}
 };
 
 export default function Student() {
@@ -19,8 +23,8 @@ export default function Student() {
   return (
     <AppShellWithRole user={user}>
       <SimpleGrid cols={3}>
-        {data &&
-          data.map(
+        {data && data.data &&
+          data.data.map(
             (
               val: {
                 c_id: string;
@@ -30,12 +34,35 @@ export default function Student() {
                 c_title: string;
                 c_date: string;
                 t_id: string;
+                name: string
               },
               index: Key
             ) => {
               console.log(index);
               mutate(`courses/${val.c_id}`, val);
               return <Class courseInfo={val} key={index} />;
+            }
+          )}
+      </SimpleGrid>
+      <Text size={"lg"} mt="xl">You've following available courses in this semester. Please get the code from the teacher to join.</Text>
+      <SimpleGrid cols={3} mt="lg">
+        {data && data.other_courses &&
+          data.other_courses.map(
+            (
+              val: {
+                c_id: string;
+                c_code: string;
+                c_credit: string;
+                s_subject: string;
+                c_title: string;
+                c_date: string;
+                t_id: string;
+                name: string
+              },
+              index: Key
+            ) => {
+              console.log(index);
+              return <Class courseInfo={val} key={index} type="unjoined"/>;
             }
           )}
       </SimpleGrid>

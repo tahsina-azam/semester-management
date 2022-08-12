@@ -13,7 +13,7 @@ export default function name() {
   return (
     <UseRte
       title
-      titlePlaceholder="Title of the project"
+      titlePlaceholder="Subject of the project"
       onSubmit={onSubmit}
       visible={visible}
     />
