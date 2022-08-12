@@ -22,6 +22,7 @@
     "pages/index.tsx",
     "pages/api/signup/index.ts",
     "pages/api/signin/index.ts",
+    "pages/api/classrooms/get-task-complete.tsx",
     "src/components/common/menubar.tsx"
   ],
   "exclude": ["node_modules"]

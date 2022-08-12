@@ -10,12 +10,13 @@ import AddResource from "../../../src/components/common/add-resource";
 
 const fetchCourse = async (url) => {
   const classId=url.split(" ")[1]
-  console.log(classId)
+  console.log({url})
   const response = await axios.get(`/api/student/view-classroom?classId=${classId}`);
   console.log({ response });
   const posts = response.data.status === "success" ? response.data.posts : [];
   const tasks = response.data.status === "success" ? response.data.tasks : [];
-  return { posts, tasks };
+  const resources = response.data.status === "success" ? response.data.resources : [];
+  return { posts, tasks, resources };
 };
 export default function classId() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function classId() {
       >
         <AddResource c_id={classId} vis={setVisible} type="resource"/>
       </Modal>
-    <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible}/>
+    <ClassView posts={data.posts} tasks={data.tasks} vis={setVisible} resources={data.resources}/>
     </>:null
   );
   

@@ -52,10 +52,13 @@ export const insertResourceOne = function (data: {
   uploader_type: string;
   uploader_mail: string;
   c_id: string;
+  title: string
 }): { query: string } {
   return {
     query:
-      "INSERT INTO resources(link, description, uploader_mail, uploader_type, c_id) VALUES('" +
+      "INSERT INTO resources(title, link, description, uploader_mail, uploader_type, c_id) VALUES('" +
+      data.title +
+      "', '" +
       data.link +
       "', '" +
       data.description +
@@ -90,5 +93,10 @@ export const insertTaskCompletionOne = function (data: {
 export const getStatus = function (data: { user: string }): { query: string } {
   return {
     query: "SELECT * from taskcompletion WHERE user='" + data.user + "';",
+  };
+};
+export const getTaskComplete = function (data: { t_id: string }): { query: string } {
+  return {
+    query: "SELECT * from taskcompletion WHERE task='" + data.t_id + "';",
   };
 };
