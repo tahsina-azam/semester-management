@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { useAuth } from "../../../../lib/client/context/auth";
 import notify from "../../../../src/components/common/Notifications";
 import Banner from "../../../../src/components/common/post-task-full";
+import UseRte from "../../../../src/components/common/rte-related";
 const getComment = async (url) => {
   const id = url.split(" ")[1];
   console.log(id);
@@ -23,6 +24,7 @@ export default function Post() {
   const [val, setVal] = useState("");
   const [del, setDel] = useState(false);
   const [ed, setEd] = useState(false);
+  const [visibleLoading, setVisibleLoading] = useState(false);
   console.log(id);
   const { data, error } = useSWR(`post/${id}`);
   const { data: datacomment, error: errorcomment } = useSWR(
@@ -50,21 +52,42 @@ export default function Post() {
       const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
       const text =
         status === "success"
-          ? "Comment added!"
+          ? "Post deleted!"
+          : response.data.errorMessage
+          ? response.data.errorMessage
+          : response.data.message;
+      notify({ type: status, title: titleForNotify, text });
+      console.log({ response });
+      setDel(false);
+    } catch (err) {}
+  };
+  const onEdit = async (values) => {
+    const { rte, title } = values;
+    try {
+      const response = await axios.post(
+        "/api/post-task-resource/update-delete",
+        {
+          type: "update",
+          table: "posts",
+          id,
+          content: rte,
+          title,
+        }
+      );
+      console.log(response);
+      const {
+        data: { status },
+      } = response;
+      const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
+      const text =
+        status === "success"
+          ? "Succesfully Edited!"
           : response.data.errorMessage
           ? response.data.errorMessage
           : response.data.message;
       notify({ type: status, title: titleForNotify, text });
       console.log({ response });
     } catch (err) {}
-  };
-  const onEdit = async () => {
-    const response = await axios.post("/api/post-task-resource/update-delete", {
-      type: "update",
-      table: "posts",
-      id,
-    });
-    console.log(response);
   };
   const onComment = async () => {
     console.log({ val });
@@ -113,12 +136,14 @@ export default function Post() {
         setDel={setDel}
         setEd={setEd}
       />
+      {/* ---------------delete modal */}
       <Modal
         opened={del}
         onClose={() => setDel(false)}
         title="Are you sure to delete?"
       >
-        <Button m={"sm"}
+        <Button
+          m={"sm"}
           sx={(theme) => ({
             fontFamily: theme.fontFamilyMonospace,
             backgroundColor: theme.colors.green[5],
@@ -127,7 +152,8 @@ export default function Post() {
         >
           No
         </Button>
-        <Button m={"sm"}
+        <Button
+          m={"sm"}
           sx={(theme) => ({
             fontFamily: theme.fontFamilyMonospace,
             backgroundColor: theme.colors.red[5],
@@ -136,6 +162,16 @@ export default function Post() {
         >
           Yes
         </Button>
+      </Modal>
+      {/* -------------edit modal */}
+      <Modal opened={ed} onClose={() => setEd(false)} size="xl">
+        <UseRte
+          title
+          titlePlaceholder="Title of the post"
+          onSubmit={onEdit}
+          visible={visibleLoading}
+          valuesForEdit={{ title, content }}
+        />
       </Modal>
     </Center>
   ) : null;

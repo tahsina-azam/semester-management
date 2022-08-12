@@ -160,7 +160,7 @@ export default function Banner({
               {user.role === "teacher" && (
                 <Group position="center" m={"sm"}>
                   <IconButton Icon={<X />} color={"red"} onClick={() => setDel(true)}/>
-                  <IconButton Icon={<Edit />} color="green" onClick={() => setDel(true)}/>
+                  <IconButton Icon={<Edit />} color="green" onClick={() => setEd(true)}/>
                 </Group>
               )}
               {score && user.role === "student" && (

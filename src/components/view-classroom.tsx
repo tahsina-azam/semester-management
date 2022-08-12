@@ -18,7 +18,7 @@ export default function ClassView({
   setTasks,
   setResources
 }: {
-  classId?: string;
+  classId: string;
   posts: {
     id: string;
     content: string;
@@ -51,12 +51,12 @@ export default function ClassView({
 
 }) {
   const { user } = useAuth();
-  console.log({resources})
+  console.log({classId})
   const { data, error } = useSWR(`courses/${classId}`);
   const [activeTab, setActiveTab] = useState<string | null>("first");
   if (error) return null;
   return (
-    <AppShellWithRole user={user} extraType="nosidebar" id={classId}>
+    <AppShellWithRole user={user} extraType="nosidebar">
       
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.List>

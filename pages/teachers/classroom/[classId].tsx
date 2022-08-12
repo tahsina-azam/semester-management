@@ -23,7 +23,7 @@ const fetchCourse = async (url: string, user: User) => {
   const tasks = response.data.status === "success" ? response.data.tasks : [];
   const resources =
     response.data.status === "success" ? response.data.resources : [];
-  return { posts, tasks, resources };
+  return { posts, tasks, resources, classId };
 };
 export default function classId() {
   const router = useRouter();
@@ -70,6 +70,7 @@ export default function classId() {
         setPosts={setPosts}
         setTasks={setTasks}
         setResources={setResources}
+        classId={data.classId}
       />
     </>
   ) : null;
