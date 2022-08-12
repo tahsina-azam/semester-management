@@ -41,8 +41,19 @@ export default async (req, res) => {
           }
 
           //---------------------------------->
-          sql =
-            "SELECT * FROM resources WHERE c_id='" + req.query.classId + "'";
+          // sql =
+          //   "SELECT * FROM resources WHERE c_id='" + req.query.classId + "'";
+          if (req.student.type === "student") {
+            sql =
+              "SELECT * FROM resources INNER JOIN users ON users.email='" +
+              req.query.email +
+              "' AND resources.uploader_mail=users.email";
+          } else {
+            sql =
+              "SELECT * FROM resources INNER JOIN teachers ON teachers.email='" +
+              req.query.email +
+              "' AND resources.uploader_mail=teachers.email";
+          }
           db.query(sql, function (err, resources) {
             console.log({ tasks });
             if (err) {
