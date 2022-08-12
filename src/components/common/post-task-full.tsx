@@ -17,7 +17,13 @@ import {
 } from "@mantine/core";
 import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
-import { CalendarStats, CalendarTime, Quote } from "tabler-icons-react";
+import {
+  CalendarStats,
+  CalendarTime,
+  Edit,
+  Quote,
+  X,
+} from "tabler-icons-react";
 import { useAuth } from "../../../lib/client/context/auth";
 import ComposedButton, { IconButton } from "./Button";
 import Router from "next/router";
@@ -99,6 +105,8 @@ export default function Banner({
   onComment,
   comment,
   commentSet,
+  setDel,
+  setEd,
 }: {
   id: string;
   title: string;
@@ -106,15 +114,17 @@ export default function Banner({
   created_at: string;
   c_id: string;
   vis?: Dispatch<SetStateAction<boolean>>;
-  stat?: 1|0;
+  stat?: 1 | 0;
   score?: number;
   deadline?: string;
   onComment: () => void;
   comment: Dispatch<SetStateAction<string>>;
   commentSet: {
     body: string;
-    name: string
+    name: string;
   }[];
+  setEd: Dispatch<SetStateAction<boolean>>;
+  setDel: Dispatch<SetStateAction<boolean>>;
 }) {
   const { classes } = useStyles();
   const { user } = useAuth();
@@ -147,6 +157,12 @@ export default function Banner({
               <Title>{title}</Title>
             </Group>
             <Group position="right">
+              {user.role === "teacher" && (
+                <Group position="center" m={"sm"}>
+                  <IconButton Icon={<X />} color={"red"} onClick={() => setDel(true)}/>
+                  <IconButton Icon={<Edit />} color="green" onClick={() => setDel(true)}/>
+                </Group>
+              )}
               {score && user.role === "student" && (
                 <ComposedButton text="Submit task" onClick={() => vis(true)} />
               )}
@@ -197,6 +213,7 @@ export default function Banner({
           </Accordion.Item>
         </Accordion>
       )}
+
       {user.role === "teacher" && score && (
         <Center mt="lg">
           <ComposedButton
@@ -215,14 +232,15 @@ export default function Banner({
         />
         <IconButton color={"indigo"} Icon={<Quote />} onClick={onComment} />
       </div>
-      {commentSet.length!==0 && commentSet.map((comm) => (
-        <Card withBorder className={classes.controls}>
-          <Text color={"indigo"} pr="lg">
-            {comm.name}:
-          </Text>
-          <Text>{comm.body}</Text>
-        </Card>
-      ))}
+      {commentSet.length !== 0 &&
+        commentSet.map((comm) => (
+          <Card withBorder className={classes.controls}>
+            <Text color={"indigo"} pr="lg">
+              {comm.name}:
+            </Text>
+            <Text>{comm.body}</Text>
+          </Card>
+        ))}
     </Container>
   );
 }

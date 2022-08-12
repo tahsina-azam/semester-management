@@ -1,4 +1,4 @@
-import { Center } from "@mantine/core";
+import { Button, Center, Modal } from "@mantine/core";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,6 +21,8 @@ export default function Post() {
   const { id } = router.query;
   const { user } = useAuth();
   const [val, setVal] = useState("");
+  const [del, setDel] = useState(false);
+  const [ed, setEd] = useState(false);
   console.log(id);
   const { data, error } = useSWR(`post/${id}`);
   const { data: datacomment, error: errorcomment } = useSWR(
@@ -31,6 +33,39 @@ export default function Post() {
   console.log({ data, error });
   if (!datacomment) return null;
   const { id: pid, title, content, created_at, c_id } = data;
+  const onDelete = async () => {
+    try {
+      const response = await axios.post(
+        "/api/post-task-resource/update-delete",
+        {
+          type: "delete",
+          table: "posts",
+          id,
+        }
+      );
+      console.log(response);
+      const {
+        data: { status },
+      } = response;
+      const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
+      const text =
+        status === "success"
+          ? "Comment added!"
+          : response.data.errorMessage
+          ? response.data.errorMessage
+          : response.data.message;
+      notify({ type: status, title: titleForNotify, text });
+      console.log({ response });
+    } catch (err) {}
+  };
+  const onEdit = async () => {
+    const response = await axios.post("/api/post-task-resource/update-delete", {
+      type: "update",
+      table: "posts",
+      id,
+    });
+    console.log(response);
+  };
   const onComment = async () => {
     console.log({ val });
     if (val === "") {
@@ -75,28 +110,33 @@ export default function Post() {
         onComment={onComment}
         comment={setVal}
         commentSet={datacomment}
+        setDel={setDel}
+        setEd={setEd}
       />
+      <Modal
+        opened={del}
+        onClose={() => setDel(false)}
+        title="Are you sure to delete?"
+      >
+        <Button m={"sm"}
+          sx={(theme) => ({
+            fontFamily: theme.fontFamilyMonospace,
+            backgroundColor: theme.colors.green[5],
+          })}
+          onClick={() => setDel(false)}
+        >
+          No
+        </Button>
+        <Button m={"sm"}
+          sx={(theme) => ({
+            fontFamily: theme.fontFamilyMonospace,
+            backgroundColor: theme.colors.red[5],
+          })}
+          onClick={onDelete}
+        >
+          Yes
+        </Button>
+      </Modal>
     </Center>
   ) : null;
 }
-
-// const [fields,setFields]=useState(arr); //arr contains an array containing all the posts
-//   return (
-//     <>
-//       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginTop: 10 }}>
-//         <AdminLibrarySearch items={arr}
-//               updateParent={setFields}/>
-//       </Container>
-//       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginTop: 12 }}>
-//         <Grid container spacing={3}>
-//           {fields.map((item) => (
-//             <MemoisedCard
-//               key={item.type}
-//               type={item.type}
-//               link={item.link}
-//             />
-//           ))}
-//         </Grid>
-//       </Container>
-//     </>
-//   );

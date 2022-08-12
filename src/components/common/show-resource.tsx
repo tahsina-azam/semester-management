@@ -115,7 +115,7 @@ function Feature({
 export default function FeaturesAsymmetricalResource({
   data,
   vis,
-  type
+  type 
 }: {
   data: {
     id: string;

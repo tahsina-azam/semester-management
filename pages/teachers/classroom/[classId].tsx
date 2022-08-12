@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { Modal } from "@mantine/core";
 import AddResource from "../../../src/components/common/add-resource";
 import { User } from "../../../lib/common/types";
+import Searchbar from "../../../src/components/common/Searchbar";
 
 const fetchCourse = async (url: string, user: User) => {
   const classId = url.split(" ")[1];
@@ -29,13 +30,28 @@ export default function classId() {
   const { user } = useAuth();
   const { classId } = router.query;
   const [visible, setVisible] = useState(false);
-  console.log({ classId });
-
-  const { data, error } = useSWR("post-task " + classId, (url) =>
-    fetchCourse(url, user)
+  const [posts, setPosts] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [resources, setResources] = useState([]);
+  const { data, error } = useSWR(
+    "post-task " + classId,
+    (url) => fetchCourse(url, user),
+    {
+      onSuccess: (data, key, config) => {
+        setPosts(data.posts);
+        setTasks(data.tasks);
+        setResources(data.resources);
+      },
+      onError: (error, x, y) => {
+        console.log({ error });
+        setPosts([]);
+        setTasks([]);
+        setResources([]);
+      },
+    }
   );
-  if (!data) return null;
-  console.log({ data, error });
+  //const [field, setField] = useState(data?data.posts:[]);
+  if (!data || error) return null;
   return classId ? (
     <>
       <Modal
@@ -45,11 +61,15 @@ export default function classId() {
       >
         <AddResource c_id={classId} vis={setVisible} type="resource" />
       </Modal>
+
       <ClassView
-        posts={data.posts}
-        tasks={data.tasks}
+        posts={posts}
+        tasks={tasks}
+        resources={resources}
         vis={setVisible}
-        resources={data.resources}
+        setPosts={setPosts}
+        setTasks={setTasks}
+        setResources={setResources}
       />
     </>
   ) : null;
