@@ -95,3 +95,8 @@ export const getStatus = function (data: { user: string }): { query: string } {
     query: "SELECT * from taskcompletion WHERE user='" + data.user + "';",
   };
 };
+export const getTaskComplete = function (data: { t_id: string }): { query: string } {
+  return {
+    query: "SELECT * from taskcompletion WHERE task='" + data.t_id + "';",
+  };
+};

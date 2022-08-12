@@ -20,6 +20,7 @@ import Image from "next/image";
 import { CalendarStats, CalendarTime, Quote } from "tabler-icons-react";
 import { useAuth } from "../../../lib/client/context/auth";
 import ComposedButton, { IconButton } from "./Button";
+import Router from "next/router";
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: "flex",
@@ -27,11 +28,6 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.xl * 2,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
-
-    // [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-    //   flexDirection: "column-reverse",
-    //   padding: theme.spacing.xl,
-    // },
   },
 
   image: {
@@ -106,7 +102,7 @@ export default function Banner({
   content: string;
   created_at: string;
   c_id: string;
-  vis: Dispatch<SetStateAction<boolean>>;
+  vis?: Dispatch<SetStateAction<boolean>>;
   stat?: number;
   score?: number;
   deadline?: string;
@@ -160,38 +156,48 @@ export default function Banner({
           </TypographyStylesProvider>
         </Text>
       </Card>
-      {score && (<Accordion defaultValue="deadline">
-        <Accordion.Item value="deadline">
-          <Accordion.Control>
-            <SimpleGrid cols={2}><Group >
-              <Image width={30} height={30} src={"/deadline.png"} />
-              <Text>Deadline</Text>
-            </Group>
-            <Group position="right">
-              {stat === 1 && <Badge color={"green"}>Submitted</Badge>}
-            {stat === 0 && <Badge color={"red"}>Not Submitted</Badge>}
-            </Group></SimpleGrid>
-            
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Text color={"red"}>
-              {deadline}
-            </Text>
-            {diffOfmin >= 0 && diffOfday >= 0 && diffOfhr >= 0 && (
-              <Text color="blue">
-                [Ending in {diffOfmin} minutes, {diffOfhr} hours and {diffOfday}{" "}
-                days]
-              </Text>
-            )}
-            {(diffOfmin < 0 || diffOfday < 0 || diffOfhr < 0) && (
-              <Text color="green" weight="bold">
-                [Ended]
-              </Text>
-            )}
-            
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>)}
+      {score && (
+        <Accordion defaultValue="deadline">
+          <Accordion.Item value="deadline">
+            <Accordion.Control>
+              <SimpleGrid cols={2}>
+                <Group>
+                  <Image width={30} height={30} src={"/deadline.png"} />
+                  <Text>Deadline</Text>
+                </Group>
+                <Group position="right">
+                  {stat === 1 && <Badge color={"green"}>Submitted</Badge>}
+                  {stat === 0 && <Badge color={"red"}>Not Submitted</Badge>}
+                </Group>
+              </SimpleGrid>
+            </Accordion.Control>
+            <Accordion.Panel>
+              <Text color={"red"}>{deadline}</Text>
+              {diffOfmin >= 0 && diffOfday >= 0 && diffOfhr >= 0 && (
+                <Text color="blue">
+                  [Ending in {diffOfmin} minutes, {diffOfhr} hours and{" "}
+                  {diffOfday} days]
+                </Text>
+              )}
+              {(diffOfmin < 0 || diffOfday < 0 || diffOfhr < 0) && (
+                <Text color="green" weight="bold">
+                  [Ended]
+                </Text>
+              )}
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+      )}
+      {user.role === "teacher" && score && (
+        <Center mt="lg">
+          <ComposedButton
+            text="View submitted task"
+            onClick={() =>
+              Router.push(`/teachers/classroom/tasks/${id}/task-submission`)
+            }
+          />
+        </Center>
+      )}
       <div className={classes.controls}>
         <TextInput
           placeholder="Write a comment"

@@ -6,12 +6,11 @@ import {
   TypographyStylesProvider,
   Card,
   Group,
+  Center,
 } from "@mantine/core";
 import Router from "next/router";
-import { Dispatch, SetStateAction } from "react";
-import { Button } from "semantic-ui-react";
+import Image from "next/image";
 import useSWR from "swr";
-import { News } from "tabler-icons-react";
 import { useAuth } from "../../../lib/client/context/auth";
 import ComposedButton from "./Button";
 
@@ -96,10 +95,11 @@ function Feature({
 
   return (
     <div className={cx(classes.feature, className)} onClick={onClick}>
-      <div className={classes.overlay} />
       <div className={classes.content}>
-        <News size={38} className={classes.icon} />
-        <Text weight={700} size="lg" mb="xs" mt={5} className={classes.title}>
+        <Center m="xs"><Image width={30} height={30} src={"/sticky-notes.png"} /></Center>
+      
+
+        <Text weight={600} m={5} className={classes.title}>
           {title}
         </Text>
         <Text color="dimmed" size="sm">

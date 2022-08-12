@@ -3,15 +3,13 @@ import {
   Text,
   SimpleGrid,
   Container,
-  TypographyStylesProvider,
-  Card,
   Group,
+  Center,
+  Tooltip,
 } from "@mantine/core";
-import Router from "next/router";
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
-import { Button } from "semantic-ui-react";
 import useSWR from "swr";
-import { News } from "tabler-icons-react";
 import { useAuth } from "../../../lib/client/context/auth";
 import ComposedButton from "./Button";
 
@@ -52,9 +50,11 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   id: string;
   link: string;
   description: string;
-  uploader_mail: string;
-  uploader_type: string;
+  uploader_mail?: string;
+  uploader_type?: string;
   created_at: string;
+  title?: string;
+  user?: string;
 }
 
 function Feature({
@@ -65,9 +65,10 @@ function Feature({
   uploader_type,
   className,
   created_at,
+  title,
+  user,
 }: FeatureProps) {
   const { classes, cx } = useStyles();
-  const { user } = useAuth();
   const { data, error } = useSWR(`resource/${id}`, () => {
     return {
       id,
@@ -78,59 +79,55 @@ function Feature({
       created_at,
     };
   });
-  if(error)return null;
+  if (error) return null;
   const onClick = () => {
     console.log({ data });
-    console.log({
-      id,
-      link,
-      description,
-      uploader_mail,
-      uploader_type,
-      created_at,
-    });
+    window.open(link);
   };
 
   return (
-    <div className={cx(classes.feature, className)} onClick={onClick}>
-      <div className={classes.overlay} />
-      <div className={classes.content}>
-        <News size={38} className={classes.icon} />
-        <Text weight={700} size="lg" mb="xs" mt={5} className={classes.title}>
-            {description}
-          </Text>
-          <Text color="dimmed" size="sm">
-          {uploader_mail}
-        </Text>
-        <Text color="dimmed" size="sm">
-          {created_at}
-        </Text>
-      </div>
+    <Tooltip label={"Click to open the file"}><div className={cx(classes.feature, className)} onClick={onClick}>
+    <div className={classes.content}>
+      <Center m="xs">
+        <Image width={30} height={30} src={"/open-book.png"} />
+      </Center>
+
+      <Text weight={500} mb="xs" mt={5} className={classes.title}>
+        {title}
+      </Text>
+      <Text color="dimmed" size="sm">
+        Uploader: {uploader_mail ? uploader_mail : user}
+      </Text>
+      <Text color="dimmed" size="sm">
+        {description && "Description: " + { description }}
+      </Text>
+      <Text color="dimmed" size="sm">
+        {created_at}
+      </Text>
     </div>
+  </div></Tooltip>
+    
   );
 }
 
 export default function FeaturesAsymmetricalResource({
   data,
   vis,
-  c_id,
 }: {
   data: {
     id: string;
     link: string;
     description: string;
-    uploader_mail: string;
-    uploader_type: string;
+    uploader_mail?: string;
+    uploader_type?: string;
     created_at: string;
+    title?: string;
+    user?: string;
   }[];
   vis?: Dispatch<SetStateAction<boolean>>;
-  c_id: string;
 }) {
   console.log({ data });
-  const { user } = useAuth();
-
   const items = data.map((item, index) => <Feature {...item} key={index} />);
-
   return (
     <Container mt={30} mb={30} size="lg">
       <Group position="right" m={"sm"}>

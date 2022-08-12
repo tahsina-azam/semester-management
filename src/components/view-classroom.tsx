@@ -37,7 +37,8 @@ export default function ClassView({
     description: string;
     uploader_mail: string;
     uploader_type: string;
-    created_at: string
+    created_at: string;
+    title: string
   }[];
   vis?: Dispatch<SetStateAction<boolean>>;
 }) {
