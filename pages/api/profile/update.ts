@@ -38,7 +38,7 @@ export default async (req, res) => {
         req.body.about +
         "' WHERE email='" +
         req.body.email +
-        "'";
+        "' ";
       db.query(sql, function (err, result) {
         console.log({ result });
         if (err) {
@@ -81,6 +81,7 @@ export default async (req, res) => {
         query: "SELECT * FROM users WHERE email='" + req.body.email + "'",
         values: [],
       });
+      console.log(user);
       if (Array.isArray(user) && user.length <= 0) {
         return res.send({
           status: "fail",

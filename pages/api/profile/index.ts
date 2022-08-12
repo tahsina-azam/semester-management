@@ -20,7 +20,7 @@ export default async (req, res) => {
       });
     }
 
-    console.log("ttt", result);
+    console.log({ result });
     return res.send({
       result: result[0],
     });
