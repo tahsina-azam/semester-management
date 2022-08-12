@@ -17,10 +17,6 @@ const roles: roleAndUsage[] = [
         name: "Join a class",
         href: "/student/join-class",
       },
-      {
-        name: "Contact for project",
-        href: "",
-      },
     ],
   },
   {

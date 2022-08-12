@@ -6,8 +6,21 @@ import StyleText from "./text-style";
 import create from "zustand";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import { Dispatch, SetStateAction } from "react";
 export default function Class({
-  courseInfo: { c_id, c_code, c_credit, s_subject, c_title, c_date, t_id },
+  courseInfo: {
+    c_id,
+    c_code,
+    c_credit,
+    s_subject,
+    c_title,
+    c_date,
+    t_id,
+    name,
+  },
+  type = "",
+  setOpen,
+  set_cid
 }: {
   courseInfo: {
     c_id: string;
@@ -17,7 +30,11 @@ export default function Class({
     c_title: string;
     c_date: string;
     t_id: string;
+    name: string;
   };
+  type?: string;
+  setOpen?: Dispatch<SetStateAction<boolean>>
+  set_cid: Dispatch<SetStateAction<string>>
 }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -27,7 +44,10 @@ export default function Class({
       ? router.push(`/teachers/classroom/${c_id}`)
       : router.push(`/student/classroom/${c_id}`);
   };
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    setOpen(true)
+    set_cid(c_id)
+  };
   console.log({ data });
   const info = [
     {
@@ -40,7 +60,7 @@ export default function Class({
     },
     {
       title: "Assigned Teacher ",
-      val: user.role === "teacher" ? user.name : "",
+      val: name?name:user.name,
     },
     {
       title: "Course Credit ",
@@ -93,14 +113,22 @@ export default function Class({
           <StyleText text2={inf.title} text1={inf.val} key={key} />
         ))}
       </Group>
-      <Group p="sm">
-        <IconButton Icon={<X size={15} />} color="red" onClick={handleDelete} />
-        <IconButton
-          Icon={<DoorEnter size={15} />}
-          color="blue"
-          onClick={handleClick}
-        />
-      </Group>
+      {type !== "unjoined" && (
+        <Group p="sm">
+          {user.role === "teacher" && (
+            <IconButton
+              Icon={<X size={15} />}
+              color="red"
+              onClick={handleDelete}
+            />
+          )}
+          <IconButton
+            Icon={<DoorEnter size={15} />}
+            color="blue"
+            onClick={handleClick}
+          />
+        </Group>
+      )}
     </Card>
   );
 }

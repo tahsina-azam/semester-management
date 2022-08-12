@@ -105,3 +105,8 @@ export const getPostOne = function (data: { id: string }): { query: string } {
     query: "SELECT * from posts WHERE id='" + data.id + "';",
   };
 };
+export const deteleCourseOne = function (data: { id: string }): { query: string } {
+  return {
+    query: "DELETE from courses WHERE c_id='" + data.id + "';",
+  };
+};

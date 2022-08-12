@@ -32,13 +32,13 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 export default function Project() {
   const arr = [
     {
-      sender: "Nowshin Alam Owishi",
+      sender: "Tahsina Bintay Azam",
       subject: "ps",
       content:
         '<p>Hello sir,</p><p>I and my teammate <span class="mention" data-index="0" data-denotation-char="@" data-id="2018331072" data-value="Tahsina Bintay Azam">﻿<span contenteditable="false"><span class="ql-mention-denotation-char">@</span>Tahsina Bintay Azam</span>﻿</span> want to show our project. </p>',
     },
     {
-      sender: "Tahsina Bintay Azam",
+      sender: "Nowshin Alam Owishi",
       subject: "ps 2",
       content: "<p>It is our <strong>100</strong>% submission</p>",
     },

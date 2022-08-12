@@ -37,6 +37,7 @@ export default function ClassView({
   }[];
   resources: {
     id: string;
+    name: string;
     link: string;
     description: string;
     uploader_mail: string;
@@ -82,7 +83,6 @@ export default function ClassView({
           />
         </Tabs.Panel>
       </Tabs>
-      {data && <Classroom classInfo={data} />}
     </AppShellWithRole>
   );
 }

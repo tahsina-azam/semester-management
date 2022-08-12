@@ -55,7 +55,8 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<"div"> {
   created_at: string;
   title?: string;
   user?: string;
-  type?: string
+  type?: string;
+  name?: string
 }
 
 function Feature({
@@ -68,7 +69,8 @@ function Feature({
   created_at,
   title,
   user,
-  type
+  type,
+  name
 }: FeatureProps) {
   const { classes, cx } = useStyles();
   const { data, error } = useSWR(`resource/${id}`, () => {
@@ -86,7 +88,7 @@ function Feature({
     console.log({ data });
     window.open(link);
   };
-
+  {console.log({description})}
   return (
     <Tooltip label={"Click to open the file"}><div className={cx(classes.feature, className)} onClick={onClick}>
     <div className={classes.content}>
@@ -98,10 +100,10 @@ function Feature({
         {title}
       </Text>
       <Text color="dimmed" size="sm">
-        Uploader: {uploader_mail ? uploader_mail : user}
+        Uploader: {name ? name : user}
       </Text>
       <Text color="dimmed" size="sm">
-        {description && "Description: " + { description }}
+        {description && "Description: " + description }
       </Text>
       <Text color="dimmed" size="sm">
         {created_at}
@@ -118,6 +120,7 @@ export default function FeaturesAsymmetricalResource({
   type 
 }: {
   data: {
+    name?: string;
     id: string;
     link: string;
     description: string;
