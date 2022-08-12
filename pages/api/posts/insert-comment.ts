@@ -9,7 +9,7 @@ export default async (req, res) => {
     let yyyy = today.getFullYear();
     let todayString = mm + "/" + dd + "/" + yyyy;
     var sql =
-      "INSERT INTO comment (body,role,time,date,type,post_id) VALUES('" +
+      "INSERT INTO comment (body,role,time,date,type,id, name) VALUES('" +
       req.body.body +
       "','" +
       req.body.role +
@@ -20,11 +20,13 @@ export default async (req, res) => {
       "','" +
       req.body.type +
       "','" +
-      req.body.post_id +
+      req.body.id +
+      "','" +
+      req.body.name +
       "')";
     const response = await executeQuery({ query: sql, values: [] });
     console.log({ response });
-    if (response[0])
+    if (response)
       res.send({
         status: "success",
         message: "successfully posted the comment",

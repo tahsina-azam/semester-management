@@ -4,13 +4,15 @@ import { useAuth } from "../../lib/client/context/auth";
 import Classroom from "../../src/components/classroom";
 import useSWR from "swr";
 import { Tabs } from "@mantine/core";
-import FeaturesAsymmetrical from "./post-task";
+import FeaturesAsymmetrical from "./common/post-task";
+import FeaturesAsymmetricalResource from "./common/show-resource";
 
 export default function ClassView({
   classId,
   posts,
   tasks,
-  vis
+  vis,
+  resources,
 }: {
   classId?: string;
   posts: {
@@ -29,13 +31,22 @@ export default function ClassView({
     deadline: string;
     score: number;
   }[];
-  vis?: Dispatch<SetStateAction<boolean>>
+  resources: {
+    id: string;
+    link: string;
+    description: string;
+    uploader_mail: string;
+    uploader_type: string;
+    created_at: string;
+    title: string
+  }[];
+  vis?: Dispatch<SetStateAction<boolean>>;
 }) {
   const { user } = useAuth();
+  console.log({resources})
   const { data, error } = useSWR(`courses/${classId}`);
   const [activeTab, setActiveTab] = useState<string | null>("first");
   if (error) return null;
-  console.log({ posts });
   return (
     <AppShellWithRole user={user} extraType="nosidebar" id={classId}>
       <Tabs value={activeTab} onTabChange={setActiveTab}>
@@ -45,13 +56,17 @@ export default function ClassView({
           <Tabs.Tab value="third">Resource</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="first">
-          <FeaturesAsymmetrical data={posts} type={"post"}  c_id={classId} />
+          <FeaturesAsymmetrical data={posts} type={"post"} c_id={classId} />
         </Tabs.Panel>
         <Tabs.Panel value="second">
-          <FeaturesAsymmetrical data={tasks} type={"task"}  c_id={classId}/>
+          <FeaturesAsymmetrical data={tasks} type={"task"} c_id={classId} />
         </Tabs.Panel>
         <Tabs.Panel value="third">
-          <FeaturesAsymmetrical data={tasks} type={"resource"} vis={vis} c_id={classId}/>
+          <FeaturesAsymmetricalResource
+            data={resources}
+            vis={vis}
+            c_id={classId}
+          />
         </Tabs.Panel>
       </Tabs>
       {data && <Classroom classInfo={data} />}

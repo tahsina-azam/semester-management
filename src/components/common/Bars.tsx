@@ -10,7 +10,7 @@ import {
   useMantineTheme,
   Badge,
 } from "@mantine/core";
-import { roleChangesForHeader } from "../roleChanges";
+import { roleChangesForHeader } from "./roleChanges";
 import { User } from "../../../lib/common/types";
 import ComposedButton, { NavbarButton } from "./Button";
 import Link from "next/link";

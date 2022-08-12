@@ -2,14 +2,11 @@ import executeQuery from "../../../config/db";
 import { getStatus } from "../../../lib/client/query";
 
 export default async function (
-  req: { query: { user_id: any } },
-  res: { send: (arg0: { status: number }) => void }
+  req,res
 ) {
-  const { user_id } = req.query;
-  const user = user_id.substring(0, 10);
-  const id = user_id.substring(14, user_id.length);
-  console.log({ user, id });
-  const query = getStatus({ user });
+  const { user_id, id }:{user_id: string, id: string} = req.body;
+  console.log("ge")
+  const query = getStatus({ user:user_id });
   console.log({ query });
   const response: any = await executeQuery(query);
   console.log(response);

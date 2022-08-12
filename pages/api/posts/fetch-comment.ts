@@ -2,8 +2,9 @@ import executeQuery from "../../../config/db";
 
 export default async (req, res) => {
   try {
-    console.log(req.body);
-    var sql = "SELECT * FROM comment WHERE post_id='" + req.body.post_id + "' ";
+    console.log(req.body.id);
+    var sql = "SELECT * FROM comment WHERE id='" + req.body.id + "' AND type='"+req.body.type+"'";
+    console.log({sql})
     const response = await executeQuery({ query: sql, values: [] });
     console.log({ response });
     if (response[0])

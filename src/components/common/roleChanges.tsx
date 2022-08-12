@@ -1,4 +1,4 @@
-import { useAuth } from "../../lib/client/context/auth";
+import { useAuth } from "../../../lib/client/context/auth";
 interface roleAndUsage {
   role: string;
   extraType?: string;

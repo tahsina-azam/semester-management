@@ -3,31 +3,87 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import AddResource from "../../../../src/components/common/add-resource";
-import Banner from "../../../../src/components/post-task-full";
+import Banner from "../../../../src/components/common/post-task-full";
 import axios from "axios";
 import { useAuth } from "../../../../lib/client/context/auth";
+import notify from "../../../../src/components/common/Notifications";
+const getAll = async (url, user) => {
+  const task_id = url.split(" ")[1];
+  const getComment = async () => {
+    console.log({ task_id });
+    const response: any = await axios.put("/api/posts/fetch-comment", {
+      id: task_id,
+      type: "task",
+    });
+    console.log(response.data.comments ? response.data.comments : []);
+    return response.data.comments ? response.data.comments : [];
+  };
+  const getStat = async function () {
+    console.log({ task_id });
+    const response = await axios.put(`/api/classrooms/get-status`, {
+      id: task_id,
+      user_id: user.id,
+    });
+    console.log(response.data);
+    return response.data.status === 1 ? 1 : 0;
+  };
+  const commentSet = await getComment();
+  console.log({ commentSet });
+  const stat = await getStat();
+  return { commentSet, stat };
+};
+
 export default function Post() {
   const router = useRouter();
   const { user } = useAuth();
-  const [getStat, setGetStat] = useState(0);
   const { id } = router.query;
+  const [val, setVal] = useState("");
   const [visible, setVisible] = useState(false);
-  console.log(id);
+
   const { data, error } = useSWR(`task/${id}`);
   if (!data) return null;
+  const { data: datastatcom, error: errorstatcom } = useSWR(
+    `stat-comment ${id}`,
+    (url) => getAll(url, user)
+  );
+  if (!datastatcom) return null;
+
   console.log({ data, error });
   const { id: tid, title, content, created_at, c_id, deadline, score } = data;
-  useEffect(() => {
-    console.log(user.id);
-    const getStat = async function () {
-      const response = await axios.get(
-        `/api/classrooms/get-status?user_id=${user.id}+id=${tid}`
-      );
-      console.log(response.data)
-      if (response.data.status === 1) setGetStat(1);
-    };
-    getStat();
-  }, []);
+
+  const onComment = async () => {
+    console.log({ val });
+    if (val === "") {
+      notify({
+        type: "fail",
+        title: "Oops!",
+        text: "Please type something",
+      });
+      return;
+    }
+    try {
+      const response = await axios.post("/api/posts/insert-comment", {
+        body: val,
+        id,
+        role: user.role,
+        type: "task",
+        name: user.name,
+      });
+      console.log({ response });
+      const {
+        data: { status },
+      } = response;
+      const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
+      const text =
+        status === "success"
+          ? "Comment added!"
+          : response.data.errorMessage
+          ? response.data.errorMessage
+          : response.data.message;
+      notify({ type: status, title: titleForNotify, text });
+      console.log({ response });
+    } catch (err) {}
+  };
   return id ? (
     <Center>
       <Banner
@@ -39,7 +95,10 @@ export default function Post() {
         score={score}
         deadline={deadline}
         vis={setVisible}
-        stat = {getStat}
+        stat={datastatcom.stat}
+        onComment={onComment}
+        comment={setVal}
+        commentSet={datastatcom.commentSet}
       />
       <Modal
         opened={visible}
