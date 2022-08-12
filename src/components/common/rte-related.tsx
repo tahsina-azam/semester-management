@@ -19,6 +19,7 @@ export default function UseRte({
   titlePlaceholder,
   visible,
   onSubmit,
+  valuesForEdit,
 }: {
   date?: boolean;
   time?: boolean;
@@ -26,13 +27,18 @@ export default function UseRte({
   titlePlaceholder?: string;
   score?: boolean;
   visible: boolean;
-  onSubmit: (value) => {};
+  onSubmit: ((value) => {}) | ((value) => void);
+  valuesForEdit?: {
+    title: string;
+    content: string;
+    score?: number;
+  };
 }) {
   const form = useForm({
     initialValues: {
-      rte: "",
-      title: "",
-      score: 0,
+      rte: valuesForEdit ? valuesForEdit.content : "",
+      title: valuesForEdit ? valuesForEdit.title : "",
+      score: valuesForEdit && valuesForEdit.score ? valuesForEdit.score : 0,
       date: new Date(),
       time: new Date(),
     },

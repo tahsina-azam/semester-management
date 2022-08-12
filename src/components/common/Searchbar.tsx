@@ -17,7 +17,7 @@ import { useEffect } from "react";
  * @param {array} props takes all the books info as array
  * @returns a search bar and a result array based on user search
  */
-const AdminLibrarySearch = (props) => {
+const Searchbar = (props) => {
   const books = props.items;
   const [values, setValues] = React.useState({
     fields: "",
@@ -48,12 +48,13 @@ const AdminLibrarySearch = (props) => {
       props.updateParent(book);
     }
   };
+  console.log(props.items);
   const getSearchTerm = () => {
     console.log(values.fields);
     searchKeyword(values.fields);
   };
   return (
-    <div>
+    <div style={{marginTop: "10px"}}>
       <Paper
         component="form"
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
@@ -83,4 +84,4 @@ const AdminLibrarySearch = (props) => {
   );
 };
 
-export default AdminLibrarySearch;
+export default Searchbar;

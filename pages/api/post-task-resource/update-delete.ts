@@ -19,8 +19,8 @@ export default async (req, res) => {
         sql =
           "UPDATE `" +
           req.body.table +
-          "` SET description='" +
-          req.body.description +
+          "` SET content='" +
+          req.body.content +
           "',deadline='" +
           req.body.deadline +
           "',score='" +
@@ -90,7 +90,7 @@ export default async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(400).send({
+    return res.status(400).send({
       status: "fail",
       message: "try again",
       errorMessage: err,

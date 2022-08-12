@@ -11,7 +11,6 @@ import { User } from "../../../lib/common/types";
 
 const fetchCourse = async (url: string, user: User) => {
   const classId = url.split(" ")[1];
-  console.log(classId);
   const response = await axios.put(`/api/student/view-classroom`, {
     classId,
     type: user.role,
@@ -28,11 +27,26 @@ export default function Task() {
   const { user } = useAuth();
   const { classId } = router.query;
   const [visible, setVisible] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [resources, setResources] = useState([]);
 
   console.log(classId);
 
   const { data, error } = useSWR("post-task " + classId, (url) =>
-    fetchCourse(url, user)
+    fetchCourse(url, user),{
+      onSuccess: (data, key, config) => {
+        setPosts(data.posts);
+        setTasks(data.tasks);
+        setResources(data.resources);
+      },
+      onError: (error, x, y) => {
+        console.log({ error });
+        setPosts([]);
+        setTasks([]);
+        setResources([]);
+      },
+    }
   );
   if (!data) return null;
   console.log({ data, error });
@@ -46,10 +60,13 @@ export default function Task() {
         <AddResource c_id={classId} vis={setVisible} type="resource" />
       </Modal>
       <ClassView
-        posts={data.posts}
-        tasks={data.tasks}
-        resources={data.resources}
+        posts={posts}
+        tasks={tasks}
+        resources={resources}
         vis={setVisible}
+        setPosts={setPosts}
+        setTasks={setTasks}
+        setResources={setResources}
       />
     </>
   ) : null;

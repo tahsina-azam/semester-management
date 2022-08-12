@@ -81,7 +81,7 @@ function Feature({
       deadline,
     };
   });
-
+  console.log({c_id})
   const onClick = () => {
     console.log("ok");
     console.log({ data });
@@ -130,7 +130,7 @@ export default function FeaturesAsymmetrical({
     score?: number;
   }[];
   type: string;
-  c_id: string;
+  c_id: string ;
 }) {
   console.log({ data });
   const { user } = useAuth();
@@ -163,6 +163,7 @@ const TeacherButton = ({
   c_id: string;
 }) => {
   const onClick = () => {
+    console.log({c_id})
     Router.push(`/teachers/add-${type}/${c_id}`);
   };
   return <ComposedButton text={`Add ${type}`} onClick={onClick} />;

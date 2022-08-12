@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { Tabs } from "@mantine/core";
 import FeaturesAsymmetrical from "./common/post-task";
 import FeaturesAsymmetricalResource from "./common/show-resource";
+import Searchbar from "./common/Searchbar";
 
 export default function ClassView({
   classId,
@@ -13,8 +14,11 @@ export default function ClassView({
   tasks,
   vis,
   resources,
+  setPosts,
+  setTasks,
+  setResources
 }: {
-  classId?: string;
+  classId: string;
   posts: {
     id: string;
     content: string;
@@ -41,14 +45,19 @@ export default function ClassView({
     title: string
   }[];
   vis?: Dispatch<SetStateAction<boolean>>;
+  setPosts: Dispatch<SetStateAction<any[]>>;
+  setTasks: Dispatch<SetStateAction<any[]>>;
+  setResources: Dispatch<SetStateAction<any[]>>
+
 }) {
   const { user } = useAuth();
-  console.log({resources})
+  console.log({classId})
   const { data, error } = useSWR(`courses/${classId}`);
   const [activeTab, setActiveTab] = useState<string | null>("first");
   if (error) return null;
   return (
-    <AppShellWithRole user={user} extraType="nosidebar" id={classId}>
+    <AppShellWithRole user={user} extraType="nosidebar">
+      
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.List>
           <Tabs.Tab value="first">Posts</Tabs.Tab>
@@ -56,16 +65,20 @@ export default function ClassView({
           <Tabs.Tab value="third">Resource</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="first">
+        <Searchbar items={posts} updateParent={setPosts} />
           <FeaturesAsymmetrical data={posts} type={"post"} c_id={classId} />
         </Tabs.Panel>
         <Tabs.Panel value="second">
+        <Searchbar items={tasks} updateParent={setTasks} />
           <FeaturesAsymmetrical data={tasks} type={"task"} c_id={classId} />
+          
         </Tabs.Panel>
         <Tabs.Panel value="third">
+        <Searchbar items={resources} updateParent={setResources} />
           <FeaturesAsymmetricalResource
             data={resources}
             vis={vis}
-            c_id={classId}
+            type={""}
           />
         </Tabs.Panel>
       </Tabs>
