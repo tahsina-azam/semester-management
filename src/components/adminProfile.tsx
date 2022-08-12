@@ -72,7 +72,7 @@ function FormSignUp() {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="field">
+            {/* <div className="field">
               <label>Semester</label>
               <Form.Input
                 type="text"
@@ -103,7 +103,7 @@ function FormSignUp() {
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
               />
-            </div>
+            </div> */}
             <Form.Button
               content="Submit"
               color="violet"

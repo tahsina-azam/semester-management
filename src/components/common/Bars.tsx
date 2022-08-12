@@ -19,20 +19,20 @@ export default function AppShellWithRole({
   children,
   user,
   extraType,
-  id
+  id,
 }: {
   children: ReactNode;
   user: User;
   extraType?: string;
-  id?: string
+  id?: string;
 }) {
   const theme = useMantineTheme();
   console.log({ user });
 
   const buttonsForSidebar = extraType
-    ? roleChangesForHeader({ user, extraType,id })
+    ? roleChangesForHeader({ user, extraType, id })
     : roleChangesForHeader({ user });
-  console.log({buttonsForSidebar});
+  console.log({ buttonsForSidebar });
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
@@ -44,30 +44,32 @@ export default function AppShellWithRole({
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar= {
-        extraType!=="nosidebar" && <Navbar
-          p="md"
-          hiddenBreakpoint="sm"
-          hidden={!opened}
-          width={{ sm: 200, lg: 200 }}
-        >
-          {buttonsForSidebar &&
-            buttonsForSidebar.map((but, index) => (
-              <NavbarButton text={but.name} href={but.href} key={index} />
-            ))}
-          <NavbarButton text="Edit account" href={""} />
-          <Link href={"/sign-in"} passHref>
-            <ComposedButton
-              text="Logout"
-              style={{ mt: "auto" }}
-              onClick={() => {
-                localStorage.removeItem("token");
-                console.log("token removed");
-                console.log(localStorage.getItem("token"));
-              }}
-            />
-          </Link>
-        </Navbar>
+      navbar={
+        extraType !== "nosidebar" && (
+          <Navbar
+            p="md"
+            hiddenBreakpoint="sm"
+            hidden={!opened}
+            width={{ sm: 200, lg: 200 }}
+          >
+            {buttonsForSidebar &&
+              buttonsForSidebar.map((but, index) => (
+                <NavbarButton text={but.name} href={but.href} key={index} />
+              ))}
+            <NavbarButton text="Edit account" href={"/student/profile"} />
+            <Link href={"/sign-in"} passHref>
+              <ComposedButton
+                text="Logout"
+                style={{ mt: "auto" }}
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  console.log("token removed");
+                  console.log(localStorage.getItem("token"));
+                }}
+              />
+            </Link>
+          </Navbar>
+        )
       }
       // aside={
       //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
@@ -96,13 +98,13 @@ export default function AppShellWithRole({
               variant="gradient"
               gradient={{ from: "indigo", to: "cyan", deg: 40 }}
               onClick={() => {
-                if(user.role==="teacher")Router.push("/teachers/")
-                else Router.push("/student/")
+                if (user.role === "teacher") Router.push("/teachers/");
+                else Router.push("/student/");
               }}
               style={{
                 fontSize: "20px",
                 fontWeight: "bold",
-                cursor:"pointer"
+                cursor: "pointer",
               }}
             >
               Classademia

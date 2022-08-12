@@ -1,5 +1,6 @@
 import executeQuery from "../../../config/db";
 import { db } from "../../../config/db";
+
 export default async (req, res) => {
   var sql;
   try {
