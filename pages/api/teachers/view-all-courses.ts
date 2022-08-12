@@ -4,16 +4,26 @@ export default async (req, res) => {
   try {
     console.log(req.body);
 
-    const sql = "SELECT * FROM courses WHERE t_id='" + req.body.id + "'";
+    var sql = "SELECT * FROM courses WHERE t_id='" + req.body.id + "'";
     const response = await executeQuery({ query: sql, values: [] });
     console.log({ response });
-    if (response[0])
-      res.send({
+    if (!response[0]) {
+      return res.send({
+        status: "fail",
+        message: "couldn't find",
+      });
+    }
+    sql = "SELECT * FROM teachers WHERE id='" + req.body.id + "'";
+    const teacher_name = await executeQuery({ query: sql, values: [] });
+    console.log({ teacher_name });
+    if (teacher_name[0])
+      return res.send({
         status: "success",
         data: response,
+        teacher_name: teacher_name[0].name,
       });
     else
-      res.send({
+      return res.send({
         status: "fail",
         message: "couldn't find",
       });
