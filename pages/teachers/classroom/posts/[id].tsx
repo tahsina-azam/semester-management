@@ -63,6 +63,7 @@ export default function Post() {
   };
   const onEdit = async (values) => {
     const { rte, title } = values;
+    setVisibleLoading(true)
     try {
       const response = await axios.post(
         "/api/post-task-resource/update-delete",
@@ -87,6 +88,7 @@ export default function Post() {
           : response.data.message;
       notify({ type: status, title: titleForNotify, text });
       console.log({ response });
+      setVisibleLoading(false)
     } catch (err) {}
   };
   const onComment = async () => {

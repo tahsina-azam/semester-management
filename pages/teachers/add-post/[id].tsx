@@ -30,7 +30,7 @@ export default function () {
       const titleForNotify = status === "success" ? "Wohoo!" : "Oops!";
       const text =
         status === "success"
-          ? "Succesfully created a task!"
+          ? "Succesfully created a post!"
           : response.data.errorMessage
           ? response.data.errorMessage
           : response.data.message;

@@ -19,8 +19,8 @@ export default async (req, res) => {
         sql =
           "UPDATE `" +
           req.body.table +
-          "` SET description='" +
-          req.body.description +
+          "` SET content='" +
+          req.body.content +
           "',deadline='" +
           req.body.deadline +
           "',score='" +
